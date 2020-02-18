@@ -1,13 +1,12 @@
 package ui;
 
+import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 
 import dao.CompanyDAO;
 import dao.ComputerDAO;
-import exceptions.DaoException;
-import exceptions.ServiceException;
 import model.Company;
 import model.Computer;
 
@@ -38,7 +37,7 @@ public class MenuAction {
 		return datetime;
 	}
 
-	public void createComputer() {
+	public void createComputer() throws SQLException {
 		Computer computer = new Computer();
 		System.out.println("Saisir le nom de l'ordinateur :");
 		computer.setName(sc.nextLine());
@@ -48,13 +47,13 @@ public class MenuAction {
 //		computer.setDiscontinued(ConvertToLDT(sc.nextLine()));
 		System.out.println("Saisir l'id de la marque :");
 		Company company = CompanyDAO.getInstance().find(sc.nextInt());
-		if (company == null) {
+//		if (company == null) {
 //			System.out.println("Erreur la compagnie n'existe pas");
 //			throw new ServiceException"Erreur la compagnie n'existe pas");
-			System.out.println("La compagnie n'existe pas, rentrez le nom de la nouvelle compagnie :");
-			company = new Company.CompanyBuilder().name(sc.next()).build();
-		}
-		company = CompanyDAO.getInstance().add(company);
+//			System.out.println("La compagnie n'existe pas, rentrez le nom de la nouvelle compagnie :");
+//			company = new Company.CompanyBuilder().name(sc.next()).build();
+//		}
+//		company = CompanyDAO.getInstance().add(company);
 		computer.setCompany(company);
 		ComputerDAO.getInstance().add(computer);
 	}

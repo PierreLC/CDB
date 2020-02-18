@@ -5,7 +5,7 @@ public class Company {
 	private Long id;
 	private String name;
 
-	public Company(long id, String name) {
+	private Company(long id, String name) {
 		this.id = id;
 		this.name = name;
 	}
@@ -68,6 +68,10 @@ public class Company {
 	@Override
 	public String toString() {
 		return "Company [id=" + id + ", name=" + name + "]";
+	}
+
+	public void getGeneratedId(long long1) {
+		
 	}
 
 }

@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,7 +16,7 @@ public final class ComputerDAO {
 	static Connection connect;
 	ResultSet resultList;
 	ResultSet resultFind;
-	public final String ADD = "INSERT TO computer(name, introduced, discontinued, company_id) VALUES (?, ?, ?, ?);";
+	public final String ADD = "INSERT INTO computer(name, introduced, discontinued, company_id) VALUES (?, ?, ?, ?);";
 	public final String LIST_COMPUTER = "SELECT computer.id, computer.name, introduced , discontinued , company_id, company.name FROM computer LEFT JOIN company ON company_id = company.id;";
 	public final String DELETE = "DELETE FROM computer WHERE id=?;";
 	public final String UPDATE = "UPDATE computer " + "SET  name = ?, Introduced = ?"
@@ -46,8 +47,9 @@ public final class ComputerDAO {
 		try (PreparedStatement pstmAdd = connect.prepareStatement(ADD)) {
 
 			pstmAdd.setString(1, computer.getName());
-			pstmAdd.setTimestamp(2, Timestamp.valueOf(computer.getIntroduced()));
-			pstmAdd.setTimestamp(3, Timestamp.valueOf(computer.getDiscontinued()));
+			pstmAdd.setTimestamp(2, computer.getIntroduced() != null ? Timestamp.valueOf(computer.getIntroduced()):null);
+			pstmAdd.setTimestamp(3, computer.getDiscontinued() != null ? Timestamp.valueOf(computer.getDiscontinued()):null);
+			System.out.println(computer);
 			pstmAdd.setLong(4, computer.getCompany().getId());
 
 			pstmAdd.executeUpdate();

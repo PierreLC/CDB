@@ -15,7 +15,7 @@ import model.Company;
 public final class CompanyDAO {
 	static Connection connect;
 	ResultSet resultSetList;
-	public final String ADD_COMPANY = "INSERT TO company(id, name) VALUES (?, ?)";
+	public final String ADD_COMPANY = "INSERT INTO company(name) VALUES (?)";
 	public final String LIST_COMPANY = "SELECT id, name FROM company";
 	public final String GET_COMPANY_BY_ID = "SELECT id, name FROM company WHERE id=?";
 	private static volatile CompanyDAO instance = null;
@@ -40,8 +40,7 @@ public final class CompanyDAO {
 
 		try (PreparedStatement pstmAdd = connect.prepareStatement(ADD_COMPANY);) {
 
-			pstmAdd.setLong(1, company.getId());
-			pstmAdd.setString(2, company.getName());
+			pstmAdd.setString(1, company.getName());
 
 			ResultSet result = pstmAdd.executeQuery();
 			return CompanyMapper.getCompanyResultSet(result);
@@ -49,6 +48,8 @@ public final class CompanyDAO {
 			System.err.println("LOG : Erreur lors de l'ajout" + e.getMessage());
 			throw new DaoException("LOG : Erreur lors de l'ajout");
 		}
+		
+		
 	}
 
 	public List<Company> lister() throws SQLException {
@@ -57,15 +58,12 @@ public final class CompanyDAO {
 		try (PreparedStatement stmt = connect.prepareStatement(LIST_COMPANY)) {
 			resultSetList = stmt.executeQuery();
 			while (resultSetList.next()) {
-				//Company company = CompanyMapper.getCompanyResultSet(resultSetList);
-				Company company = new Company(resultSetList.getLong("id"), resultSetList.getString("name"));
+				Company company =  CompanyMapper.getCompanyResultSet(resultSetList);
 				allCompanies.add(company);
-				System.out.println("company listée");
 			}
 		} catch (SQLException e) {
 
-		}
-		finally {
+		} finally {
 			resultSetList.close();
 		}
 		return allCompanies;
@@ -76,11 +74,9 @@ public final class CompanyDAO {
 		Company company = null;
 
 		try {
-//			System.out.println("LOG : tentative de connexion");
-//			System.out.println("LOG : connexion réussie");
 			PreparedStatement pstmFind = connect.prepareStatement(GET_COMPANY_BY_ID);
 
-		System.out.println("LOG : connexion statetement");
+			System.out.println("LOG : connexion statetement");
 
 			pstmFind.setInt(1, i);
 			ResultSet resultFind = pstmFind.executeQuery();

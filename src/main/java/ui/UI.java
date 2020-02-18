@@ -4,7 +4,6 @@ import java.util.Scanner;
 
 import dao.CompanyDAO;
 import dao.ComputerDAO;
-import exceptions.ServiceException;
 
 public class UI {
 	private static Scanner scanner = new Scanner(System.in);
