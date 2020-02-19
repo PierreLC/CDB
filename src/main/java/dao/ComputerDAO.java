@@ -5,7 +5,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,11 +18,9 @@ public final class ComputerDAO {
 	public final String ADD = "INSERT INTO computer(name, introduced, discontinued, company_id) VALUES (?, ?, ?, ?);";
 	public final String LIST_COMPUTER = "SELECT computer.id, computer.name, introduced , discontinued , company_id, company.name FROM computer LEFT JOIN company ON company_id = company.id;";
 	public final String DELETE = "DELETE FROM computer WHERE id=?;";
-	public final String UPDATE = "UPDATE computer " + "SET  name = ?, Introduced = ?"
-			+ "Discontinued = ?,company_id = ? WHERE Id = ?;";
-	//public final String COUNT = "SELECT COUNT(*) FROM computer;";
-	//public final String GET_PAGE = "SELECT computer.id as computer_id, computer.name as computer_name, computer.introduced, computer.discontinued, computer.company_id, company.name as company_name FROM computer LEFT JOIN company on company.id=computer.company_id LIMIT ?, ?;";
-	public final String GET_COMPUTER_BY_ID = "SELECT computer.id, computer.name, computer.introduced, computer.discontinued, computer.company_id, company.name FROM computer LEFT JOIN company ON company_id = company.id  WHERE computer.id=?;";
+	public final String UPDATE = "UPDATE computer SET  name = ?, introduced = ?, discontinued = ?, company_id = ? WHERE Id = ?;";
+	public final String LIST_PAGE = "SELECT computer.id, computer.name, introduced, discontinued, company_id, company.name FROM computer LEFT JOIN company ON company_id = company.id LIMIT ?, ?;";
+	public final String DISPLAY_COMPUTER = "SELECT computer.id, computer.name, computer.introduced, computer.discontinued, computer.company_id, company.name FROM computer LEFT JOIN company ON company_id = company.id  WHERE computer.id=?;";
 
 	private static volatile ComputerDAO instance = null;
 
@@ -59,7 +56,7 @@ public final class ComputerDAO {
 		}
 	}
 
-	public List<Computer> lister() {
+	public List<Computer> list() {
 		List<Computer> computerList = new ArrayList<Computer>();
 
 		try (PreparedStatement pstmList = connect.prepareStatement(LIST_COMPUTER)) {
@@ -74,6 +71,26 @@ public final class ComputerDAO {
 			System.exit(-1);
 		}
 		return computerList;
+	}
+	
+	public List<Computer> listPage(int startPaginate, int pageSize) {
+		
+		List<Computer> compPagList = new ArrayList<Computer>();
+
+		try (PreparedStatement pstmPagList = connect.prepareStatement(LIST_PAGE)) {
+			pstmPagList.setInt(1, startPaginate);
+			pstmPagList.setInt(2, pageSize);
+			resultList = pstmPagList.executeQuery();
+			while (resultList.next()) {
+				Computer computer = ComputerMapper.getComputerResultSet(resultList);
+				compPagList.add(computer);
+			}
+
+		} catch (SQLException e) {
+			System.err.println("Erreur there 6" + e.getMessage());
+			System.exit(-1);
+		}
+		return compPagList;
 	}
 
 	public void deleteComputer(Computer computer) {
@@ -90,7 +107,7 @@ public final class ComputerDAO {
 	public Computer find(int i) {
 		Computer computer = null;
 
-		try (PreparedStatement pstmFind = connect.prepareStatement(GET_COMPUTER_BY_ID);) {
+		try (PreparedStatement pstmFind = connect.prepareStatement(DISPLAY_COMPUTER);) {
 			pstmFind.setLong(1, i);
 			resultFind = pstmFind.executeQuery();
 			System.out.println("requete exec");
@@ -109,11 +126,13 @@ public final class ComputerDAO {
 	public void update(Computer computer) {
 
 		try (PreparedStatement pstmUpdate = connect.prepareStatement(UPDATE);) {
-
+			
 			pstmUpdate.setString(1, computer.getName());
 			pstmUpdate.setTimestamp(2, Timestamp.valueOf(computer.getIntroduced()));
 			pstmUpdate.setTimestamp(3, Timestamp.valueOf(computer.getDiscontinued()));
-			pstmUpdate.setLong(4, computer.getCompany().getId());
+ 			pstmUpdate.setLong(4, computer.getCompany().getId());
+			pstmUpdate.setLong(5, computer.getId());
+
 
 			pstmUpdate.executeUpdate();
 			pstmUpdate.close();

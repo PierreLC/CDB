@@ -41,10 +41,10 @@ public class MenuAction {
 		Computer computer = new Computer();
 		System.out.println("Saisir le nom de l'ordinateur :");
 		computer.setName(sc.nextLine());
-//		System.out.println("Saisir la date de parution du modèle (yyyy-MM-dd):");
-//		computer.setIntroduced(ConvertToLDT(sc.nextLine()));
-//		System.out.println("Saisir la date de fin de production : (yyyy-MM-dd)");
-//		computer.setDiscontinued(ConvertToLDT(sc.nextLine()));
+		System.out.println("Saisir la date de parution du modèle (yyyy-MM-dd):");
+		computer.setIntroduced(ConvertToLDT(sc.nextLine()));
+		System.out.println("Saisir la date de fin de production : (yyyy-MM-dd)");
+		computer.setDiscontinued(ConvertToLDT(sc.nextLine()));
 		System.out.println("Saisir l'id de la marque :");
 		Company company = CompanyDAO.getInstance().find(sc.nextInt());
 //		if (company == null) {
@@ -59,8 +59,10 @@ public class MenuAction {
 	}
 
 	public void updateComputer() {
+		System.out.println("Saisir l'id de l'ordinateur à modifier :\n");
+		Computer computer = ComputerDAO.getInstance().find(sc.nextInt());
 		System.out.println("Saisir le nouvel id :\n");
-		Computer computer = new Computer.ComputerBuilder().initializeWithId(sc.nextLong()).build();
+		computer = new Computer.ComputerBuilder().initializeWithId(sc.nextLong()).build();
 		System.out.println("Saisir le nouveau nom :\n");
 		computer.setName(sc.next());
 		System.out.println("Saisir la nouvelle date de parution du modele :\n");

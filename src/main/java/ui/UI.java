@@ -7,6 +7,7 @@ import dao.ComputerDAO;
 
 public class UI {
 	private static Scanner scanner = new Scanner(System.in);
+	private static final int pageSize = 20;
 
 	public UI() {
 		actions();
@@ -15,15 +16,16 @@ public class UI {
 	public static int menu() {
 
 		System.out.println("\n******************************Menu***************************************************");
-		System.out.println("\n                       1 - Afficher la liste des ordinateur                          ");
-		System.out.println("\n                       2 - Supprimer un ordinateur                                   ");
-		System.out.println("\n                       3 - Mettre à jour un ordinateur                               ");
-		System.out.println("\n                       4 - Ajouter un ordinateur                                     ");
-		System.out.println("\n                       5 - Afficher toute les marques d'ordinateur                   ");
-		System.out.println("\n                       6 - Afficher les détails d'un ordi à partir de son id         ");
-		System.out.println("\n                       7 - Quitter                                                   ");
+		System.out.println("\n                       1 - Afficher la liste des ordinateurs                         ");
+		System.out.println("\n                       2 - Afficher la liste des ordinateurs avec pagination         ");
+		System.out.println("\n                       3 - Supprimer un ordinateur                                   ");
+		System.out.println("\n                       4 - Mettre à jour un ordinateur                               ");
+		System.out.println("\n                       5 - Ajouter un ordinateur                                     ");
+		System.out.println("\n                       6 - Afficher toute les marques d'ordinateur                   ");
+		System.out.println("\n                       7 - Afficher les détails d'un ordi à partir de son id         ");
+		System.out.println("\n                       8 - Quitter                                                   ");
 		System.out.println("\n******************************Fin****************************************************");
-		return scannerMenu(1, 7);
+		return scannerMenu(1, 8);
 	}
 
 	public static int scannerMenu(int entreeBasse, int entreeHaute) {
@@ -53,9 +55,11 @@ public class UI {
 		try {
 			switch (MenuEntry.entry(choice)) {
 
-			case DISPLAYCOMPUTERS:
-				System.out.println(ComputerDAO.getInstance().lister());
+			case LISTCOMPUTERS:
+				System.out.println(ComputerDAO.getInstance().list());
 				break;
+			case PAGECOMPUTERS:
+				System.out.println(ComputerDAO.getInstance().listPage(0, pageSize));
 			case DELETECOMPUTER:
 				MenuAction.getInstance().deleteComputer();
 				break;
