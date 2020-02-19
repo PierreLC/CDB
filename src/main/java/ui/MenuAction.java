@@ -1,8 +1,10 @@
 package ui;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Scanner;
 
 import dao.CompanyDAO;
@@ -13,6 +15,7 @@ import model.Computer;
 public class MenuAction {
 
 	public Scanner sc = new Scanner(System.in);
+	private static final int PAGE_SIZE = 20;
 
 	private static volatile MenuAction instance = null;
 
@@ -84,6 +87,22 @@ public class MenuAction {
 		System.out.println("Rentrez l'id de l'ordinateur à supprimer :\n");
 		Computer computer = ComputerDAO.getInstance().find(sc.nextInt());
 		ComputerDAO.getInstance().deleteComputer(computer);
+	}
+	
+	public void computerPaginate() throws SQLException, IOException {
+		System.out.println("passe dans le menu action");
+		int nbRows = ComputerDAO.getInstance().getNbRows();
+		int currentRow = 0;
+		
+		do {
+			List<Computer> listPage = ComputerDAO.getInstance().listPage(currentRow, PAGE_SIZE);
+			for (Computer c: listPage) {
+				System.out.println(c);
+			}
+			System.out.println("[Entrée] pour changer de page");
+			System.in.read();
+			currentRow += 20;
+		}while (currentRow < nbRows);
 	}
 	
 	@Override

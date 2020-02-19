@@ -15,13 +15,15 @@ public final class ComputerDAO {
 	static Connection connect;
 	ResultSet resultList;
 	ResultSet resultFind;
+	ResultSet resultRows;
 	public final String ADD = "INSERT INTO computer(name, introduced, discontinued, company_id) VALUES (?, ?, ?, ?);";
 	public final String LIST_COMPUTER = "SELECT computer.id, computer.name, introduced , discontinued , company_id, company.name FROM computer LEFT JOIN company ON company_id = company.id;";
 	public final String DELETE = "DELETE FROM computer WHERE id=?;";
 	public final String UPDATE = "UPDATE computer SET  name = ?, introduced = ?, discontinued = ?, company_id = ? WHERE Id = ?;";
 	public final String LIST_PAGE = "SELECT computer.id, computer.name, introduced, discontinued, company_id, company.name FROM computer LEFT JOIN company ON company_id = company.id LIMIT ?, ?;";
 	public final String DISPLAY_COMPUTER = "SELECT computer.id, computer.name, computer.introduced, computer.discontinued, computer.company_id, company.name FROM computer LEFT JOIN company ON company_id = company.id  WHERE computer.id=?;";
-
+	public final String NB_ROWS = "SELECT COUNT(*) as \"Rows\" FROM computer;";
+	
 	private static volatile ComputerDAO instance = null;
 
 	private ComputerDAO() {
@@ -73,7 +75,23 @@ public final class ComputerDAO {
 		return computerList;
 	}
 	
+	public int getNbRows() throws SQLException {
+		int nbRows = -1;
+		
+		try (PreparedStatement pstmRows = connect.prepareStatement(NB_ROWS);) {
+			resultRows = pstmRows.executeQuery();
+			
+			if (resultRows.first()) {
+				nbRows = resultRows.getInt("Rows");
+			}
+		}catch (SQLException e) {
+			//TODO
+		}
+		return nbRows;
+	}
+	
 	public List<Computer> listPage(int startPaginate, int pageSize) {
+		System.out.println("passe dans la DAO");
 		
 		List<Computer> compPagList = new ArrayList<Computer>();
 
@@ -141,4 +159,6 @@ public final class ComputerDAO {
 			System.exit(-1);
 		}
 	}
+	
+
 }

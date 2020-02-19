@@ -2,12 +2,13 @@ package ui;
 
 import java.util.Scanner;
 
+import com.sun.org.apache.xerces.internal.impl.xpath.regex.ParseException;
+
 import dao.CompanyDAO;
 import dao.ComputerDAO;
 
 public class UI {
 	private static Scanner scanner = new Scanner(System.in);
-	private static final int pageSize = 20;
 
 	public UI() {
 		actions();
@@ -30,21 +31,22 @@ public class UI {
 
 	public static int scannerMenu(int entreeBasse, int entreeHaute) {
 		String answer;
-		int choix = -1;
+		int choice = -1;
 
 		do {
 			System.out.println("Rentrer votre choix d actions :");
 			try {
 				answer = scanner.nextLine();
-				choix = Integer.parseInt(answer);
-			} catch (Exception e) {
+				System.out.println(answer);
+				choice = Integer.parseInt(answer);
+			} catch (ParseException e) {
 				System.err.println("Erreur happened :" + e.getMessage());
 				scanner.close();
 				System.exit(-1);
 			}
-		} while (choix == -1 || (choix < entreeBasse) || (choix > entreeHaute));
+		} while (choice == -1 || (choice < entreeBasse) || (choice > entreeHaute));
 
-		return choix;
+		return choice;
 	}
 
 	public static void actions() {
@@ -59,7 +61,8 @@ public class UI {
 				System.out.println(ComputerDAO.getInstance().list());
 				break;
 			case PAGECOMPUTERS:
-				System.out.println(ComputerDAO.getInstance().listPage(0, pageSize));
+				System.out.println("lance pagination depuis menu");
+				MenuAction.getInstance().computerPaginate();
 			case DELETECOMPUTER:
 				MenuAction.getInstance().deleteComputer();
 				break;

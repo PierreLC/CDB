@@ -10,6 +10,7 @@ public enum MenuEntry {
 		case 1:
 			return LISTCOMPUTERS;
 		case 2:
+			
 			return PAGECOMPUTERS;
 		case 3:
 			return DELETECOMPUTER;
@@ -21,6 +22,8 @@ public enum MenuEntry {
 			return DISPLAYCOMPANIES;
 		case 7:
 			return DISPLAYDETAILS;
+		case 8: 
+			return EXIT;
 		default:
 			return EXIT;
 
