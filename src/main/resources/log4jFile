@@ -1,0 +1,17 @@
+# Error
+log4j.appender.Error=org.apache.log4j.RollingFileAppender
+log4j.appender.Error.File=Error.log
+log4j.appender.Error.MaxFileSize=20000KB
+log4j.appender.Error.Threshold=ERROR
+log4j.appender.Error.MaxBackupIndex=1
+log4j.appender.Error.layout=org.apache.log4j.PatternLayout
+log4j.appender.Error.layout.ConversionPattern=[%d{dd-MMM-yyyy HH:mm:ss,SSS}] %-5p [%t] %x%30F:%4L - %m%n
+ 
+# Info
+log4j.appender.Info=org.apache.log4j.RollingFileAppender
+log4j.appender.Info.File=Info.log
+log4j.appender.Info.MaxFileSize=20000KB
+log4j.appender.Info.Threshold=INFO
+log4j.appender.Info.MaxBackupIndex=1
+log4j.appender.Info.layout=org.apache.log4j.PatternLayout
+log4j.appender.Info.layout.ConversionPattern=[%d{dd-MMM-yyyy HH:mm:ss,SSS}] %-5p [%t] %x%30F:%4L - %m%n

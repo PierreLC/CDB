@@ -8,6 +8,7 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
+import exceptions.DaoException;
 import mapper.ComputerMapper;
 import model.Computer;
 
@@ -23,6 +24,14 @@ public final class ComputerDAO {
 	public final String LIST_PAGE = "SELECT computer.id, computer.name, introduced, discontinued, company_id, company.name FROM computer LEFT JOIN company ON company_id = company.id LIMIT ?, ?;";
 	public final String DISPLAY_COMPUTER = "SELECT computer.id, computer.name, computer.introduced, computer.discontinued, computer.company_id, company.name FROM computer LEFT JOIN company ON company_id = company.id  WHERE computer.id=?;";
 	public final String NB_ROWS = "SELECT COUNT(*) as \"Rows\" FROM computer;";
+	
+	public final String ADD_LOG ="Erreur lors de l'ajout : échec de la connexion à la base de donnée";
+	public final String LIST_LOG =" Erreur lors de l'affichage des ordinateur : échec de la connexion à la base de donnée";
+	public final String DELETE_LOG ="Erreur lors de la suppression : échec de la connexion à la base de donnée";
+	public final String UPDATE_LOG ="Erreur lors de la mise à jour de l'ordinateur : échec de la connexion à la base de donnée";
+	public final String DISPLAY_LOG ="Erreur lors de l'affichage de l'ordinateur : échec de la connexion à la base de donnée";
+	public final String ROWS_LOG ="Erreur au moment de compter les lignes : échec lors de la connexion à la base de donnée";
+	public final String LIST_PAGE_LOG ="Erreur lors de l'affichage des pages : échec lors de la connexion à la base de donnée";
 	
 	private static volatile ComputerDAO instance = null;
 
@@ -53,7 +62,7 @@ public final class ComputerDAO {
 
 			pstmAdd.executeUpdate();
 		} catch (SQLException e) {
-			System.err.println("Erreur there 1" + e.getMessage());
+			DaoException.displayError(ADD_LOG);
 			System.exit(-1);
 		}
 	}
@@ -69,7 +78,7 @@ public final class ComputerDAO {
 			}
 
 		} catch (SQLException e) {
-			System.err.println("Erreur there 2" + e.getMessage());
+			DaoException.displayError(LIST_LOG);
 			System.exit(-1);
 		}
 		return computerList;
@@ -85,7 +94,7 @@ public final class ComputerDAO {
 				nbRows = resultRows.getInt("Rows");
 			}
 		}catch (SQLException e) {
-			//TODO
+			DaoException.displayError(ROWS_LOG);
 		}
 		return nbRows;
 	}
@@ -105,7 +114,7 @@ public final class ComputerDAO {
 			}
 
 		} catch (SQLException e) {
-			System.err.println("Erreur there 6" + e.getMessage());
+			DaoException.displayError(LIST_PAGE_LOG);
 			System.exit(-1);
 		}
 		return compPagList;
@@ -134,7 +143,7 @@ public final class ComputerDAO {
 			}
 
 		} catch (SQLException e) {
-			System.err.println("Erreur there 4" + e.getMessage());
+			DaoException.displayError(DISPLAY_LOG);
 			System.exit(-1);
 		}
 
@@ -155,7 +164,7 @@ public final class ComputerDAO {
 			pstmUpdate.executeUpdate();
 			pstmUpdate.close();
 		} catch (SQLException e) {
-			System.err.println("Erreur there 5" + e.getMessage());
+			DaoException.displayError(UPDATE_LOG);
 			System.exit(-1);
 		}
 	}

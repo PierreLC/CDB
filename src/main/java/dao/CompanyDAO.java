@@ -19,6 +19,10 @@ public final class CompanyDAO {
 	public final String LIST_COMPANY = "SELECT id, name FROM company";
 	public final String GET_COMPANY_BY_ID = "SELECT id, name FROM company WHERE id=?";
 	private static volatile CompanyDAO instance = null;
+	
+	private final static String ADD_COMPANY_LOG = "Erreur lors de l'ajout : échec de la connexion à la base de donnée";
+	private final static String LIST_COMPANY_LOG = "Erreur au moment de lister les marques : échec de la connexion à la base de donnée";
+	private final static String GET_COMPANY_LOG = "Erreur au moment d'obtenir la marque : échec de la connexion à la base de donnée";
 
 	private CompanyDAO() {
 		CompanyDAO.connect = ConnexionSQL.getInstance().connect();
@@ -45,8 +49,7 @@ public final class CompanyDAO {
 			ResultSet result = pstmAdd.executeQuery();
 			return CompanyMapper.getCompanyResultSet(result);
 		} catch (SQLException e) {
-			System.err.println("LOG : Erreur lors de l'ajout" + e.getMessage());
-			throw new DaoException("LOG : Erreur lors de l'ajout");
+			DaoException.displayError(ADD_COMPANY_LOG);
 		}
 		
 		
