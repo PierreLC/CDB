@@ -16,7 +16,7 @@ public class HelloWorld extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		response.getWriter().append("Served at: ").append(request.getContextPath());
-		request.getRequestDispatcher("/views/helloWorld.html").forward(request,response);
+		request.getRequestDispatcher("views/helloWorld.html").forward(request,response);
 		
 		
 	}

@@ -4,7 +4,7 @@
 <%@ page isELIgnored="false"%>
 
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%-- <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%> --%>
 
 <!DOCTYPE html>
 <html>
@@ -30,7 +30,7 @@
 	<section id="main">
 		<div class="container">
 			<h1 id="homeTitle">
-				<b>Computer Database : 121 computers found</b>
+				<b>Computer Database : computers found</b>
 			</h1>
 			<div id="actions" class="form-horizontal">
 				<div class="pull-left">
