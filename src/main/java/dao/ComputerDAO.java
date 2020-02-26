@@ -8,15 +8,17 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
-import exceptions.DaoException;
+import exceptions.DAOException;
 import mapper.ComputerMapper;
 import model.Computer;
 
 public final class ComputerDAO {
+	
 	static Connection connect;
 	ResultSet resultList;
 	ResultSet resultFind;
 	ResultSet resultRows;
+	
 	public final String ADD = "INSERT INTO computer(name, introduced, discontinued, company_id) VALUES (?, ?, ?, ?);";
 	public final String LIST_COMPUTER = "SELECT computer.id, computer.name, introduced , discontinued , company_id, company.name FROM computer LEFT JOIN company ON company_id = company.id;";
 	public final String DELETE = "DELETE FROM computer WHERE id=?;";
@@ -24,15 +26,15 @@ public final class ComputerDAO {
 	public final String LIST_PAGE = "SELECT computer.id, computer.name, introduced, discontinued, company_id, company.name FROM computer LEFT JOIN company ON company_id = company.id LIMIT ?, ?;";
 	public final String DISPLAY_COMPUTER = "SELECT computer.id, computer.name, computer.introduced, computer.discontinued, computer.company_id, company.name FROM computer LEFT JOIN company ON company_id = company.id  WHERE computer.id=?;";
 	public final String NB_ROWS = "SELECT COUNT(*) as \"Rows\" FROM computer;";
-	
-	public final String ADD_LOG ="Erreur lors de l'ajout : échec de la connexion à la base de donnée";
-	public final String LIST_LOG =" Erreur lors de l'affichage des ordinateur : échec de la connexion à la base de donnée";
-	public final String DELETE_LOG ="Erreur lors de la suppression : échec de la connexion à la base de donnée";
-	public final String UPDATE_LOG ="Erreur lors de la mise à jour de l'ordinateur : échec de la connexion à la base de donnée";
-	public final String DISPLAY_LOG ="Erreur lors de l'affichage de l'ordinateur : échec de la connexion à la base de donnée";
-	public final String ROWS_LOG ="Erreur au moment de compter les lignes : échec lors de la connexion à la base de donnée";
-	public final String LIST_PAGE_LOG ="Erreur lors de l'affichage des pages : échec lors de la connexion à la base de donnée";
-	
+
+	public final String ADD_LOG = "Erreur lors de l'ajout : échec de la connexion à la base de donnée";
+	public final String LIST_LOG = " Erreur lors de l'affichage des ordinateur : échec de la connexion à la base de donnée";
+	public final String DELETE_LOG = "Erreur lors de la suppression : échec de la connexion à la base de donnée";
+	public final String UPDATE_LOG = "Erreur lors de la mise à jour de l'ordinateur : échec de la connexion à la base de donnée";
+	public final String DISPLAY_LOG = "Erreur lors de l'affichage de l'ordinateur : échec de la connexion à la base de donnée";
+	public final String ROWS_LOG = "Erreur au moment de compter les lignes : échec lors de la connexion à la base de donnée";
+	public final String LIST_PAGE_LOG = "Erreur lors de l'affichage des pages : échec lors de la connexion à la base de donnée";
+
 	private static volatile ComputerDAO instance = null;
 
 	private ComputerDAO() {
@@ -41,7 +43,6 @@ public final class ComputerDAO {
 
 	public final static ComputerDAO getInstance() {
 		if (ComputerDAO.instance == null) {
-
 			synchronized (ComputerDAO.class) {
 				if (ComputerDAO.instance == null) {
 					ComputerDAO.instance = new ComputerDAO();
@@ -55,15 +56,16 @@ public final class ComputerDAO {
 		try (PreparedStatement pstmAdd = connect.prepareStatement(ADD)) {
 
 			pstmAdd.setString(1, computer.getName());
-			pstmAdd.setTimestamp(2, computer.getIntroduced() != null ? Timestamp.valueOf(computer.getIntroduced()):null);
-			pstmAdd.setTimestamp(3, computer.getDiscontinued() != null ? Timestamp.valueOf(computer.getDiscontinued()):null);
+			pstmAdd.setTimestamp(2,
+					computer.getIntroduced() != null ? Timestamp.valueOf(computer.getIntroduced()) : null);
+			pstmAdd.setTimestamp(3,
+					computer.getDiscontinued() != null ? Timestamp.valueOf(computer.getDiscontinued()) : null);
 			System.out.println(computer);
 			pstmAdd.setLong(4, computer.getCompany().getId());
 
 			pstmAdd.executeUpdate();
 		} catch (SQLException e) {
-			DaoException.displayError(ADD_LOG);
-			System.exit(-1);
+			DAOException.displayError(ADD_LOG);
 		}
 	}
 
@@ -78,30 +80,33 @@ public final class ComputerDAO {
 			}
 
 		} catch (SQLException e) {
-			DaoException.displayError(LIST_LOG);
-			System.exit(-1);
+			DAOException.displayError(LIST_LOG);
 		}
 		return computerList;
 	}
-	
+
 	public int getNbRows() throws SQLException {
 		int nbRows = -1;
-		
+
 		try (PreparedStatement pstmRows = connect.prepareStatement(NB_ROWS);) {
 			resultRows = pstmRows.executeQuery();
-			
+
 			if (resultRows.first()) {
 				nbRows = resultRows.getInt("Rows");
 			}
-		}catch (SQLException e) {
-			DaoException.displayError(ROWS_LOG);
+		} catch (SQLException e) {
+			DAOException.displayError(ROWS_LOG);
+		}finally {
+			if(resultRows != null) {
+			resultRows.close();
+			}
 		}
 		return nbRows;
 	}
-	
+
 	public List<Computer> listPage(int startPaginate, int pageSize) {
 		System.out.println("passe dans la DAO");
-		
+
 		List<Computer> compPagList = new ArrayList<Computer>();
 
 		try (PreparedStatement pstmPagList = connect.prepareStatement(LIST_PAGE)) {
@@ -114,8 +119,7 @@ public final class ComputerDAO {
 			}
 
 		} catch (SQLException e) {
-			DaoException.displayError(LIST_PAGE_LOG);
-			System.exit(-1);
+			DAOException.displayError(LIST_PAGE_LOG);
 		}
 		return compPagList;
 	}
@@ -127,7 +131,6 @@ public final class ComputerDAO {
 			pstmDelete.execute();
 		} catch (SQLException e) {
 			System.err.println("Erreur there 3" + e.getMessage());
-			System.exit(-1);
 		}
 	}
 
@@ -143,8 +146,7 @@ public final class ComputerDAO {
 			}
 
 		} catch (SQLException e) {
-			DaoException.displayError(DISPLAY_LOG);
-			System.exit(-1);
+			DAOException.displayError(DISPLAY_LOG);
 		}
 
 		return computer;
@@ -153,21 +155,18 @@ public final class ComputerDAO {
 	public void update(Computer computer) {
 
 		try (PreparedStatement pstmUpdate = connect.prepareStatement(UPDATE);) {
-			
+
 			pstmUpdate.setString(1, computer.getName());
 			pstmUpdate.setTimestamp(2, Timestamp.valueOf(computer.getIntroduced()));
 			pstmUpdate.setTimestamp(3, Timestamp.valueOf(computer.getDiscontinued()));
- 			pstmUpdate.setLong(4, computer.getCompany().getId());
+			pstmUpdate.setLong(4, computer.getCompany().getId());
 			pstmUpdate.setLong(5, computer.getId());
-
 
 			pstmUpdate.executeUpdate();
 			pstmUpdate.close();
 		} catch (SQLException e) {
-			DaoException.displayError(UPDATE_LOG);
-			System.exit(-1);
+			DAOException.displayError(UPDATE_LOG);
 		}
 	}
-	
 
 }

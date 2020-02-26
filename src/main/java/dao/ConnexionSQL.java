@@ -3,7 +3,7 @@ package dao;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.lang.AutoCloseable;
+
 public final class ConnexionSQL {
 
 	private static volatile ConnexionSQL instance;

@@ -7,7 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import exceptions.DaoException;
+import exceptions.DAOException;
 import mapper.CompanyMapper;
 
 import model.Company;
@@ -15,6 +15,7 @@ import model.Company;
 public final class CompanyDAO {
 	static Connection connect;
 	ResultSet resultSetList;
+	ResultSet result;
 	public final String ADD_COMPANY = "INSERT INTO company(name) VALUES (?)";
 	public final String LIST_COMPANY = "SELECT id, name FROM company";
 	public final String GET_COMPANY_BY_ID = "SELECT id, name FROM company WHERE id=?";
@@ -39,20 +40,20 @@ public final class CompanyDAO {
 		return CompanyDAO.instance;
 	}
 
-	public Company add(Company company) {
+	public Company add(Company company) throws SQLException {
 		System.out.println("LOG : Creation de la company avec pour nom " + company.getName());
 
 		try (PreparedStatement pstmAdd = connect.prepareStatement(ADD_COMPANY);) {
 
 			pstmAdd.setString(1, company.getName());
 
-			ResultSet result = pstmAdd.executeQuery();
-			return CompanyMapper.getCompanyResultSet(result);
+			result = pstmAdd.executeQuery();
+			
 		} catch (SQLException e) {
-			DaoException.displayError(ADD_COMPANY_LOG);
+			DAOException.displayError(ADD_COMPANY_LOG);	
 		}
 		
-		
+		return CompanyMapper.getCompanyResultSet(result);
 	}
 
 	public List<Company> lister() throws SQLException {
@@ -65,7 +66,7 @@ public final class CompanyDAO {
 				allCompanies.add(company);
 			}
 		} catch (SQLException e) {
-
+			DAOException.displayError(LIST_COMPANY_LOG);
 		} finally {
 			resultSetList.close();
 		}
@@ -89,8 +90,7 @@ public final class CompanyDAO {
 			}
 			connect.close();
 		} catch (SQLException e) {
-			System.err.println("Erreur there 4" + e.getMessage());
-			System.exit(-1);
+			DAOException.displayError(GET_COMPANY_LOG);
 		}
 
 		return company;
