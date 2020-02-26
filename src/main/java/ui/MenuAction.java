@@ -44,7 +44,7 @@ public class MenuAction {
 		System.out.println("Saisir la date de fin de production : (yyyy-MM-dd)");
 		computer.setDiscontinued(DateUtils.convertToLDT(sc.nextLine()));
 		System.out.println("Saisir l'id de la marque :");
-		Company company = companyDAO.find(sc.nextInt());
+		Company company = companyDAO.find_by_id(sc.nextInt());
 		if (company == null) {
 			System.out.println("La compagnie n'existe pas, rentrez le nom de la nouvelle compagnie :");
 			company = new Company.CompanyBuilder().name(sc.nextLine()).build();
@@ -56,9 +56,9 @@ public class MenuAction {
 
 	public void updateComputer() {
 		System.out.println("Saisir l'id de l'ordinateur à modifier :\n");
-		Computer computer = ComputerDAO.getInstance().find(sc.nextInt());
+		Computer computer = ComputerDAO.getInstance().find_by_id(sc.nextInt());
 		System.out.println("Saisir le nouvel id :\n");
-		computer = new Computer.ComputerBuilder().initializeWithId(sc.nextLong()).build();
+		computer = new Computer.Builder().initializeId(sc.nextLong()).build();
 		System.out.println("Saisir le nouveau nom :\n");
 		computer.setName(sc.next());
 		System.out.println("Saisir la nouvelle date de parution du modele :\n");
@@ -73,12 +73,12 @@ public class MenuAction {
 
 	public void displayComputer() {
 		System.out.println("Rentrez l'id de l'ordinateur à afficher :\n");
-		System.out.println(computerDAO.find(sc.nextInt()));
+		System.out.println(computerDAO.find_by_id(sc.nextInt()));
 	}
 
 	public void deleteComputer() {
 		System.out.println("Rentrez l'id de l'ordinateur à supprimer :\n");
-		Computer computer = computerDAO.find(sc.nextInt());
+		Computer computer = computerDAO.find_by_id(sc.nextInt());
 		computerDAO.deleteComputer(computer);
 	}
 	

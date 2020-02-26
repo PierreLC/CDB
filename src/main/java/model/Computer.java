@@ -10,7 +10,7 @@ public class Computer {
 	private LocalDateTime discontinued;
 	private Company company;
 
-	public Computer(ComputerBuilder computerBuilder) {
+	public Computer(Builder computerBuilder) {
 		this.id = computerBuilder.id;
 		this.name = computerBuilder.name;
 		this.introduced = computerBuilder.introduced;
@@ -61,34 +61,34 @@ public class Computer {
 		this.company = company;
 	}
 
-	public static class ComputerBuilder {
+	public static class Builder {
 		private long id;
 		private String name;
 		private LocalDateTime introduced;
 		private LocalDateTime discontinued;
 		private Company company;
 
-		public ComputerBuilder initializeWithName(String name) {
+		public Builder initializeName(String name) {
 			this.name = name;
 			return this;
 		}
 
-		public ComputerBuilder initializeWithId(long id) {
+		public Builder initializeId(long id) {
 			this.id = id;
 			return this;
 		}
 
-		public ComputerBuilder initializeWithIntroducedDate(LocalDateTime introduced) {
+		public Builder initializeIntroducedDate(LocalDateTime introduced) {
 			this.introduced = introduced;
 			return this;
 		}
 
-		public ComputerBuilder initializeWithDiscontinuedDate(LocalDateTime discontinued) {
+		public Builder initializeDiscontinuedDate(LocalDateTime discontinued) {
 			this.discontinued = discontinued;
 			return this;
 		}
 
-		public ComputerBuilder initializeWithCompany(Company company) {
+		public Builder initializeCompany(Company company) {
 			this.company = company;
 			return this;
 		}

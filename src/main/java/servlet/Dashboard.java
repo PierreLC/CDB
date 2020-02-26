@@ -21,27 +21,26 @@ public class Dashboard extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
-//		int i = 0;
-//		try {
-//			i = ComputerDAO.getInstance().getNbRows();
-//		} catch (SQLException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//
-//		request.setAttribute("nbRows", i);
-//
-//		List<Computer> listComputer = ComputerDAO.getInstance().list();
-//		request.setAttribute("listComputer", listComputer);
-//
-//		response.getWriter().append("Served at: ").append(request.getContextPath());
+		int nbRows = 0;
+		try {
+			nbRows = ComputerDAO.getInstance().getNbRows();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();;
+		}
+
+		request.setAttribute("nbRows", nbRows);
+
+		List<Computer> listComputer = ComputerDAO.getInstance().list();
+		request.setAttribute("listComputer", listComputer);
+
+		response.getWriter().append("Served at: ").append(request.getContextPath());
 
 		request.getRequestDispatcher("/WEB-INF/views/dashboard.jsp").forward(request, response);
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		// TODO Auto-generated method stub
 		doGet(request, response);
 	}
 

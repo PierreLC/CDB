@@ -15,9 +15,6 @@ import model.Computer;
 public final class ComputerDAO {
 	
 	static Connection connect;
-	ResultSet resultList;
-	ResultSet resultFind;
-	ResultSet resultRows;
 	
 	public final String ADD = "INSERT INTO computer(name, introduced, discontinued, company_id) VALUES (?, ?, ?, ?);";
 	public final String LIST_COMPUTER = "SELECT computer.id, computer.name, introduced , discontinued , company_id, company.name FROM computer LEFT JOIN company ON company_id = company.id;";
@@ -65,11 +62,12 @@ public final class ComputerDAO {
 
 			pstmAdd.executeUpdate();
 		} catch (SQLException e) {
-			DAOException.displayError(ADD_LOG);
+			DAOException.displayError(ADD_LOG+e.getMessage());
 		}
 	}
 
 	public List<Computer> list() {
+		ResultSet resultList;
 		List<Computer> computerList = new ArrayList<Computer>();
 
 		try (PreparedStatement pstmList = connect.prepareStatement(LIST_COMPUTER)) {
@@ -80,13 +78,14 @@ public final class ComputerDAO {
 			}
 
 		} catch (SQLException e) {
-			DAOException.displayError(LIST_LOG);
+			DAOException.displayError(LIST_LOG+e.getMessage());
 		}
 		return computerList;
 	}
 
 	public int getNbRows() throws SQLException {
 		int nbRows = -1;
+		ResultSet resultRows = null;
 
 		try (PreparedStatement pstmRows = connect.prepareStatement(NB_ROWS);) {
 			resultRows = pstmRows.executeQuery();
@@ -95,7 +94,7 @@ public final class ComputerDAO {
 				nbRows = resultRows.getInt("Rows");
 			}
 		} catch (SQLException e) {
-			DAOException.displayError(ROWS_LOG);
+			DAOException.displayError(ROWS_LOG+e.getMessage());
 		}finally {
 			if(resultRows != null) {
 			resultRows.close();
@@ -105,8 +104,8 @@ public final class ComputerDAO {
 	}
 
 	public List<Computer> listPage(int startPaginate, int pageSize) {
-		System.out.println("passe dans la DAO");
-
+		ResultSet resultList;
+		
 		List<Computer> compPagList = new ArrayList<Computer>();
 
 		try (PreparedStatement pstmPagList = connect.prepareStatement(LIST_PAGE)) {
@@ -119,7 +118,7 @@ public final class ComputerDAO {
 			}
 
 		} catch (SQLException e) {
-			DAOException.displayError(LIST_PAGE_LOG);
+			DAOException.displayError(LIST_PAGE_LOG+e.getMessage());
 		}
 		return compPagList;
 	}
@@ -134,11 +133,12 @@ public final class ComputerDAO {
 		}
 	}
 
-	public Computer find(int i) {
+	public Computer find_by_id(int id) {
 		Computer computer = null;
+		ResultSet resultFind;
 
 		try (PreparedStatement pstmFind = connect.prepareStatement(DISPLAY_COMPUTER);) {
-			pstmFind.setLong(1, i);
+			pstmFind.setLong(1, id);
 			resultFind = pstmFind.executeQuery();
 			System.out.println("requete exec");
 			if (resultFind.first()) {
@@ -146,7 +146,7 @@ public final class ComputerDAO {
 			}
 
 		} catch (SQLException e) {
-			DAOException.displayError(DISPLAY_LOG);
+			DAOException.displayError(DISPLAY_LOG+e.getMessage());
 		}
 
 		return computer;
@@ -165,7 +165,7 @@ public final class ComputerDAO {
 			pstmUpdate.executeUpdate();
 			pstmUpdate.close();
 		} catch (SQLException e) {
-			DAOException.displayError(UPDATE_LOG);
+			DAOException.displayError(UPDATE_LOG+e.getMessage());
 		}
 	}
 

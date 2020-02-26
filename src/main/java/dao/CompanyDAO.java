@@ -14,13 +14,11 @@ import model.Company;
 
 public final class CompanyDAO {
 	static Connection connect;
-	ResultSet resultSetList;
-	ResultSet result;
 	public final String ADD_COMPANY = "INSERT INTO company(name) VALUES (?)";
 	public final String LIST_COMPANY = "SELECT id, name FROM company";
 	public final String GET_COMPANY_BY_ID = "SELECT id, name FROM company WHERE id=?";
 	private static volatile CompanyDAO instance = null;
-	
+
 	private final static String ADD_COMPANY_LOG = "Erreur lors de l'ajout : échec de la connexion à la base de donnée";
 	private final static String LIST_COMPANY_LOG = "Erreur au moment de lister les marques : échec de la connexion à la base de donnée";
 	private final static String GET_COMPANY_LOG = "Erreur au moment d'obtenir la marque : échec de la connexion à la base de donnée";
@@ -41,40 +39,40 @@ public final class CompanyDAO {
 	}
 
 	public Company add(Company company) throws SQLException {
-		System.out.println("LOG : Creation de la company avec pour nom " + company.getName());
-
+		ResultSet resultAdd = null;
+		
 		try (PreparedStatement pstmAdd = connect.prepareStatement(ADD_COMPANY);) {
 
 			pstmAdd.setString(1, company.getName());
 
-			result = pstmAdd.executeQuery();
-			
+			resultAdd = pstmAdd.executeQuery();
+
 		} catch (SQLException e) {
-			DAOException.displayError(ADD_COMPANY_LOG);	
+			DAOException.displayError(ADD_COMPANY_LOG + e.getMessage());
 		}
-		
-		return CompanyMapper.getCompanyResultSet(result);
+		return CompanyMapper.getCompanyResultSet(resultAdd);
 	}
 
-	public List<Company> lister() throws SQLException {
+	public List<Company> list() throws SQLException {
 		List<Company> allCompanies = new ArrayList<Company>();
+		ResultSet resultSetList = null;
 
 		try (PreparedStatement stmt = connect.prepareStatement(LIST_COMPANY)) {
 			resultSetList = stmt.executeQuery();
 			while (resultSetList.next()) {
-				Company company =  CompanyMapper.getCompanyResultSet(resultSetList);
+				Company company = CompanyMapper.getCompanyResultSet(resultSetList);
 				allCompanies.add(company);
 			}
 		} catch (SQLException e) {
-			DAOException.displayError(LIST_COMPANY_LOG);
+			DAOException.displayError(LIST_COMPANY_LOG+e.getMessage());
 		} finally {
 			resultSetList.close();
 		}
 		return allCompanies;
 	}
 
-	public Company find(int i) {
-		System.out.println("LOG : Au moment de trouver la company avec l'id" + i);
+	public Company find_by_id(int id) {
+		System.out.println("LOG : Au moment de trouver la company avec l'id" + id);
 		Company company = null;
 
 		try {
@@ -82,7 +80,7 @@ public final class CompanyDAO {
 
 			System.out.println("LOG : connexion statetement");
 
-			pstmFind.setInt(1, i);
+			pstmFind.setInt(1, id);
 			ResultSet resultFind = pstmFind.executeQuery();
 
 			if (resultFind.first()) {
@@ -90,7 +88,7 @@ public final class CompanyDAO {
 			}
 			connect.close();
 		} catch (SQLException e) {
-			DAOException.displayError(GET_COMPANY_LOG);
+			DAOException.displayError(GET_COMPANY_LOG+e.getMessage());
 		}
 
 		return company;

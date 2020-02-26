@@ -30,7 +30,7 @@
 	<section id="main">
 		<div class="container">
 			<h1 id="homeTitle">
-				<b>Computer Database : computers found</b>
+				 <b>Computer Database : <c:out value = "${nbRows}"></c:out> computers found</b> 
 			</h1>
 			<div id="actions" class="form-horizontal">
 				<div class="pull-left">

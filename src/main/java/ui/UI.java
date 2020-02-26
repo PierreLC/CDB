@@ -66,7 +66,7 @@ public class UI {
 				MenuAction.getInstance().createComputer();
 				break;
 			case DISPLAYCOMPANIES:
-				System.out.println(CompanyDAO.getInstance().lister());
+				System.out.println(CompanyDAO.getInstance().list());
 				break;
 			case DISPLAYDETAILS:
 				MenuAction.getInstance().displayComputer();

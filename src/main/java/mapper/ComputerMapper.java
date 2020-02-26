@@ -25,9 +25,9 @@ public class ComputerMapper {
 			Company company = new Company.CompanyBuilder().id(companyId).name(companyName)
 					.build();
 
-			computer = new Computer.ComputerBuilder().initializeWithId(computerId).initializeWithName(computerName)
-					.initializeWithIntroducedDate(introduced).initializeWithDiscontinuedDate(discontinued)
-					.initializeWithCompany(company).build();
+			computer = new Computer.Builder().initializeId(computerId).initializeName(computerName)
+					.initializeIntroducedDate(introduced).initializeDiscontinuedDate(discontinued)
+					.initializeCompany(company).build();
 			return computer;
 
 	}
