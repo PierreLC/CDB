@@ -13,9 +13,9 @@ import mapper.ComputerMapper;
 import model.Computer;
 
 public final class ComputerDAO {
-	
+	private static volatile ComputerDAO instance = null;
 	static Connection connect;
-	
+
 	public final String ADD = "INSERT INTO computer(name, introduced, discontinued, company_id) VALUES (?, ?, ?, ?);";
 	public final String LIST_COMPUTER = "SELECT computer.id, computer.name, introduced , discontinued , company_id, company.name FROM computer LEFT JOIN company ON company_id = company.id;";
 	public final String DELETE = "DELETE FROM computer WHERE id=?;";
@@ -32,8 +32,6 @@ public final class ComputerDAO {
 	public final String ROWS_LOG = "Erreur au moment de compter les lignes : échec lors de la connexion à la base de donnée";
 	public final String LIST_PAGE_LOG = "Erreur lors de l'affichage des pages : échec lors de la connexion à la base de donnée";
 
-	private static volatile ComputerDAO instance = null;
-
 	private ComputerDAO() {
 		ComputerDAO.connect = ConnexionSQL.getInstance().connect();
 	}
@@ -49,7 +47,9 @@ public final class ComputerDAO {
 		return ComputerDAO.instance;
 	}
 
-	public void add(Computer computer) {
+	public Computer add(Computer computer) throws SQLException {
+		ResultSet resultAdd = null;
+
 		try (PreparedStatement pstmAdd = connect.prepareStatement(ADD)) {
 
 			pstmAdd.setString(1, computer.getName());
@@ -57,13 +57,14 @@ public final class ComputerDAO {
 					computer.getIntroduced() != null ? Timestamp.valueOf(computer.getIntroduced()) : null);
 			pstmAdd.setTimestamp(3,
 					computer.getDiscontinued() != null ? Timestamp.valueOf(computer.getDiscontinued()) : null);
-			System.out.println(computer);
 			pstmAdd.setLong(4, computer.getCompany().getId());
 
-			pstmAdd.executeUpdate();
+			resultAdd = pstmAdd.executeQuery();
+
 		} catch (SQLException e) {
-			DAOException.displayError(ADD_LOG+e.getMessage());
+			DAOException.displayError(ADD_LOG + e.getMessage());
 		}
+		return ComputerMapper.getComputerResultSet(resultAdd);
 	}
 
 	public List<Computer> list() {
@@ -78,34 +79,14 @@ public final class ComputerDAO {
 			}
 
 		} catch (SQLException e) {
-			DAOException.displayError(LIST_LOG+e.getMessage());
+			DAOException.displayError(LIST_LOG + e.getMessage());
 		}
 		return computerList;
 	}
 
-	public int getNbRows() throws SQLException {
-		int nbRows = -1;
-		ResultSet resultRows = null;
-
-		try (PreparedStatement pstmRows = connect.prepareStatement(NB_ROWS);) {
-			resultRows = pstmRows.executeQuery();
-
-			if (resultRows.first()) {
-				nbRows = resultRows.getInt("Rows");
-			}
-		} catch (SQLException e) {
-			DAOException.displayError(ROWS_LOG+e.getMessage());
-		}finally {
-			if(resultRows != null) {
-			resultRows.close();
-			}
-		}
-		return nbRows;
-	}
-
 	public List<Computer> listPage(int startPaginate, int pageSize) {
 		ResultSet resultList;
-		
+
 		List<Computer> compPagList = new ArrayList<Computer>();
 
 		try (PreparedStatement pstmPagList = connect.prepareStatement(LIST_PAGE)) {
@@ -118,7 +99,7 @@ public final class ComputerDAO {
 			}
 
 		} catch (SQLException e) {
-			DAOException.displayError(LIST_PAGE_LOG+e.getMessage());
+			DAOException.displayError(LIST_PAGE_LOG + e.getMessage());
 		}
 		return compPagList;
 	}
@@ -128,6 +109,7 @@ public final class ComputerDAO {
 
 			pstmDelete.setLong(1, computer.getId());
 			pstmDelete.execute();
+
 		} catch (SQLException e) {
 			System.err.println("Erreur there 3" + e.getMessage());
 		}
@@ -146,7 +128,7 @@ public final class ComputerDAO {
 			}
 
 		} catch (SQLException e) {
-			DAOException.displayError(DISPLAY_LOG+e.getMessage());
+			DAOException.displayError(DISPLAY_LOG + e.getMessage());
 		}
 
 		return computer;
@@ -165,8 +147,23 @@ public final class ComputerDAO {
 			pstmUpdate.executeUpdate();
 			pstmUpdate.close();
 		} catch (SQLException e) {
-			DAOException.displayError(UPDATE_LOG+e.getMessage());
+			DAOException.displayError(UPDATE_LOG + e.getMessage());
 		}
+	}
+
+	public int getNbRows() throws SQLException {
+		int nbRows = -1;
+
+		try (PreparedStatement pstmRows = connect.prepareStatement(NB_ROWS);) {
+			try (ResultSet resultRows = pstmRows.executeQuery()) {
+				if (resultRows.first()) {
+					nbRows = resultRows.getInt("Rows");
+				}
+			}
+		} catch (SQLException e) {
+			DAOException.displayError(ROWS_LOG + e.getMessage());
+		}
+		return nbRows;
 	}
 
 }

@@ -12,7 +12,9 @@ public class Main {
 // for(Computer c : computers) {
 //	 System.out.println(c);
 		
-	UI.actions();
+//	UI.actions();
+		
+		System.out.println(ComputerDAO.getInstance().getNbRows());
 		
 	}
 	}

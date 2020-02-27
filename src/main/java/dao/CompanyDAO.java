@@ -13,11 +13,12 @@ import mapper.CompanyMapper;
 import model.Company;
 
 public final class CompanyDAO {
-	static Connection connect;
-	public final String ADD_COMPANY = "INSERT INTO company(name) VALUES (?)";
-	public final String LIST_COMPANY = "SELECT id, name FROM company";
-	public final String GET_COMPANY_BY_ID = "SELECT id, name FROM company WHERE id=?";
 	private static volatile CompanyDAO instance = null;
+	static Connection connect;
+	
+	public final static String ADD_COMPANY = "INSERT INTO company(name) VALUES (?)";
+	public final static String LIST_COMPANY = "SELECT id, name FROM company";
+	public final String GET_COMPANY_BY_ID = "SELECT id, name FROM company WHERE id=?";
 
 	private final static String ADD_COMPANY_LOG = "Erreur lors de l'ajout : échec de la connexion à la base de donnée";
 	private final static String LIST_COMPANY_LOG = "Erreur au moment de lister les marques : échec de la connexion à la base de donnée";
@@ -38,7 +39,7 @@ public final class CompanyDAO {
 		return CompanyDAO.instance;
 	}
 
-	public Company add(Company company) throws SQLException {
+	public static Company add(Company company) throws SQLException {
 		ResultSet resultAdd = null;
 		
 		try (PreparedStatement pstmAdd = connect.prepareStatement(ADD_COMPANY);) {
@@ -53,7 +54,7 @@ public final class CompanyDAO {
 		return CompanyMapper.getCompanyResultSet(resultAdd);
 	}
 
-	public List<Company> list() throws SQLException {
+	public static List<Company> list() throws SQLException {
 		List<Company> allCompanies = new ArrayList<Company>();
 		ResultSet resultSetList = null;
 

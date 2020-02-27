@@ -49,7 +49,7 @@ public class MenuAction {
 			System.out.println("La compagnie n'existe pas, rentrez le nom de la nouvelle compagnie :");
 			company = new Company.CompanyBuilder().name(sc.nextLine()).build();
 		}
-		company = companyDAO.add(company);
+		company = CompanyDAO.add(company);
 		computer.setCompany(company);
 		computerDAO.add(computer);
 	}
