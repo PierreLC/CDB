@@ -22,7 +22,7 @@ public class CompanyService {
 	}
 	
 	public CompanyService(CompanyDAO companyDAO) {
-		CompanyService.companyDAO = companyDAO;
+		CompanyService.companyDAO = CompanyDAO.getInstance();
 	}
 	
 	public Company add(Company company) throws SQLException {

@@ -4,6 +4,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 
+import dto.CompanyDTO;
+import dto.ComputerDTO;
 import model.Company;
 import model.Computer;
 
@@ -29,6 +31,27 @@ public class ComputerMapper {
 					.initializeIntroducedDate(introduced).initializeDiscontinuedDate(discontinued)
 					.initializeCompany(company).build();
 			return computer;
-
 	}
+	
+//	public ComputerDTO toComputerDto(Computer computer) {
+//		CompanyDTO companyDTO = new CompanyDTO();
+//		companyDTO.setId(computer.getCompany().getId());
+//		companyDTO.setName(computer.getCompany().getName());
+//
+//		ComputerDTO computerDTO = new ComputerDTO(computer.getId(),computer.getName(),
+//				computer.getIntroduced()==null?null:computer.getIntroduced().toString(),
+//				computer.getDiscontinued()==null?null:computer.getDiscontinued().toString(),companyDTO);
+//		return computerDTO;
+//	}
+//	
+//	public static Computer convertFromComputerDtoToComputer(ComputerDto computerDto) throws ParseException {
+//		Computer computer = new Computer.ComputerBuilder().setId(computerDto.getId())
+//														  .setName(computerDto.getName())
+//														  .setIntroduced(convertStringToLocalDateTime(computerDto.getIntroduced()))
+//														  .setDiscontinued(convertStringToLocalDateTime(computerDto.getDiscontinued()))
+//														  .setCompany(CompanyMapper.mapFromCompanyDtoToCompany(computerDto.getCompany()))
+//														  .build();   
+//		return computer;
+//
+//	}
 }

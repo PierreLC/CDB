@@ -1,21 +1,12 @@
-import java.io.IOException;
 import java.sql.SQLException;
+import java.util.List;
 
-import dao.ComputerDAO;
-import ui.UI;
+import model.Computer;
+import services.ComputerService;
 
 public class Main {
 
-	public static void main(String[] args) throws SQLException, IOException {
-
-// List<Computer> computers = ComputerDAO.getInstance().list();
-// for(Computer c : computers) {
-//	 System.out.println(c);
-		
-//	UI.actions();
-		
-		System.out.println(ComputerDAO.getInstance().getNbRows());
+	public static void main(String[] args) throws SQLException  {
 		
 	}
-	}
-
+}

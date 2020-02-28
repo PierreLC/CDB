@@ -22,7 +22,7 @@ public class ComputerService {
 	}
 	
 	public ComputerService(ComputerDAO computerDAO) {
-		ComputerService.computerDAO = computerDAO;
+		ComputerService.computerDAO = ComputerDAO.getInstance();
 	}
 	
 	public Computer add(Computer computer) throws SQLException {
@@ -33,8 +33,8 @@ public class ComputerService {
 		return computerDAO.list();
 	}
 	
-	public List<Computer> listPage(){
-		return computerDAO.listPage(0, 20);
+	public List<Computer> listPage(int offset, int step){
+		return computerDAO.listPage(offset, step);
 	}
 	
 	public void delete(Computer computer) {
