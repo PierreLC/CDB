@@ -29,11 +29,11 @@
 	<section id="main">
 		<div class="container">
 			<h1 id="homeTitle">
-				<b>Computer Database : ${nbRows} computers found</b> 
+				<b>Computer Database : ${ nbRows } computers found</b> 
 			</h1>
 			<c:choose>
-				<c:when test="${pageIterator > 0 && pageIterator <= lastPage}">
-					<h4>Page ${pageIterator}</h4>
+				<c:when test="${ pageIterator > 0 && pageIterator <= lastPage }">
+					<h4>Page ${ pageIterator }</h4>
 				</c:when>
 				<c:otherwise>
 					<h4>No page found</h4>
@@ -88,15 +88,15 @@
 				
 				<!-- Browse attribute computers -->
 				<tbody id="results">
-					<c:forEach items="${listComputerPag}" var="computer">
+					<c:forEach items="${ computerListPag }" var="computer">
 						<tr>
 							<td class="editMode"><input type="checkbox" name="cb"
 								class="cb" value="0"></td>
 							<td><a href="EditComputer.jsp" onclick=""> <c:out
-										value="${computer.getName()}"></c:out></a></td>
-							<td><c:out value="${computer.getIntroduced()}"></c:out></td>
-							<td><c:out value="${computer.getDiscontinued()}"></c:out></td>
-							<td><c:out value="${computer.getCompany().getName()}"></c:out></td>
+										value="${ computer.getName() }"></c:out></a></td>
+							<td><c:out value="${ computer.getIntroduced() }"></c:out></td>
+							<td><c:out value="${ computer.getDiscontinued() }"></c:out></td>
+							<td><c:out value="${ computer.getCompany().getName() }"></c:out></td>
 						</tr>
 					</c:forEach>
 				</tbody>
@@ -110,7 +110,7 @@
 			<ul class="pagination">
 
 				<c:choose>
-					<c:when test="${ lastPageIndex > 6 }">
+					<c:when test="${ lastPage > 6 }">
 						<li><c:choose>
 								<c:when test="${ pageIterator >= 2 }">
 									<a href="dashboard?pageIterator=${ pageIterator - 1 }"
@@ -134,16 +134,16 @@
 								</c:forEach>
 							</c:when>
 							<c:when
-								test="${ pageIterator > 3 && pageIterator < lastPageIndex - 3 }">
+								test="${ pageIterator > 3 && pageIterator < lastPage - 3 }">
 								<c:forEach var="i" begin="${ pageIterator - 2 }"
 									end="${ pageIterator + 2 }" step="1">
 									<li><a href="dashboard?pageIterator=${ i }"><c:out
 												value="${ i }" /></a></li>
 								</c:forEach>
 							</c:when>
-							<c:when test="${ pageIterator >= lastPageIndex - 3 }">
-								<c:forEach var="i" begin="${ lastPageIndex - 5}"
-									end="${ lastPageIndex -1 }" step="1">
+							<c:when test="${ pageIterator >= lastPage - 3 }">
+								<c:forEach var="i" begin="${ lastPage - 5}"
+									end="${ lastPage -1 }" step="1">
 									<li><a href="dashboard?pageIterator=${ i }"> <c:out
 												value="${ i }" /></a></li>
 								</c:forEach>
@@ -152,16 +152,16 @@
 
 
 						<c:choose>
-							<c:when test="${ pageIterator < lastPageIndex - 3 }">
+							<c:when test="${ pageIterator < lastPage - 3 }">
 								<li><a href="#">...</a></li>
 							</c:when>
 						</c:choose>
 
-						<li><a href="dashboard?pageIterator=${ lastPageIndex }"><c:out
-									value="${ lastPageIndex }" /></a></li>
+						<li><a href="dashboard?pageIterator=${ lastPage }"><c:out
+									value="${ lastPage }" /></a></li>
 
 						<li><c:choose>
-								<c:when test="${ pageIterator != lastPageIndex }">
+								<c:when test="${ pageIterator != lastPage }">
 									<a href="dashboard?pageIterator=${ pageIterator + 1 }"
 										aria-label="Next"><span aria-hidden="true">&raquo;</span></a>
 								</c:when>
@@ -174,12 +174,12 @@
 										aria-label="Previous"> <span aria-hidden="true">&laquo;</span></a>
 								</c:when>
 							</c:choose></li>
-						<c:forEach var="i" begin="1" end="${ lastPageIndex }" step="1">
+						<c:forEach var="i" begin="1" end="${ lastPage }" step="1">
 							<li><a href="dashboard?pageIterator=${ i }"><c:out
 										value="${ i }" /></a></li>
 						</c:forEach>
 						<li><c:choose>
-								<c:when test="${ pageIterator != lastPageIndex }">
+								<c:when test="${ pageIterator != lastPage }">
 									<a href="dashboard?pageIterator=${ pageIterator + 1 }"
 										aria-label="Next"><span aria-hidden="true">&raquo;</span></a>
 								</c:when>

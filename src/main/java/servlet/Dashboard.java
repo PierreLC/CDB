@@ -17,8 +17,8 @@ import services.ComputerService;
 @WebServlet(urlPatterns = "/dashboard")
 public class Dashboard extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	
-	int pageIterator = 1;
+
+	private int pageIterator = 1;
 	private int nbRows = 0;
 	private int step = 10;
 	ComputerService computerService;
@@ -27,12 +27,17 @@ public class Dashboard extends HttpServlet {
 			throws ServletException, IOException {
 
 		try {
-			List<Computer> computerList = ComputerService.getInstance().list();
+			nbRows = ComputerService.getInstance().getNbRows();
+		} catch (SQLException e) {
+			DAOException.displayError(e.getMessage());
+		}
+
+		try {
 
 			if (request.getParameter("pageIterator") != null) {
 				String s = request.getParameter("pageIterator");
 				try {
-					Integer.parseInt(s);
+					pageIterator = Integer.parseInt(s);
 				} catch (NumberFormatException e) {
 					this.getServletContext().getRequestDispatcher("/WEB-INF/views/dashboard.jsp").forward(request,
 							response);
@@ -48,41 +53,30 @@ public class Dashboard extends HttpServlet {
 							response);
 				}
 			}
-			
 
-			List<Computer> computerListPag = ComputerService.getInstance().listPage((pageIterator-1)*step, step);
-			
-			System.out.println(computerListPag);
-			
-			int lastPage = (int) Math.ceil((double) computerList.size()/step);
-
-//			request.setAttribute("addSuccess", request.getParameter("addSuccess"));
-			request.setAttribute("pageIterator", pageIterator);
-			request.setAttribute("step", step);
-			request.setAttribute("lastPage", lastPage);
-			request.setAttribute("computerList", computerList);
-//			System.out.println(computerService.list());
-			request.setAttribute("computerListPag", computerListPag);
-//			System.out.println(computerService.listPage((pageIterator-1)*step, step));
-			request.getRequestDispatcher("/WEB-INF/views/dashboard.jsp").forward(request, response);
-			
 		} catch (Exception e) {
 			// TODO not all exceptions
 		}
 
-		try {
-			nbRows = ComputerService.getInstance().getNbRows();
-		} catch (SQLException e) {
-			DAOException.displayError(e.getMessage());
-		}
+		List<Computer> computerList = ComputerService.getInstance().list();
 
+		List<Computer> computerListPag = ComputerService.getInstance().listPage((pageIterator - 1) * step, step);
+
+		int lastPage = (int) Math.ceil((double) computerList.size() / step);
+
+//		request.setAttribute("addSuccess", request.getParameter("addSuccess"));
 		request.setAttribute("nbRows", nbRows);
+		request.setAttribute("pageIterator", pageIterator);
+		request.setAttribute("step", step);
+		request.setAttribute("lastPage", lastPage);
+		request.setAttribute("computerList", computerList);
+		request.setAttribute("computerListPag", computerListPag);
 		request.getRequestDispatcher("/WEB-INF/views/dashboard.jsp").forward(request, response);
 	}
-	
+
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		
-		doGet(request,response);
+
+		doGet(request, response);
 	}
 }
