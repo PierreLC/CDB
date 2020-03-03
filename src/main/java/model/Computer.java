@@ -68,27 +68,27 @@ public class Computer {
 		private LocalDateTime discontinued;
 		private Company company;
 
-		public Builder initializeName(String name) {
+		public Builder setName(String name) {
 			this.name = name;
 			return this;
 		}
 
-		public Builder initializeId(long id) {
+		public Builder setId(long id) {
 			this.id = id;
 			return this;
 		}
 
-		public Builder initializeIntroducedDate(LocalDateTime introduced) {
+		public Builder setIntroducedDate(LocalDateTime introduced) {
 			this.introduced = introduced;
 			return this;
 		}
 
-		public Builder initializeDiscontinuedDate(LocalDateTime discontinued) {
+		public Builder setDiscontinuedDate(LocalDateTime discontinued) {
 			this.discontinued = discontinued;
 			return this;
 		}
 
-		public Builder initializeCompany(Company company) {
+		public Builder setCompany(Company company) {
 			this.company = company;
 			return this;
 		}

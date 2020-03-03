@@ -58,7 +58,7 @@ public class MenuAction {
 		System.out.println("Saisir l'id de l'ordinateur à modifier :\n");
 		Computer computer = ComputerDAO.getInstance().find_by_id(sc.nextInt());
 		System.out.println("Saisir le nouvel id :\n");
-		computer = new Computer.Builder().initializeId(sc.nextLong()).build();
+		computer = new Computer.Builder().setId(sc.nextLong()).build();
 		System.out.println("Saisir le nouveau nom :\n");
 		computer.setName(sc.next());
 		System.out.println("Saisir la nouvelle date de parution du modele :\n");

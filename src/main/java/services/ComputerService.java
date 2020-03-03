@@ -25,8 +25,8 @@ public class ComputerService {
 		ComputerService.computerDAO = ComputerDAO.getInstance();
 	}
 	
-	public Computer add(Computer computer) throws SQLException {
-		return computerDAO.add(computer);
+	public void add(Computer computer) throws SQLException {
+//		return computerDAO.add(computer);
 	}
 	
 	public List<Computer> list(){

@@ -16,7 +16,7 @@ public final class ComputerDAO {
 	private static volatile ComputerDAO instance = null;
 	static Connection connect;
 
-	public final String ADD = "INSERT INTO computer(name, introduced, discontinued, company_id) VALUES (?, ?, ?, ?);";
+	public final String ADD = "INSERT INTO computer (name, introduced, discontinued, company_id) VALUES (?, ?, ?, ?);";
 	public final String LIST_COMPUTER = "SELECT computer.id, computer.name, introduced , discontinued , company_id, company.name FROM computer LEFT JOIN company ON company_id = company.id;";
 	public final String DELETE = "DELETE FROM computer WHERE id=?;";
 	public final String UPDATE = "UPDATE computer SET  name = ?, introduced = ?, discontinued = ?, company_id = ? WHERE Id = ?;";
@@ -47,11 +47,10 @@ public final class ComputerDAO {
 		return ComputerDAO.instance;
 	}
 
-	public Computer add(Computer computer) throws SQLException {
-		ResultSet resultAdd = null;
+	public void add(Computer computer) throws SQLException {
+		System.out.println(computer.getIntroduced());
 
 		try (PreparedStatement pstmAdd = connect.prepareStatement(ADD)) {
-
 			pstmAdd.setString(1, computer.getName());
 			pstmAdd.setTimestamp(2,
 					computer.getIntroduced() != null ? Timestamp.valueOf(computer.getIntroduced()) : null);
@@ -59,12 +58,11 @@ public final class ComputerDAO {
 					computer.getDiscontinued() != null ? Timestamp.valueOf(computer.getDiscontinued()) : null);
 			pstmAdd.setLong(4, computer.getCompany().getId());
 
-			resultAdd = pstmAdd.executeQuery();
+			 pstmAdd.executeUpdate();
 
 		} catch (SQLException e) {
 			DAOException.displayError(ADD_LOG + e.getMessage());
 		}
-		return ComputerMapper.getComputerResultSet(resultAdd);
 	}
 
 	public List<Computer> list() {
