@@ -92,7 +92,7 @@
 						<tr>
 							<td class="editMode"><input type="checkbox" name="cb"
 								class="cb" value="0"></td>
-							<td><a href="EditComputer.jsp" onclick=""> <c:out
+							<td><a href="editComputer?id=${ computer.getId() }" onclick=""> <c:out
 										value="${ computer.getName() }"></c:out></a></td>
 							<td><c:out value="${ computer.getIntroduced() }"></c:out></td>
 							<td><c:out value="${ computer.getDiscontinued() }"></c:out></td>

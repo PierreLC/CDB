@@ -9,9 +9,9 @@ import com.zaxxer.hikari.HikariDataSource;
 public final class ConnexionSQL {
 
 	private static volatile ConnexionSQL instance;
-	private static HikariConfig connectProperties;
+	private static HikariConfig configProperties;
 	private static HikariDataSource dataSource;
-	private static final String CONFIGURATION_LOCATION = "database.properties";
+	private static final String CONFIGURATION_LOCATION = "/database.properties";
 
 	public ConnexionSQL() {
 		super();
@@ -30,8 +30,8 @@ public final class ConnexionSQL {
 
 	public Connection connect() {
 
-		connectProperties = new HikariConfig(CONFIGURATION_LOCATION);
-		dataSource = new HikariDataSource(connectProperties);
+		configProperties = new HikariConfig(CONFIGURATION_LOCATION);
+		dataSource = new HikariDataSource(configProperties);
 
 		try {
 			return dataSource.getConnection();

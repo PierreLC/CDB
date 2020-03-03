@@ -64,7 +64,6 @@ public class Dashboard extends HttpServlet {
 
 		int lastPage = (int) Math.ceil((double) computerList.size() / step);
 
-//		request.setAttribute("addSuccess", request.getParameter("addSuccess"));
 		request.setAttribute("nbRows", nbRows);
 		request.setAttribute("pageIterator", pageIterator);
 		request.setAttribute("step", step);

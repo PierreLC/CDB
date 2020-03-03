@@ -1,7 +1,10 @@
 package servlet;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
+import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -11,6 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import model.Company;
 import model.Computer;
+import services.CompanyService;
 import services.ComputerService;
 
 @WebServlet(urlPatterns="/editComputer")
@@ -21,15 +25,54 @@ public class UpdateComputer extends HttpServlet {
 	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) 
 		throws ServletException, IOException {
+		
+		List<Company> companyList;
+		try {
+			companyList = CompanyService.getInstance().list();
+			request.setAttribute("companyList", companyList);
+			String x=request.getParameter("id");
+			Computer computer = service.find_by_id(Integer.parseInt(request.getParameter("id")));
+			
+			request.setAttribute("computerId", computer.getId());
+			request.setAttribute("computerName", computer.getName());
+			request.setAttribute("introduced", computer.getIntroduced());
+			request.setAttribute("discontinued", computer.getDiscontinued());
+			request.setAttribute("company", computer.getCompany());
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		this.getServletContext().getRequestDispatcher("/WEB-INF/views/editComputer.jsp").forward(request,response);
+		
 	}
 	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 	throws ServletException, IOException{
 		
-		Computer computer = ComputerService.getInstance().find_by_id(Integer.parseInt(request.getParameter("computerID")));
-		String newName = computer;
-		LocalDateTime introduced = computer.getIntroduced();
-		LocalDateTime discontinued = computer.getDiscontinued();
-		Company company = computer.getCompany();
+		String computerName = request.getParameter("computerName");
+		LocalDate introduced = LocalDate.parse(request.getParameter("introduced"));
+		String x=request.getParameter("companyId");
+		LocalDate discontinued = LocalDate.parse(request.getParameter("discontinued"));
+		int companyId = Integer.parseInt(request.getParameter("companyId"));
+		
+		Company company = CompanyService.getInstance().find_by_id(companyId);
+		
+		boolean testCompanyId = (request.getParameter("companyId").equals("none"));
+		
+		if(!testCompanyId) {
+			company = CompanyService.getInstance().find_by_id(companyId);
+		}
+		
+		Computer computer = new Computer.Builder().setName(computerName)
+				 .setIntroducedDate(introduced.atTime(LocalTime.MIDNIGHT))
+				 .setDiscontinuedDate(discontinued.atTime(LocalTime.MIDNIGHT))
+				 .setCompany(company)
+				 .build();
+		
+		service.update(computer);
+		
+		response.sendRedirect(request.getContextPath()+"/dashboard");
 	}
 }
