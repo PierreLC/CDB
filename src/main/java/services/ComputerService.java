@@ -37,8 +37,8 @@ public class ComputerService {
 		return computerDAO.listPage(offset, step);
 	}
 	
-	public void delete(Computer computer) {
-		computerDAO.deleteComputer(computer);
+	public void delete(int id) {
+		computerDAO.deleteComputer(id);
 	}
 	
 	public Computer find_by_id(int i) {

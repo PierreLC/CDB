@@ -2,6 +2,7 @@ package servlet;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -49,20 +50,20 @@ public class Dashboard extends HttpServlet {
 				try {
 					step = Integer.parseInt(s);
 				} catch (NumberFormatException e) {
-					this.getServletContext().getRequestDispatcher("WEB-INF/views/dashboard.jsp").forward(request,
+					this.getServletContext().getRequestDispatcher("/WEB-INF/views/dashboard.jsp").forward(request,
 							response);
 				}
 			}
 
 		} catch (Exception e) {
-			// TODO not all exceptions
+			System.exit(0);
 		}
 
 		List<Computer> computerList = ComputerService.getInstance().list();
 
 		List<Computer> computerListPag = ComputerService.getInstance().listPage((pageIterator - 1) * step, step);
 
-		int lastPage = (int) Math.ceil((double) computerList.size() / step);
+		int lastPage = (int) Math.ceil((double) computerList.size()/step);
 
 		request.setAttribute("nbRows", nbRows);
 		request.setAttribute("pageIterator", pageIterator);
@@ -75,7 +76,15 @@ public class Dashboard extends HttpServlet {
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-
+		String computerSelection = request.getParameter("selection");
+		System.out.println(computerSelection);
+		List<String> computerToDelete = Arrays.asList(computerSelection.split(","));
+		System.out.println(computerToDelete);
+		for (String s : computerToDelete) {
+			System.out.println(s);
+			ComputerService.getInstance().delete(Integer.parseInt(s));
+		}
+		
 		doGet(request, response);
 	}
 }

@@ -78,8 +78,7 @@ public class MenuAction {
 
 	public void deleteComputer() {
 		System.out.println("Rentrez l'id de l'ordinateur à supprimer :\n");
-		Computer computer = computerDAO.find_by_id(sc.nextInt());
-		computerDAO.deleteComputer(computer);
+		computerDAO.deleteComputer(sc.nextInt());
 	}
 	
 	

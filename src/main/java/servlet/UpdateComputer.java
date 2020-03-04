@@ -30,7 +30,6 @@ public class UpdateComputer extends HttpServlet {
 		try {
 			companyList = CompanyService.getInstance().list();
 			request.setAttribute("companyList", companyList);
-			String x=request.getParameter("id");
 			Computer computer = service.find_by_id(Integer.parseInt(request.getParameter("id")));
 			
 			request.setAttribute("computerId", computer.getId());
@@ -40,7 +39,6 @@ public class UpdateComputer extends HttpServlet {
 			request.setAttribute("company", computer.getCompany());
 			
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
@@ -53,7 +51,6 @@ public class UpdateComputer extends HttpServlet {
 		
 		String computerName = request.getParameter("computerName");
 		LocalDate introduced = LocalDate.parse(request.getParameter("introduced"));
-		String x=request.getParameter("companyId");
 		LocalDate discontinued = LocalDate.parse(request.getParameter("discontinued"));
 		int companyId = Integer.parseInt(request.getParameter("companyId"));
 		

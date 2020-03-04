@@ -102,10 +102,10 @@ public final class ComputerDAO {
 		return compPagList;
 	}
 
-	public void deleteComputer(Computer computer) {
+	public void deleteComputer(int id) {
 		try (PreparedStatement pstmDelete = connect.prepareStatement(DELETE)) {
 
-			pstmDelete.setLong(1, computer.getId());
+			pstmDelete.setLong(1, id);
 			pstmDelete.execute();
 
 		} catch (SQLException e) {
