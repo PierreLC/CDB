@@ -56,20 +56,18 @@ public class Dashboard extends HttpServlet {
 							response);
 				}
 			}
-		
+
 		} catch (Exception e) {
 			System.exit(0);
 		}
-		
+
 		String search = request.getParameter("search");
-		if (search != null) {
-		 computerSearchedList = ComputerService.getInstance()
-					.find_by_name(search);	
-		}else {
-		 computerListPag = ComputerService.getInstance().listPage((pageIterator - 1) * step, step);
-		}
+
+		computerListPag = ComputerService.getInstance().listPage((pageIterator - 1) * step, step);
 
 		List<Computer> computerList = ComputerService.getInstance().list();
+
+		computerSearchedList = ComputerService.getInstance().find_by_name(search, (pageIterator - 1) * step, step);
 
 		int lastPage = (int) Math.ceil((double) computerList.size() / step);
 

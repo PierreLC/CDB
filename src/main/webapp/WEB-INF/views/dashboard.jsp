@@ -117,10 +117,10 @@
 									<td class="editMode"><input type="checkbox" name="cb"
 										class="cb" value="${computer.getId()}"></td>
 									<td><a href="editComputer?id=${ computer.getId() }"
-										onclick=""> <c:out value="${ computer.getName() }"></c:out></a></td>
-									<td><c:out value="${ computer.getIntroduced() }"></c:out></td>
-									<td><c:out value="${ computer.getDiscontinued() }"></c:out></td>
-									<td><c:out value="${ computer.getCompany().getName() }"></c:out></td>
+										onclick=""> <c:out value="${ computer.getName() }"/></a></td>
+									<td><c:out value="${ computer.getIntroduced() }"/></td>
+									<td><c:out value="${ computer.getDiscontinued() }"/></td>
+									<td><c:out value="${ computer.getCompany().getName() }"/></td>
 								</tr>
 							</c:forEach>
 						</c:otherwise>
