@@ -22,6 +22,8 @@ public class Dashboard extends HttpServlet {
 	private int pageIterator = 1;
 	private int nbRows = 0;
 	private int step = 10;
+	List<Computer> computerSearchedList;
+	List<Computer> computerListPag;
 	ComputerService computerService;
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -54,17 +56,25 @@ public class Dashboard extends HttpServlet {
 							response);
 				}
 			}
-
+		
 		} catch (Exception e) {
 			System.exit(0);
+		}
+		
+		String search = request.getParameter("search");
+		if (search != null) {
+		 computerSearchedList = ComputerService.getInstance()
+					.find_by_name(search);	
+		}else {
+		 computerListPag = ComputerService.getInstance().listPage((pageIterator - 1) * step, step);
 		}
 
 		List<Computer> computerList = ComputerService.getInstance().list();
 
-		List<Computer> computerListPag = ComputerService.getInstance().listPage((pageIterator - 1) * step, step);
+		int lastPage = (int) Math.ceil((double) computerList.size() / step);
 
-		int lastPage = (int) Math.ceil((double) computerList.size()/step);
-
+		request.setAttribute("search", search);
+		request.setAttribute("computerSearchedList", computerSearchedList);
 		request.setAttribute("nbRows", nbRows);
 		request.setAttribute("pageIterator", pageIterator);
 		request.setAttribute("step", step);
@@ -76,15 +86,13 @@ public class Dashboard extends HttpServlet {
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+
 		String computerSelection = request.getParameter("selection");
-		System.out.println(computerSelection);
 		List<String> computerToDelete = Arrays.asList(computerSelection.split(","));
-		System.out.println(computerToDelete);
 		for (String s : computerToDelete) {
-			System.out.println(s);
 			ComputerService.getInstance().delete(Integer.parseInt(s));
 		}
-		
+
 		doGet(request, response);
 	}
 }

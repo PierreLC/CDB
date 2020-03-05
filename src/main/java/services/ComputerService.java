@@ -44,6 +44,9 @@ public class ComputerService {
 	public Computer find_by_id(int i) {
 		return computerDAO.find_by_id(i);
 	}
+	public List<Computer> find_by_name(String name) {
+		return computerDAO.find_by_name(name);
+	}
 	
 	public void update(Computer computer) {
 		computerDAO.update(computer);

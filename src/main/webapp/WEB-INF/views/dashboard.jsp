@@ -28,9 +28,17 @@
 
 	<section id="main">
 		<div class="container">
-			<h1 id="homeTitle">
-				<b>Computer Database : ${ nbRows } computers found</b> 
-			</h1>
+			<c:choose>
+				<c:when test="${ search != null }">
+					<h1 id="homeTitle">${ computerSearchedList.size() }Computers
+						found for ${ search }</h1>
+				</c:when>
+				<c:otherwise>
+					<h1 id="homeTitle">
+						<b>Computer Database : ${ nbRows } computers found</b>
+					</h1>
+				</c:otherwise>
+			</c:choose>
 			<c:choose>
 				<c:when test="${ pageIterator > 0 && pageIterator <= lastPage }">
 					<h4>Page ${ pageIterator }</h4>
@@ -85,20 +93,38 @@
 
 					</tr>
 				</thead>
-				
+
 				<!-- Browse attribute computers -->
 				<tbody id="results">
-					<c:forEach items="${ computerListPag }" var="computer">
-						<tr>
-							<td class="editMode"><input type="checkbox" name="cb"
-								class="cb" value="${computer.getId()}"></td>
-							<td><a href="editComputer?id=${ computer.getId() }" onclick=""> <c:out
-										value="${ computer.getName() }"></c:out></a></td>
-							<td><c:out value="${ computer.getIntroduced() }"></c:out></td>
-							<td><c:out value="${ computer.getDiscontinued() }"></c:out></td>
-							<td><c:out value="${ computer.getCompany().getName() }"></c:out></td>
-						</tr>
-					</c:forEach>
+					<c:choose>
+						<c:when test="${search != null}">
+							<c:forEach items="${computerSearchedList}" var="computer">
+								<tr>
+									<td class="editMode"><input type="checkbox" name="cb"
+										class="cb" value="${ computer.getId() }"></td>
+									<td><a href="editComputer?id=${ computer.getId() } "
+										onclick=""><c:out value="${ computer.getName() }" /></a></td>
+									<td><c:out value="${ computer.getIntroduced() }" /></td>
+									<td><c:out value="${ computer.getDiscontinued() }" /></td>
+									<td><c:out value="${ computer.getCompany().getName() }" /></td>
+								<tr>
+							</c:forEach>
+
+						</c:when>
+						<c:otherwise>
+							<c:forEach items="${ computerListPag }" var="computer">
+								<tr>
+									<td class="editMode"><input type="checkbox" name="cb"
+										class="cb" value="${computer.getId()}"></td>
+									<td><a href="editComputer?id=${ computer.getId() }"
+										onclick=""> <c:out value="${ computer.getName() }"></c:out></a></td>
+									<td><c:out value="${ computer.getIntroduced() }"></c:out></td>
+									<td><c:out value="${ computer.getDiscontinued() }"></c:out></td>
+									<td><c:out value="${ computer.getCompany().getName() }"></c:out></td>
+								</tr>
+							</c:forEach>
+						</c:otherwise>
+					</c:choose>
 				</tbody>
 			</table>
 		</div>
@@ -187,8 +213,8 @@
 					</c:otherwise>
 				</c:choose>
 
-				</ul> 
-								
+			</ul>
+
 			<div class="btn-group btn-group-sm pull-right" role="group">
 				<a href="dashboard?pageIterator=1&step=10"><button type="button"
 						class="btn btn-default"

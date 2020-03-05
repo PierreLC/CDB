@@ -21,7 +21,8 @@ public final class ComputerDAO {
 	public final String DELETE = "DELETE FROM computer WHERE id=?;";
 	public final String UPDATE = "UPDATE computer SET  name = ?, introduced = ?, discontinued = ?, company_id = ? WHERE Id = ?;";
 	public final String LIST_PAGE = "SELECT computer.id, computer.name, introduced, discontinued, company_id, company.name FROM computer LEFT JOIN company ON company_id = company.id LIMIT ?, ?;";
-	public final String DISPLAY_COMPUTER = "SELECT computer.id, computer.name, computer.introduced, computer.discontinued, computer.company_id, company.name FROM computer LEFT JOIN company ON company_id = company.id  WHERE computer.id=?;";
+	public final String FIND_BY_ID = "SELECT computer.id, computer.name, computer.introduced, computer.discontinued, computer.company_id, company.name FROM computer LEFT JOIN company ON company_id = company.id  WHERE computer.id=?;";
+	public final String FIND_BY_NAME = "SELECT computer.id, computer.name, computer.introduced, computer.discontinued, computer.company_id, company.name FROM computer LEFT JOIN company ON company_id = company.id  WHERE computer.name LIKE ?;";
 	public final String NB_ROWS = "SELECT COUNT(*) as \"Rows\" FROM computer;";
 
 	public final String ADD_LOG = "Erreur lors de l'ajout : échec de la connexion à la base de donnée";
@@ -48,7 +49,6 @@ public final class ComputerDAO {
 	}
 
 	public void add(Computer computer) throws SQLException {
-		System.out.println(computer.getIntroduced());
 
 		try (PreparedStatement pstmAdd = connect.prepareStatement(ADD)) {
 			pstmAdd.setString(1, computer.getName());
@@ -115,14 +115,13 @@ public final class ComputerDAO {
 
 	public Computer find_by_id(int id) {
 		Computer computer = null;
-		ResultSet resultFind;
+		ResultSet resultFindId;
 
-		try (PreparedStatement pstmFind = connect.prepareStatement(DISPLAY_COMPUTER);) {
+		try (PreparedStatement pstmFind = connect.prepareStatement(FIND_BY_ID);) {
 			pstmFind.setLong(1, id);
-			resultFind = pstmFind.executeQuery();
-			System.out.println("requete exec");
-			if (resultFind.first()) {
-				computer = ComputerMapper.getComputerResultSet(resultFind);
+			resultFindId = pstmFind.executeQuery();
+			if (resultFindId.first()) {
+				computer = ComputerMapper.getComputerResultSet(resultFindId);
 			}
 
 		} catch (SQLException e) {
@@ -132,6 +131,25 @@ public final class ComputerDAO {
 		return computer;
 	}
 
+	public List<Computer> find_by_name(String name) {
+		Computer computer;
+		ResultSet resultFindName;
+		List<Computer> computerSearched = new ArrayList<Computer>();
+
+		try (PreparedStatement pstmFind = connect.prepareStatement(FIND_BY_NAME);) {
+			pstmFind.setString(1, "%"+name+"%");
+			resultFindName = pstmFind.executeQuery();
+			while (resultFindName.next()) {
+				computer = ComputerMapper.getComputerResultSet(resultFindName);
+				computerSearched.add(computer);
+			}
+
+		} catch (SQLException e) {
+			DAOException.displayError(DISPLAY_LOG + e.getMessage());
+		}
+
+		return computerSearched;
+	}
 	public void update(Computer computer) {
 
 		try (PreparedStatement pstmUpdate = connect.prepareStatement(UPDATE);) {
@@ -143,7 +161,6 @@ public final class ComputerDAO {
 			pstmUpdate.setLong(5, computer.getId());
 
 			pstmUpdate.executeUpdate();
-			pstmUpdate.close();
 		} catch (SQLException e) {
 			DAOException.displayError(UPDATE_LOG + e.getMessage());
 		}
