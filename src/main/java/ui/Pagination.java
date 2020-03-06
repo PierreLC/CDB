@@ -12,7 +12,6 @@ public class Pagination {
 	private static ComputerDAO computerDAO;
 	
 	public static void computerPaginate() throws SQLException, IOException {
-		System.out.println("passe dans le menu action");
 		int nbRows = computerDAO.getNbRows();
 		int currentRow = 0;
 		

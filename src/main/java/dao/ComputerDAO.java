@@ -16,16 +16,6 @@ public final class ComputerDAO {
 	private static volatile ComputerDAO instance = null;
 	static Connection connect;
 
-	public final String ADD = "INSERT INTO computer (name, introduced, discontinued, company_id) VALUES (?, ?, ?, ?);";
-	public final String LIST_COMPUTER = "SELECT computer.id, computer.name, introduced , discontinued , company_id, company.name FROM computer LEFT JOIN company ON company_id = company.id;";
-	public final String DELETE = "DELETE FROM computer WHERE id=?;";
-	public final String UPDATE = "UPDATE computer SET  name = ?, introduced = ?, discontinued = ?, company_id = ? WHERE Id = ?;";
-	public final String LIST_PAGE = "SELECT computer.id, computer.name, introduced, discontinued, company_id, company.name FROM computer LEFT JOIN company ON company_id = company.id LIMIT ?, ?;";
-	public final String FIND_BY_ID = "SELECT computer.id, computer.name, computer.introduced, computer.discontinued, computer.company_id, company.name FROM computer LEFT JOIN company ON company_id = company.id  WHERE computer.id=?;";
-	public final String FIND_BY_NAME_PAG = "SELECT computer.id, computer.name, computer.introduced, computer.discontinued, computer.company_id, company.name FROM computer LEFT JOIN company ON company_id = company.id  WHERE computer.name LIKE ? LIMIT ?, ?;";
-	public final String FIND_BY_NAME = "SELECT computer.id, computer.name, computer.introduced, computer.discontinued, computer.company_id, company.name FROM computer LEFT JOIN company ON company_id = company.id  WHERE computer.name LIKE ?;";
-	public final String NB_ROWS = "SELECT COUNT(*) as \"Rows\" FROM computer;";
-
 	public final String ADD_LOG = "Erreur lors de l'ajout : échec de la connexion à la base de donnée";
 	public final String LIST_LOG = " Erreur lors de l'affichage des ordinateur : échec de la connexion à la base de donnée";
 	public final String DELETE_LOG = "Erreur lors de la suppression : échec de la connexion à la base de donnée";
@@ -51,7 +41,7 @@ public final class ComputerDAO {
 
 	public void add(Computer computer) throws SQLException {
 
-		try (PreparedStatement pstmAdd = connect.prepareStatement(ADD)) {
+		try (PreparedStatement pstmAdd = connect.prepareStatement(SQLRequest.ADD.getQuery());) {
 			pstmAdd.setString(1, computer.getName());
 			pstmAdd.setTimestamp(2,
 					computer.getIntroduced() != null ? Timestamp.valueOf(computer.getIntroduced()) : null);
@@ -70,7 +60,7 @@ public final class ComputerDAO {
 		ResultSet resultList;
 		List<Computer> computerList = new ArrayList<Computer>();
 
-		try (PreparedStatement pstmList = connect.prepareStatement(LIST_COMPUTER)) {
+		try (PreparedStatement pstmList = connect.prepareStatement(SQLRequest.LIST_COMPUTER.getQuery());) {
 			resultList = pstmList.executeQuery();
 			while (resultList.next()) {
 				Computer computer = ComputerMapper.getComputerResultSet(resultList);
@@ -88,7 +78,7 @@ public final class ComputerDAO {
 
 		List<Computer> compPagList = new ArrayList<Computer>();
 
-		try (PreparedStatement pstmPagList = connect.prepareStatement(LIST_PAGE)) {
+		try (PreparedStatement pstmPagList = connect.prepareStatement(SQLRequest.LIST_PAGE.getQuery());) {
 			pstmPagList.setInt(1, startPaginate);
 			pstmPagList.setInt(2, pageSize);
 			resultList = pstmPagList.executeQuery();
@@ -104,7 +94,7 @@ public final class ComputerDAO {
 	}
 
 	public void deleteComputer(int id) {
-		try (PreparedStatement pstmDelete = connect.prepareStatement(DELETE)) {
+		try (PreparedStatement pstmDelete = connect.prepareStatement(SQLRequest.DELETE.getQuery());) {
 
 			pstmDelete.setLong(1, id);
 			pstmDelete.execute();
@@ -118,7 +108,7 @@ public final class ComputerDAO {
 		Computer computer = null;
 		ResultSet resultFindId;
 
-		try (PreparedStatement pstmFind = connect.prepareStatement(FIND_BY_ID);) {
+		try (PreparedStatement pstmFind = connect.prepareStatement(SQLRequest.FIND_BY_ID.getQuery());) {
 			pstmFind.setLong(1, id);
 			resultFindId = pstmFind.executeQuery();
 			if (resultFindId.first()) {
@@ -136,7 +126,7 @@ public final class ComputerDAO {
 		ResultSet resultFindName;
 		List<Computer> computerSearched = new ArrayList<Computer>();
 
-		try (PreparedStatement pstmFind = connect.prepareStatement(FIND_BY_NAME_PAG);) {
+		try (PreparedStatement pstmFind = connect.prepareStatement(SQLRequest.FIND_BY_NAME_PAG.getQuery());) {
 			pstmFind.setString(1, "%"+name+"%");
 			pstmFind.setInt(2, offset);
 			pstmFind.setInt(3, step);
@@ -155,7 +145,7 @@ public final class ComputerDAO {
 		ResultSet resultFindName;
 		List<Computer> computerSearched = new ArrayList<Computer>();
 
-		try (PreparedStatement pstmFind = connect.prepareStatement(FIND_BY_NAME);) {
+		try (PreparedStatement pstmFind = connect.prepareStatement(SQLRequest.FIND_BY_NAME.getQuery());) {
 			pstmFind.setString(1, "%"+name+"%");
 			resultFindName = pstmFind.executeQuery();
 			while (resultFindName.next()) {
@@ -171,7 +161,7 @@ public final class ComputerDAO {
 	
 	public void update(Computer computer) {
 
-		try (PreparedStatement pstmUpdate = connect.prepareStatement(UPDATE);) {
+		try (PreparedStatement pstmUpdate = connect.prepareStatement(SQLRequest.UPDATE.getQuery());) {
 
 			pstmUpdate.setString(1, computer.getName());
 			pstmUpdate.setTimestamp(2, Timestamp.valueOf(computer.getIntroduced()));
@@ -188,7 +178,7 @@ public final class ComputerDAO {
 	public int getNbRows() throws SQLException {
 		int nbRows = -1;
 
-		try (PreparedStatement pstmRows = connect.prepareStatement(NB_ROWS);) {
+		try (PreparedStatement pstmRows = connect.prepareStatement(SQLRequest.NB_ROWS.getQuery());) {
 			try (ResultSet resultRows = pstmRows.executeQuery()) {
 				if (resultRows.first()) {
 					nbRows = resultRows.getInt("Rows");

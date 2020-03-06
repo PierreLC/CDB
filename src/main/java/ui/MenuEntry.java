@@ -10,7 +10,6 @@ public enum MenuEntry {
 		case 1:
 			return LISTCOMPUTERS;
 		case 2:
-			
 			return PAGECOMPUTERS;
 		case 3:
 			return DELETECOMPUTER;

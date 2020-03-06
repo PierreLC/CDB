@@ -15,10 +15,6 @@ import model.Company;
 public final class CompanyDAO {
 	private static volatile CompanyDAO instance = null;
 	static Connection connect;
-	
-	public final static String ADD_COMPANY = "INSERT INTO company(name) VALUES (?)";
-	public final static String LIST_COMPANY = "SELECT id, name FROM company";
-	public final String GET_COMPANY_BY_ID = "SELECT id, name FROM company WHERE id=?";
 
 	private final static String ADD_COMPANY_LOG = "Erreur lors de l'ajout : échec de la connexion à la base de donnée";
 	private final static String LIST_COMPANY_LOG = "Erreur au moment de lister les marques : échec de la connexion à la base de donnée";
@@ -42,7 +38,7 @@ public final class CompanyDAO {
 	public static Company add(Company company) throws SQLException {
 		ResultSet resultAdd = null;
 		
-		try (PreparedStatement pstmAdd = connect.prepareStatement(ADD_COMPANY);) {
+		try (PreparedStatement pstmAdd = connect.prepareStatement(SQLRequest.ADD_COMPANY.getQuery());) {
 
 			pstmAdd.setString(1, company.getName());
 
@@ -58,7 +54,7 @@ public final class CompanyDAO {
 		List<Company> allCompanies = new ArrayList<Company>();
 		ResultSet resultSetList = null;
 
-		try (PreparedStatement stmt = connect.prepareStatement(LIST_COMPANY)) {
+		try (PreparedStatement stmt = connect.prepareStatement(SQLRequest.LIST_COMPANY.getQuery());) {
 			resultSetList = stmt.executeQuery();
 			while (resultSetList.next()) {
 				Company company = CompanyMapper.getCompanyResultSet(resultSetList);
@@ -76,8 +72,7 @@ public final class CompanyDAO {
 		System.out.println("LOG : Au moment de trouver la company avec l'id" + id);
 		Company company = null;
 
-		try {
-			PreparedStatement pstmFind = connect.prepareStatement(GET_COMPANY_BY_ID);
+		try (PreparedStatement pstmFind = connect.prepareStatement(SQLRequest.GET_COMPANY_BY_ID.getQuery());) {
 
 			System.out.println("LOG : connexion statetement");
 

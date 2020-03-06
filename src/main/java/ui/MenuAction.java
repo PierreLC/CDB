@@ -81,7 +81,6 @@ public class MenuAction {
 		computerDAO.deleteComputer(sc.nextInt());
 	}
 	
-	
 	@Override
 	public void finalize() {
 		sc.close();

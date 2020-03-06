@@ -86,7 +86,6 @@ public class Dashboard extends HttpServlet {
 		request.setAttribute("nbRows", nbRows);
 		request.setAttribute("pageIterator", pageIterator);
 		request.setAttribute("step", step);
-
 		request.setAttribute("computerList", computerList);
 		request.setAttribute("computerListPag", computerListPag);
 		request.getRequestDispatcher("/WEB-INF/views/dashboard.jsp").forward(request, response);
@@ -100,7 +99,6 @@ public class Dashboard extends HttpServlet {
 		for (String s : computerToDelete) {
 			ComputerService.getInstance().delete(Integer.parseInt(s));
 		}
-
 		doGet(request, response);
 	}
 }
