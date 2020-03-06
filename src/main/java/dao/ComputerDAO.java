@@ -22,7 +22,8 @@ public final class ComputerDAO {
 	public final String UPDATE = "UPDATE computer SET  name = ?, introduced = ?, discontinued = ?, company_id = ? WHERE Id = ?;";
 	public final String LIST_PAGE = "SELECT computer.id, computer.name, introduced, discontinued, company_id, company.name FROM computer LEFT JOIN company ON company_id = company.id LIMIT ?, ?;";
 	public final String FIND_BY_ID = "SELECT computer.id, computer.name, computer.introduced, computer.discontinued, computer.company_id, company.name FROM computer LEFT JOIN company ON company_id = company.id  WHERE computer.id=?;";
-	public final String FIND_BY_NAME = "SELECT computer.id, computer.name, computer.introduced, computer.discontinued, computer.company_id, company.name FROM computer LEFT JOIN company ON company_id = company.id  WHERE computer.name LIKE ? LIMIT ?, ?;";
+	public final String FIND_BY_NAME_PAG = "SELECT computer.id, computer.name, computer.introduced, computer.discontinued, computer.company_id, company.name FROM computer LEFT JOIN company ON company_id = company.id  WHERE computer.name LIKE ? LIMIT ?, ?;";
+	public final String FIND_BY_NAME = "SELECT computer.id, computer.name, computer.introduced, computer.discontinued, computer.company_id, company.name FROM computer LEFT JOIN company ON company_id = company.id  WHERE computer.name LIKE ?;";
 	public final String NB_ROWS = "SELECT COUNT(*) as \"Rows\" FROM computer;";
 
 	public final String ADD_LOG = "Erreur lors de l'ajout : échec de la connexion à la base de donnée";
@@ -113,7 +114,7 @@ public final class ComputerDAO {
 		}
 	}
 
-	public Computer find_by_id(int id) {
+	public Computer findById(int id) {
 		Computer computer = null;
 		ResultSet resultFindId;
 
@@ -131,11 +132,11 @@ public final class ComputerDAO {
 		return computer;
 	}
 
-	public List<Computer> find_by_name(String name,int offset, int step) {
+	public List<Computer> findByName(String name,int offset, int step) {
 		ResultSet resultFindName;
 		List<Computer> computerSearched = new ArrayList<Computer>();
 
-		try (PreparedStatement pstmFind = connect.prepareStatement(FIND_BY_NAME);) {
+		try (PreparedStatement pstmFind = connect.prepareStatement(FIND_BY_NAME_PAG);) {
 			pstmFind.setString(1, "%"+name+"%");
 			pstmFind.setInt(2, offset);
 			pstmFind.setInt(3, step);
@@ -149,6 +150,25 @@ public final class ComputerDAO {
 
 		return computerSearched;
 	}
+	
+	public int nbSearchedComputer(String name) {
+		ResultSet resultFindName;
+		List<Computer> computerSearched = new ArrayList<Computer>();
+
+		try (PreparedStatement pstmFind = connect.prepareStatement(FIND_BY_NAME);) {
+			pstmFind.setString(1, "%"+name+"%");
+			resultFindName = pstmFind.executeQuery();
+			while (resultFindName.next()) {
+				computerSearched.add(ComputerMapper.getComputerResultSet(resultFindName));
+				System.out.println("listComputerSearched"+computerSearched);
+			}
+		}catch (SQLException e) {
+			DAOException.displayError(DISPLAY_LOG + e.getMessage());
+		}
+		System.out.println("requete size"+computerSearched.size());
+		return computerSearched.size();
+	}
+	
 	public void update(Computer computer) {
 
 		try (PreparedStatement pstmUpdate = connect.prepareStatement(UPDATE);) {

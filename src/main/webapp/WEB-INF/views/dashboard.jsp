@@ -30,7 +30,7 @@
 		<div class="container">
 			<c:choose>
 				<c:when test="${ search != null }">
-					<h1 id="homeTitle">${ computerSearchedList.size() }Computers
+					<h1 id="homeTitle">${ nbSearchedComputer } Computers
 						found for ${ search }</h1>
 				</c:when>
 				<c:otherwise>
@@ -139,7 +139,8 @@
 					<c:when test="${ lastPage > 6 }">
 						<li><c:choose>
 								<c:when test="${ pageIterator >= 2 }">
-									<a href="dashboard?pageIterator=${ pageIterator - 1 }"
+									<a href="dashboard?pageIterator=${ pageIterator - 1 }
+										<c:if test="${ search != null }">&search=${ search }</c:if>"
 										aria-label="Previous"> <span aria-hidden="true">&laquo;</span></a>
 								</c:when>
 							</c:choose></li>
@@ -155,7 +156,8 @@
 						<c:choose>
 							<c:when test="${ pageIterator <= 3 }">
 								<c:forEach var="i" begin="2" end="5" step="1">
-									<li><a href="dashboard?pageIterator=${ i }"><c:out
+									<li><a href="dashboard?pageIterator=${ i }
+									<c:if test="${ search != null }">&search=${ search }</c:if>"><c:out
 												value="${ i }" /></a></li>
 								</c:forEach>
 							</c:when>
@@ -163,15 +165,17 @@
 								test="${ pageIterator > 3 && pageIterator < lastPage - 3 }">
 								<c:forEach var="i" begin="${ pageIterator - 2 }"
 									end="${ pageIterator + 2 }" step="1">
-									<li><a href="dashboard?pageIterator=${ i }"><c:out
-												value="${ i }" /></a></li>
+									<li><a href="dashboard?pageIterator=${ i }
+									<c:if test="${ search != null }">&search=${ search }</c:if>">
+									<c:out value="${ i }" /></a></li>
 								</c:forEach>
 							</c:when>
 							<c:when test="${ pageIterator >= lastPage - 3 }">
 								<c:forEach var="i" begin="${ lastPage - 5}"
 									end="${ lastPage -1 }" step="1">
-									<li><a href="dashboard?pageIterator=${ i }"> <c:out
-												value="${ i }" /></a></li>
+									<li><a href="dashboard?pageIterator=${ i }
+									<c:if test="${ search != null }">&search=${ search }</c:if>">
+									<c:out value="${ i }" /></a></li>
 								</c:forEach>
 							</c:when>
 						</c:choose>
@@ -183,12 +187,14 @@
 							</c:when>
 						</c:choose>
 
-						<li><a href="dashboard?pageIterator=${ lastPage }"><c:out
-									value="${ lastPage }" /></a></li>
+						<li><a href="dashboard?pageIterator=${ lastPage }
+						<c:if test="${ search != null }">&search=${ search }</c:if>">
+						<c:out value="${ lastPage }" /></a></li>
 
 						<li><c:choose>
 								<c:when test="${ pageIterator != lastPage }">
-									<a href="dashboard?pageIterator=${ pageIterator + 1 }"
+									<a href="dashboard?pageIterator=${ pageIterator + 1 }
+									<c:if test="${ search != null }">&search=${ search }</c:if>"
 										aria-label="Next"><span aria-hidden="true">&raquo;</span></a>
 								</c:when>
 							</c:choose></li>
@@ -196,17 +202,20 @@
 					<c:otherwise>
 						<li><c:choose>
 								<c:when test="${ pageIterator >= 2 }">
-									<a href="dashboard?pageIterator=${ pageIterator - 1 }"
+									<a href="dashboard?pageIterator=${ pageIterator - 1 }
+									<c:if test="${ search != null }">&search=${ search }</c:if>"
 										aria-label="Previous"> <span aria-hidden="true">&laquo;</span></a>
 								</c:when>
 							</c:choose></li>
 						<c:forEach var="i" begin="1" end="${ lastPage }" step="1">
-							<li><a href="dashboard?pageIterator=${ i }"><c:out
+							<li><a href="dashboard?pageIterator=${ i }"
+							><c:out
 										value="${ i }" /></a></li>
 						</c:forEach>
 						<li><c:choose>
 								<c:when test="${ pageIterator != lastPage }">
-									<a href="dashboard?pageIterator=${ pageIterator + 1 }"
+									<a href="dashboard?pageIterator=${ pageIterator + 1 }
+									<c:if test="${ search != null }">&search=${ search }</c:if>"
 										aria-label="Next"><span aria-hidden="true">&raquo;</span></a>
 								</c:when>
 							</c:choose></li>
@@ -216,13 +225,19 @@
 			</ul>
 
 			<div class="btn-group btn-group-sm pull-right" role="group">
-				<a href="dashboard?pageIterator=1&step=10"><button type="button"
+				<a href="dashboard?pageIterator=1&step=10
+				<c:if test="${ search != null }">&search=${ search }</c:if>">
+				<button type="button"
 						class="btn btn-default"
 						onclick="<c:set var="pageIterator" value="1"/>">10</button></a> <a
-					href="dashboard?pageIterator=1&step=50"><button type="button"
+					href="dashboard?pageIterator=1&step=50
+					<c:if test="${ search != null }">&search=${ search }</c:if>">
+					<button type="button"
 						class="btn btn-default"
 						onclick="<c:set var="pageIterator" value="1"/>">50</button></a> <a
-					href="dashboard?pageIterator=1&step=100"><button type="button"
+					href="dashboard?pageIterator=1&step=100
+					<c:if test="${ search != null }">&search=${ search }</c:if>">
+					<button type="button"
 						class="btn btn-default"
 						onclick="<c:set var="pageIterator" value="1"/>">100</button></a>
 			</div>

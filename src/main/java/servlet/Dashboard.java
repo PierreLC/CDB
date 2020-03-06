@@ -67,16 +67,26 @@ public class Dashboard extends HttpServlet {
 
 		List<Computer> computerList = ComputerService.getInstance().list();
 
+		int nbSearchedComputer = ComputerService.getInstance().nbSearchedComputer(search);
+		System.out.println("Au moment du Dashboard" + nbSearchedComputer);
+
 		computerSearchedList = ComputerService.getInstance().find_by_name(search, (pageIterator - 1) * step, step);
 
-		int lastPage = (int) Math.ceil((double) computerList.size() / step);
+		if (search != null) {
+			int lastPage = (int) Math.ceil((double) nbSearchedComputer / step);
+			request.setAttribute("lastPage", lastPage);
+		} else {
+			int lastPage = (int) Math.ceil((double) computerList.size() / step);
+			request.setAttribute("lastPage", lastPage);
+		}
 
 		request.setAttribute("search", search);
+		request.setAttribute("nbSearchedComputer", nbSearchedComputer);
 		request.setAttribute("computerSearchedList", computerSearchedList);
 		request.setAttribute("nbRows", nbRows);
 		request.setAttribute("pageIterator", pageIterator);
 		request.setAttribute("step", step);
-		request.setAttribute("lastPage", lastPage);
+
 		request.setAttribute("computerList", computerList);
 		request.setAttribute("computerListPag", computerListPag);
 		request.getRequestDispatcher("/WEB-INF/views/dashboard.jsp").forward(request, response);

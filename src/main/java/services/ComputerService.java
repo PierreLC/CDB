@@ -26,7 +26,7 @@ public class ComputerService {
 	}
 	
 	public void add(Computer computer) throws SQLException {
-//		return computerDAO.add(computer);
+		computerDAO.add(computer);
 	}
 	
 	public List<Computer> list(){
@@ -42,10 +42,10 @@ public class ComputerService {
 	}
 	
 	public Computer find_by_id(int i) {
-		return computerDAO.find_by_id(i);
+		return computerDAO.findById(i);
 	}
 	public List<Computer> find_by_name(String name, int offset, int step) {
-		return computerDAO.find_by_name(name, offset, step);
+		return computerDAO.findByName(name, offset, step);
 	}
 	
 	public void update(Computer computer) {
@@ -54,5 +54,10 @@ public class ComputerService {
 	
 	public int getNbRows() throws SQLException {
 		return computerDAO.getNbRows();
+	}
+	
+	public int nbSearchedComputer(String name) {
+		System.out.println("Au moment du service"+computerDAO.nbSearchedComputer(name));
+		return computerDAO.nbSearchedComputer(name);
 	}
 }

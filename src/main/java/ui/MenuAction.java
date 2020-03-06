@@ -56,7 +56,7 @@ public class MenuAction {
 
 	public void updateComputer() {
 		System.out.println("Saisir l'id de l'ordinateur à modifier :\n");
-		Computer computer = ComputerDAO.getInstance().find_by_id(sc.nextInt());
+		Computer computer = ComputerDAO.getInstance().findById(sc.nextInt());
 		System.out.println("Saisir le nouvel id :\n");
 		computer = new Computer.Builder().setId(sc.nextLong()).build();
 		System.out.println("Saisir le nouveau nom :\n");
@@ -73,7 +73,7 @@ public class MenuAction {
 
 	public void displayComputer() {
 		System.out.println("Rentrez l'id de l'ordinateur à afficher :\n");
-		System.out.println(computerDAO.find_by_id(sc.nextInt()));
+		System.out.println(computerDAO.findById(sc.nextInt()));
 	}
 
 	public void deleteComputer() {
