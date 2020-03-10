@@ -90,15 +90,14 @@ public final class ComputerDAO {
 		} catch (SQLException e) {
 			DAOException.displayError(LIST_PAGE_LOG + e.getMessage());
 		}
+		System.out.println(compPagList);
 		return compPagList;
 	}
 
 	public void deleteComputer(int id) {
 		try (PreparedStatement pstmDelete = connect.prepareStatement(SQLRequest.DELETE.getQuery());) {
-
 			pstmDelete.setLong(1, id);
 			pstmDelete.execute();
-
 		} catch (SQLException e) {
 			System.err.println("Erreur there 3" + e.getMessage());
 		}
@@ -150,12 +149,10 @@ public final class ComputerDAO {
 			resultFindName = pstmFind.executeQuery();
 			while (resultFindName.next()) {
 				computerSearched.add(ComputerMapper.getComputerResultSet(resultFindName));
-				System.out.println("listComputerSearched"+computerSearched);
 			}
 		}catch (SQLException e) {
 			DAOException.displayError(DISPLAY_LOG + e.getMessage());
 		}
-		System.out.println("requete size"+computerSearched.size());
 		return computerSearched.size();
 	}
 	
@@ -188,6 +185,82 @@ public final class ComputerDAO {
 			DAOException.displayError(ROWS_LOG + e.getMessage());
 		}
 		return nbRows;
+	}
+	
+	public List<Computer> orderByName(int startPaginate, int pageSize) {
+		
+		ResultSet resultOrderByName;
+		List<Computer> orderByName = new ArrayList<Computer>();
+
+		try (PreparedStatement pstmOrderByName = connect.prepareStatement(OrderByRequest.ORDER_BY_NAME.getQuery());) {
+			pstmOrderByName.setInt(1, startPaginate);
+			pstmOrderByName.setInt(2, pageSize);
+			resultOrderByName = pstmOrderByName.executeQuery();
+			while (resultOrderByName.next()) {
+				Computer computer = ComputerMapper.getComputerResultSet(resultOrderByName);
+				orderByName.add(computer);
+			}
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+		}
+		return orderByName;
+	}
+	
+	public List<Computer> orderByIntroduced(int startPaginate, int pageSize) {
+		
+		ResultSet resultOrderByName;
+		List<Computer> orderByName = new ArrayList<Computer>();
+
+		try (PreparedStatement pstmOrderByName = connect.prepareStatement(OrderByRequest.ORDER_BY_NAME.getQuery());) {
+			pstmOrderByName.setInt(1, startPaginate);
+			pstmOrderByName.setInt(2, pageSize);
+			resultOrderByName = pstmOrderByName.executeQuery();
+			while (resultOrderByName.next()) {
+				Computer computer = ComputerMapper.getComputerResultSet(resultOrderByName);
+				orderByName.add(computer);
+			}
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+		}
+		return orderByName;
+	}
+	
+	public List<Computer> orderByDiscontinued(int startPaginate, int pageSize) {
+		
+		ResultSet resultOrderByName;
+		List<Computer> orderByName = new ArrayList<Computer>();
+
+		try (PreparedStatement pstmOrderByName = connect.prepareStatement(OrderByRequest.ORDER_BY_NAME.getQuery());) {
+			pstmOrderByName.setInt(1, startPaginate);
+			pstmOrderByName.setInt(2, pageSize);
+			resultOrderByName = pstmOrderByName.executeQuery();
+			while (resultOrderByName.next()) {
+				Computer computer = ComputerMapper.getComputerResultSet(resultOrderByName);
+				orderByName.add(computer);
+			}
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+		}
+		return orderByName;
+	}
+	
+	public List<Computer> orderByCompany(int startPaginate, int pageSize) {
+		
+		ResultSet resultOrderByName;
+		List<Computer> orderByName = new ArrayList<Computer>();
+
+		try (PreparedStatement pstmOrderByName = connect.prepareStatement(OrderByRequest.ORDER_BY_NAME.getQuery());) {
+			pstmOrderByName.setInt(1, startPaginate);
+			pstmOrderByName.setInt(2, pageSize);
+			resultOrderByName = pstmOrderByName.executeQuery();
+			while (resultOrderByName.next()) {
+				Computer computer = ComputerMapper.getComputerResultSet(resultOrderByName);
+				orderByName.add(computer);
+			}
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+		}
+		return orderByName;
 	}
 
 }

@@ -84,12 +84,10 @@
 									class="fa fa-trash-o fa-lg"></i>
 							</a>
 						</span></th>
-						<th>Computer name</th>
-						<th>Introduced date</th>
-						<!-- Table header for Discontinued Date -->
-						<th>Discontinued date</th>
-						<!-- Table header for Company -->
-						<th>Company</th>
+						<th><a href="dashboard?columnName=computerName">Computer Name</a></th>
+						<th><a href="dashboard?columnName=introduced">Introduced date</a></th>
+						<th><a href="dashboard?columnName=discontinued">Discontinued date</a></th>
+						<th><a href="dashboard?columnName=company">Company</a></th>
 
 					</tr>
 				</thead>

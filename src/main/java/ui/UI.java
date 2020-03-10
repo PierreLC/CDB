@@ -54,7 +54,6 @@ public class UI {
 				System.out.println(ComputerDAO.getInstance().list());
 				break;
 			case PAGECOMPUTERS:
-				System.out.println("lance pagination depuis menu");
 				Pagination.computerPaginate();
 			case DELETECOMPUTER:
 				MenuAction.getInstance().deleteComputer();

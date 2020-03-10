@@ -2,17 +2,17 @@ package dao;
 
 public enum SQLRequest {
 	ADD("INSERT INTO computer (name, introduced, discontinued, company_id) VALUES (?, ?, ?, ?);"),
-	LIST_COMPUTER("SELECT computer.id, computer.name, introduced , discontinued , company_id, company.name"
+	LIST_COMPUTER("SELECT computer.id, computer.name, introduced , discontinued , company_id, company.name "
 			+"FROM computer LEFT JOIN company ON company_id = company.id;"),
 	DELETE("DELETE FROM computer WHERE id=?;"),
 	UPDATE("UPDATE computer SET  name = ?, introduced = ?, discontinued = ?, company_id = ? WHERE Id = ?;"),
-	LIST_PAGE("SELECT computer.id, computer.name, introduced, discontinued, company_id, company.name"
+	LIST_PAGE("SELECT computer.id, computer.name, introduced, discontinued, company_id, company.name "
 			+"FROM computer LEFT JOIN company ON company_id = company.id LIMIT ?, ?;"),
-	FIND_BY_ID("SELECT computer.id, computer.name, computer.introduced, computer.discontinued, computer.company_id, company.name"
+	FIND_BY_ID("SELECT computer.id, computer.name, computer.introduced, computer.discontinued, computer.company_id, company.name "
 			+"FROM computer LEFT JOIN company ON company_id = company.id  WHERE computer.id=?;"),
 	FIND_BY_NAME_PAG("SELECT computer.id, computer.name, computer.introduced, computer.discontinued, computer.company_id,"
 			+"company.name FROM computer LEFT JOIN company ON company_id = company.id  WHERE computer.name LIKE ? LIMIT ?, ?;"),
-	FIND_BY_NAME("SELECT computer.id, computer.name, computer.introduced, computer.discontinued, computer.company_id, company.name"
+	FIND_BY_NAME("SELECT computer.id, computer.name, computer.introduced, computer.discontinued, computer.company_id, company.name "
 			+"FROM computer LEFT JOIN company ON company_id = company.id  WHERE computer.name LIKE ?;"),
 	NB_ROWS("SELECT COUNT(*) as \"Rows\" FROM computer;"),
 	

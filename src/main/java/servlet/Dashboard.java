@@ -21,7 +21,7 @@ public class Dashboard extends HttpServlet {
 
 	private int pageIterator = 1;
 	private int nbRows = 0;
-	private int step = 10;
+	private int pageSize = 10;
 	List<Computer> computerSearchedList;
 	List<Computer> computerListPag;
 	ComputerService computerService;
@@ -50,7 +50,7 @@ public class Dashboard extends HttpServlet {
 			if (request.getParameter("step") != null) {
 				String s = request.getParameter("step");
 				try {
-					step = Integer.parseInt(s);
+					pageSize = Integer.parseInt(s);
 				} catch (NumberFormatException e) {
 					this.getServletContext().getRequestDispatcher("/WEB-INF/views/dashboard.jsp").forward(request,
 							response);
@@ -61,31 +61,55 @@ public class Dashboard extends HttpServlet {
 			System.exit(0);
 		}
 
+		String orderBy = (request.getParameter("columnName")!=null) ? request.getParameter("columnName"):"";
+		
+		
+		switch (orderBy){
+		case "computerName":
+			computerListPag = ComputerService.getInstance().orderByName((pageIterator - 1) * pageSize, pageSize);
+			break;
+		case "introduced":
+			computerListPag = ComputerService.getInstance().orderByIntroduced((pageIterator - 1) * pageSize, pageSize);
+			break;
+		case "discontinued":
+			computerListPag = ComputerService.getInstance().orderByDiscontinued((pageIterator - 1) * pageSize, pageSize);
+			break;
+		case "company":
+			computerListPag = ComputerService.getInstance().orderByCompany((pageIterator - 1) * pageSize, pageSize);
+			break;
+		default:
+			computerListPag = ComputerService.getInstance().listPage((pageIterator - 1) * pageSize, pageSize);
+		}
+		List<Computer> computerList = ComputerService.getInstance().list();
+		
+		
+		
 		String search = request.getParameter("search");
 
-		computerListPag = ComputerService.getInstance().listPage((pageIterator - 1) * step, step);
-
-		List<Computer> computerList = ComputerService.getInstance().list();
-
 		int nbSearchedComputer = ComputerService.getInstance().nbSearchedComputer(search);
-		System.out.println("Au moment du Dashboard" + nbSearchedComputer);
 
-		computerSearchedList = ComputerService.getInstance().find_by_name(search, (pageIterator - 1) * step, step);
+		computerSearchedList = ComputerService.getInstance().find_by_name(search, (pageIterator - 1) * pageSize, pageSize);
+		
+		
+		
+		
+		
 
 		if (search != null) {
-			int lastPage = (int) Math.ceil((double) nbSearchedComputer / step);
+			int lastPage = (int) Math.ceil((double) nbSearchedComputer / pageSize);
 			request.setAttribute("lastPage", lastPage);
 		} else {
-			int lastPage = (int) Math.ceil((double) computerList.size() / step);
+			int lastPage = (int) Math.ceil((double) computerList.size() / pageSize);
 			request.setAttribute("lastPage", lastPage);
 		}
-
+		
+		request.setAttribute("orderBy", orderBy);
 		request.setAttribute("search", search);
 		request.setAttribute("nbSearchedComputer", nbSearchedComputer);
 		request.setAttribute("computerSearchedList", computerSearchedList);
 		request.setAttribute("nbRows", nbRows);
 		request.setAttribute("pageIterator", pageIterator);
-		request.setAttribute("step", step);
+		request.setAttribute("step", pageSize);
 		request.setAttribute("computerList", computerList);
 		request.setAttribute("computerListPag", computerListPag);
 		request.getRequestDispatcher("/WEB-INF/views/dashboard.jsp").forward(request, response);

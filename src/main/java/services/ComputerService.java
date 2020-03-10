@@ -33,8 +33,8 @@ public class ComputerService {
 		return computerDAO.list();
 	}
 	
-	public List<Computer> listPage(int offset, int step){
-		return computerDAO.listPage(offset, step);
+	public List<Computer> listPage(int startPaginate, int pageSize){
+		return computerDAO.listPage(startPaginate, pageSize);
 	}
 	
 	public void delete(int id) {
@@ -44,8 +44,8 @@ public class ComputerService {
 	public Computer find_by_id(int i) {
 		return computerDAO.findById(i);
 	}
-	public List<Computer> find_by_name(String name, int offset, int step) {
-		return computerDAO.findByName(name, offset, step);
+	public List<Computer> find_by_name(String name, int startPaginate, int pageSize) {
+		return computerDAO.findByName(name, startPaginate, pageSize);
 	}
 	
 	public void update(Computer computer) {
@@ -57,7 +57,22 @@ public class ComputerService {
 	}
 	
 	public int nbSearchedComputer(String name) {
-		System.out.println("Au moment du service"+computerDAO.nbSearchedComputer(name));
 		return computerDAO.nbSearchedComputer(name);
+	}
+	
+	public List<Computer> orderByName(int startPaginate, int pageSize){
+		return computerDAO.orderByName(startPaginate, pageSize);
+	}
+	
+	public List<Computer> orderByIntroduced(int startPaginate, int pageSize){
+		return computerDAO.orderByIntroduced(startPaginate, pageSize);
+	}
+	
+	public List<Computer> orderByDiscontinued(int startPaginate, int pageSize){
+		return computerDAO.orderByDiscontinued(startPaginate, pageSize);
+	}
+	
+	public List<Computer> orderByCompany(int startPaginate, int pageSize){
+		return computerDAO.orderByCompany(startPaginate, pageSize);
 	}
 }
