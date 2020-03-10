@@ -7,11 +7,14 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.stereotype.Repository;
+
 import exceptions.DAOException;
 import mapper.CompanyMapper;
 
 import model.Company;
 
+@Repository
 public final class CompanyDAO {
 	private static volatile CompanyDAO instance = null;
 	static Connection connect;
@@ -68,13 +71,10 @@ public final class CompanyDAO {
 		return allCompanies;
 	}
 
-	public Company find_by_id(int id) {
-		System.out.println("LOG : Au moment de trouver la company avec l'id" + id);
+	public Company findById(int id) {
 		Company company = null;
 
 		try (PreparedStatement pstmFind = connect.prepareStatement(SQLRequest.GET_COMPANY_BY_ID.getQuery());) {
-
-			System.out.println("LOG : connexion statetement");
 
 			pstmFind.setInt(1, id);
 			ResultSet resultFind = pstmFind.executeQuery();
@@ -88,6 +88,26 @@ public final class CompanyDAO {
 		}
 
 		return company;
+	}
+	
+	public void deleteCompany(int id) throws SQLException {
+		
+		try (PreparedStatement pstmDeleteComputer = connect.prepareStatement(SQLRequest.DELETE_COMPUTER_BY_COMPANY_ID.getQuery());
+			 PreparedStatement pstmDeleteCompany = connect.prepareStatement(SQLRequest.DELETE_COMPANY.getQuery());) {
+			connect.setAutoCommit(false);
+			pstmDeleteComputer.setLong(1, id);
+			pstmDeleteCompany.setLong(1, id);
+			
+			pstmDeleteComputer.executeUpdate();
+			pstmDeleteCompany.executeUpdate();
+			connect.commit();
+			connect.setAutoCommit(true);
+			
+		} catch (SQLException e) {
+			//TODO don't show message to users
+			System.out.println(e.getMessage());
+			
+		}
 	}
 
 }

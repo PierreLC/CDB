@@ -3,9 +3,12 @@ package dao;
 import java.sql.Connection;
 import java.sql.SQLException;
 
+import org.springframework.stereotype.Repository;
+
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
+@Repository
 public final class ConnexionSQL {
 
 	private static volatile ConnexionSQL instance;

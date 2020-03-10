@@ -34,6 +34,12 @@ public class CompanyService {
 	}
 	
 	public Company find_by_id(int id) {
-		return companyDAO.find_by_id(id);
+		return companyDAO.findById(id);
+	}
+	
+	public void deleteCompany(int id) throws SQLException {
+		companyDAO.deleteCompany(id);
 	}
 }
+
+

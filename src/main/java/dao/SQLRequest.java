@@ -1,5 +1,8 @@
 package dao;
 
+import org.springframework.stereotype.Repository;
+
+@Repository
 public enum SQLRequest {
 	ADD("INSERT INTO computer (name, introduced, discontinued, company_id) VALUES (?, ?, ?, ?);"),
 	LIST_COMPUTER("SELECT computer.id, computer.name, introduced , discontinued , company_id, company.name "
@@ -18,7 +21,11 @@ public enum SQLRequest {
 	
 	ADD_COMPANY("INSERT INTO company(name) VALUES (?);"),
 	LIST_COMPANY("SELECT id, name FROM company;"),
-	GET_COMPANY_BY_ID("SELECT id, name FROM company WHERE id=?;");
+	GET_COMPANY_BY_ID("SELECT id, name FROM company WHERE id = ?;"),
+	DELETE_COMPUTER_BY_COMPANY_ID("DELETE computer.id, computer.name, computer.introduced, computer.discontinued "
+								+"computer_id, company.name FROM computer LEFT JOIN company ON company_id = company.id "
+								+"WHERE company.name = ?;"),
+	DELETE_COMPANY("DELETE id, name FROM company WHERE id = ?;");
 
 	private final String query;
 

@@ -44,7 +44,7 @@ public class MenuAction {
 		System.out.println("Saisir la date de fin de production : (yyyy-MM-dd)");
 		computer.setDiscontinued(DateUtils.convertToLDT(sc.nextLine()));
 		System.out.println("Saisir l'id de la marque :");
-		Company company = companyDAO.find_by_id(sc.nextInt());
+		Company company = companyDAO.findById(sc.nextInt());
 		if (company == null) {
 			System.out.println("La compagnie n'existe pas, rentrez le nom de la nouvelle compagnie :");
 			company = new Company.CompanyBuilder().name(sc.nextLine()).build();

@@ -90,10 +90,6 @@ public class Dashboard extends HttpServlet {
 
 		computerSearchedList = ComputerService.getInstance().find_by_name(search, (pageIterator - 1) * pageSize, pageSize);
 		
-		
-		
-		
-		
 
 		if (search != null) {
 			int lastPage = (int) Math.ceil((double) nbSearchedComputer / pageSize);

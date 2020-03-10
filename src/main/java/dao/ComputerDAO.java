@@ -8,10 +8,13 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.stereotype.Repository;
+
 import exceptions.DAOException;
 import mapper.ComputerMapper;
 import model.Computer;
 
+@Repository
 public final class ComputerDAO {
 	private static volatile ComputerDAO instance = null;
 	static Connection connect;
@@ -97,7 +100,7 @@ public final class ComputerDAO {
 	public void deleteComputer(int id) {
 		try (PreparedStatement pstmDelete = connect.prepareStatement(SQLRequest.DELETE.getQuery());) {
 			pstmDelete.setLong(1, id);
-			pstmDelete.execute();
+			pstmDelete.executeUpdate();
 		} catch (SQLException e) {
 			System.err.println("Erreur there 3" + e.getMessage());
 		}
