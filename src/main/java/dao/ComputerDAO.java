@@ -8,6 +8,7 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import exceptions.DAOException;
@@ -16,8 +17,9 @@ import model.Computer;
 
 @Repository
 public final class ComputerDAO {
-	private static volatile ComputerDAO instance = null;
+//	private static volatile ComputerDAO instance = null;
 	static Connection connect;
+	private ConnexionSQL connection;
 
 	public final String ADD_LOG = "Erreur lors de l'ajout : échec de la connexion à la base de donnée";
 	public final String LIST_LOG = " Erreur lors de l'affichage des ordinateur : échec de la connexion à la base de donnée";
@@ -27,20 +29,22 @@ public final class ComputerDAO {
 	public final String ROWS_LOG = "Erreur au moment de compter les lignes : échec lors de la connexion à la base de donnée";
 	public final String LIST_PAGE_LOG = "Erreur lors de l'affichage des pages : échec lors de la connexion à la base de donnée";
 
-	private ComputerDAO() {
-		ComputerDAO.connect = ConnexionSQL.getInstance().connect();
+	@Autowired
+	private ComputerDAO(ConnexionSQL connectionSQL) {
+		this.connection = connectionSQL;
+//		ComputerDAO.connect = ConnexionSQL.getInstance().connect();
 	}
 
-	public final static ComputerDAO getInstance() {
-		if (ComputerDAO.instance == null) {
-			synchronized (ComputerDAO.class) {
-				if (ComputerDAO.instance == null) {
-					ComputerDAO.instance = new ComputerDAO();
-				}
-			}
-		}
-		return ComputerDAO.instance;
-	}
+//	public final static ComputerDAO getInstance() {
+//		if (ComputerDAO.instance == null) {
+//			synchronized (ComputerDAO.class) {
+//				if (ComputerDAO.instance == null) {
+//					ComputerDAO.instance = new ComputerDAO();
+//				}
+//			}
+//		}
+//		return ComputerDAO.instance;
+//	}
 
 	public void add(Computer computer) throws SQLException {
 

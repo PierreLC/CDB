@@ -1,38 +1,43 @@
 package ui;
 
 import java.sql.SQLException;
-
 import java.util.Scanner;
+
+import org.springframework.stereotype.Component;
 
 import dao.CompanyDAO;
 import dao.ComputerDAO;
+import dao.ConnexionSQL;
 import model.Company;
 import model.Computer;
 import utils.DateUtils;
 
+@Component
 public class MenuAction {
 	
 	final ComputerDAO computerDAO;
 	final CompanyDAO companyDAO;
+	ConnexionSQL connexionSQL;
 
 	public Scanner sc = new Scanner(System.in);
 
-	private static volatile MenuAction instance = null;
+//	private static volatile MenuAction instance = null;
 
-	public final static MenuAction getInstance() {
-		if (MenuAction.instance == null) {
-			synchronized (MenuAction.class) {
-				if (MenuAction.instance == null) {
-					MenuAction.instance = new MenuAction(ComputerDAO.getInstance(), CompanyDAO.getInstance());
-				}
-			}
-		}
-		return MenuAction.instance;
-	}
+//	public final static MenuAction getInstance() {
+//		if (MenuAction.instance == null) {
+//			synchronized (MenuAction.class) {
+//				if (MenuAction.instance == null) {
+//					MenuAction.instance = new MenuAction(ComputerDAO.getInstance(), CompanyDAO.getInstance());
+//				}
+//			}
+//		}
+//		return MenuAction.instance;
+//	}
 	
-	public MenuAction(ComputerDAO computerDAO, CompanyDAO companyDAO) {
-		this.computerDAO = computerDAO;
-		this.companyDAO = companyDAO;
+	public MenuAction(ConnexionSQL instance) {
+		this.connexionSQL = instance;
+//		this.computerDAO = computerDAO;
+//		this.companyDAO = companyDAO;
 	}
 
 	public void createComputer() throws SQLException {

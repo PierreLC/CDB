@@ -3,26 +3,32 @@ package services;
 import java.sql.SQLException;
 import java.util.List;
 
+import org.springframework.stereotype.Service;
+
 import dao.CompanyDAO;
+import dao.ConnexionSQL;
 import model.Company;
 
+@Service
 public class CompanyService {
-	private static volatile CompanyService instance = null;
+//	private static volatile CompanyService instance = null;
 	private static CompanyDAO companyDAO;
+	private ConnexionSQL connexionSQL;
 
-	public final static CompanyService getInstance() {
-		if (CompanyService.instance == null) {
-			synchronized (CompanyService.class) {
-				if (CompanyService.instance == null) {
-					CompanyService.instance = new CompanyService(companyDAO);
-				}
-			}
-		}
-		return CompanyService.instance;
-	}
+//	public final static CompanyService getInstance() {
+//		if (CompanyService.instance == null) {
+//			synchronized (CompanyService.class) {
+//				if (CompanyService.instance == null) {
+//					CompanyService.instance = new CompanyService(companyDAO);
+//				}
+//			}
+//		}
+//		return CompanyService.instance;
+//	}
 	
-	public CompanyService(CompanyDAO companyDAO) {
-		CompanyService.companyDAO = CompanyDAO.getInstance();
+	public CompanyService(ConnexionSQL instance) {
+//		CompanyService.companyDAO = CompanyDAO.getInstance();
+		this.connexionSQL = instance;
 	}
 	
 	public Company add(Company company) throws SQLException {

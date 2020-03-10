@@ -7,36 +7,39 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import exceptions.DAOException;
 import mapper.CompanyMapper;
-
 import model.Company;
 
 @Repository
 public final class CompanyDAO {
-	private static volatile CompanyDAO instance = null;
+//	private static volatile CompanyDAO instance = null;
+	ConnexionSQL connexionSQL;
 	static Connection connect;
 
 	private final static String ADD_COMPANY_LOG = "Erreur lors de l'ajout : échec de la connexion à la base de donnée";
 	private final static String LIST_COMPANY_LOG = "Erreur au moment de lister les marques : échec de la connexion à la base de donnée";
 	private final static String GET_COMPANY_LOG = "Erreur au moment d'obtenir la marque : échec de la connexion à la base de donnée";
 
-	private CompanyDAO() {
-		CompanyDAO.connect = ConnexionSQL.getInstance().connect();
+	@Autowired
+	private CompanyDAO(ConnexionSQL instance) {
+		this.connexionSQL = instance;
+//		CompanyDAO.connect = ConnexionSQL.connect();
 	}
 
-	public final static CompanyDAO getInstance() {
-		if (CompanyDAO.instance == null) {
-			synchronized (CompanyDAO.class) {
-				if (CompanyDAO.instance == null) {
-					CompanyDAO.instance = new CompanyDAO();
-				}
-			}
-		}
-		return CompanyDAO.instance;
-	}
+//	public final static CompanyDAO getInstance() {
+//		if (CompanyDAO.instance == null) {
+//			synchronized (CompanyDAO.class) {
+//				if (CompanyDAO.instance == null) {
+//					CompanyDAO.instance = new CompanyDAO();
+//				}
+//			}
+//		}
+//		return CompanyDAO.instance;
+//	}
 
 	public static Company add(Company company) throws SQLException {
 		ResultSet resultAdd = null;

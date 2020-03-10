@@ -1,8 +1,8 @@
 package dao;
 
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Component;
 
-@Repository
+@Component
 public enum SQLRequest {
 	ADD("INSERT INTO computer (name, introduced, discontinued, company_id) VALUES (?, ?, ?, ?);"),
 	LIST_COMPUTER("SELECT computer.id, computer.name, introduced , discontinued , company_id, company.name "

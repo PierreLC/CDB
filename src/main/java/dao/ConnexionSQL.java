@@ -3,33 +3,36 @@ package dao;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-import org.springframework.stereotype.Repository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
-@Repository
+@Component
 public final class ConnexionSQL {
 
-	private static volatile ConnexionSQL instance;
+//	private static volatile ConnexionSQL instance;
 	private static HikariConfig configProperties;
 	private static HikariDataSource dataSource;
 	private static final String CONFIGURATION_LOCATION = "/database.properties";
 
+	@Autowired
 	public ConnexionSQL() {
 		super();
+		
 	}
 
-	public final static ConnexionSQL getInstance() {
-		if (ConnexionSQL.instance == null) {
-			synchronized (ConnexionSQL.class) {
-				if (ConnexionSQL.instance == null) {
-					ConnexionSQL.instance = new ConnexionSQL();
-				}
-			}
-		}
-		return ConnexionSQL.instance;
-	}
+//	public final static ConnexionSQL getInstance() {
+//		if (ConnexionSQL.instance == null) {
+//			synchronized (ConnexionSQL.class) {
+//				if (ConnexionSQL.instance == null) {
+//					ConnexionSQL.instance = new ConnexionSQL();
+//				}
+//			}
+//		}
+//		return ConnexionSQL.instance;
+//	}
 
 	public Connection connect() {
 
