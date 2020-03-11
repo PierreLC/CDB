@@ -4,12 +4,19 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 
+import org.springframework.stereotype.Component;
+
 import dao.ComputerDAO;
 import model.Computer;
 
+@Component
 public class Pagination {
 	private static final int PAGE_SIZE = 20;
 	private static ComputerDAO computerDAO;
+	
+	public Pagination(ComputerDAO instance) {
+		this.computerDAO = instance;
+	}
 	
 	public static void computerPaginate() throws SQLException, IOException {
 		int nbRows = computerDAO.getNbRows();

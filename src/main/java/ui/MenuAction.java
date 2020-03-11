@@ -3,7 +3,6 @@ package ui;
 import java.sql.SQLException;
 import java.util.Scanner;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import dao.CompanyDAO;
@@ -20,7 +19,6 @@ public class MenuAction {
 
 	public Scanner sc = new Scanner(System.in);
 	
-	@Autowired
 	public MenuAction(ComputerDAO computerDAO, CompanyDAO companyDAO) {
 		this.computerDAO = computerDAO;
 		this.companyDAO = companyDAO;

@@ -1,8 +1,5 @@
 package dao;
 
-import org.springframework.stereotype.Repository;
-
-@Repository
 public enum OrderByRequest {
 	ORDER_BY_NAME("SELECT computer.id, computer.name, introduced , discontinued , company_id, company.name "
 			+"FROM computer LEFT JOIN company ON company_id = company.id "

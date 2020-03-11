@@ -4,8 +4,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 
-import dto.CompanyDTO;
-import dto.ComputerDTO;
 import model.Company;
 import model.Computer;
 

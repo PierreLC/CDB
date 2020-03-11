@@ -2,7 +2,6 @@ package ui;
 
 import java.util.Scanner;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import dao.CompanyDAO;
@@ -16,7 +15,6 @@ public class UI {
 	private static MenuAction menuAction;
 	private static CompanyDAO companyDAO;
 
-	@Autowired
 	public UI(ComputerDAO computerInstance, MenuAction menuInstance, CompanyDAO companyInstance) {
 		this.computerDAO = computerInstance;
 		this.menuAction = menuInstance;
