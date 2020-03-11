@@ -17,7 +17,6 @@ import model.Computer;
 
 @Repository
 public final class ComputerDAO {
-//	private static volatile ComputerDAO instance = null;
 	static Connection connect;
 	private ConnexionSQL connection;
 
@@ -32,19 +31,7 @@ public final class ComputerDAO {
 	@Autowired
 	private ComputerDAO(ConnexionSQL connectionSQL) {
 		this.connection = connectionSQL;
-//		ComputerDAO.connect = ConnexionSQL.getInstance().connect();
 	}
-
-//	public final static ComputerDAO getInstance() {
-//		if (ComputerDAO.instance == null) {
-//			synchronized (ComputerDAO.class) {
-//				if (ComputerDAO.instance == null) {
-//					ComputerDAO.instance = new ComputerDAO();
-//				}
-//			}
-//		}
-//		return ComputerDAO.instance;
-//	}
 
 	public void add(Computer computer) throws SQLException {
 

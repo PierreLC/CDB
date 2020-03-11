@@ -16,10 +16,9 @@ import model.Company;
 
 @Repository
 public final class CompanyDAO {
-//	private static volatile CompanyDAO instance = null;
-	ConnexionSQL connexionSQL;
 	static Connection connect;
-
+	ConnexionSQL connexionSQL;
+	
 	private final static String ADD_COMPANY_LOG = "Erreur lors de l'ajout : échec de la connexion à la base de donnée";
 	private final static String LIST_COMPANY_LOG = "Erreur au moment de lister les marques : échec de la connexion à la base de donnée";
 	private final static String GET_COMPANY_LOG = "Erreur au moment d'obtenir la marque : échec de la connexion à la base de donnée";
@@ -27,19 +26,7 @@ public final class CompanyDAO {
 	@Autowired
 	private CompanyDAO(ConnexionSQL instance) {
 		this.connexionSQL = instance;
-//		CompanyDAO.connect = ConnexionSQL.connect();
 	}
-
-//	public final static CompanyDAO getInstance() {
-//		if (CompanyDAO.instance == null) {
-//			synchronized (CompanyDAO.class) {
-//				if (CompanyDAO.instance == null) {
-//					CompanyDAO.instance = new CompanyDAO();
-//				}
-//			}
-//		}
-//		return CompanyDAO.instance;
-//	}
 
 	public static Company add(Company company) throws SQLException {
 		ResultSet resultAdd = null;
@@ -56,7 +43,7 @@ public final class CompanyDAO {
 		return CompanyMapper.getCompanyResultSet(resultAdd);
 	}
 
-	public static List<Company> list() throws SQLException {
+	public List<Company> list() throws SQLException {
 		List<Company> allCompanies = new ArrayList<Company>();
 		ResultSet resultSetList = null;
 

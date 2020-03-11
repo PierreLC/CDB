@@ -11,26 +11,39 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+
 import exceptions.DAOException;
 import model.Computer;
 import services.ComputerService;
 
 @WebServlet(urlPatterns = "/dashboard")
+@Controller
+//@ pour l'url utiliser get mapping et postmapping
 public class Dashboard extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
-	private int pageIterator = 1;
-	private int nbRows = 0;
-	private int pageSize = 10;
-	List<Computer> computerSearchedList;
-	List<Computer> computerListPag;
-	ComputerService computerService;
+	private ComputerService computerService;
+	
+	@Autowired
+	public Dashboard(ComputerService instance) {
+		this.computerService = instance;
+	}
 
+	//GetMapping + param url
+	@GetMapping
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
+		int pageSize = 10;
+		int pageIterator = 1;
+		int nbRows = 0;
+		
 		try {
-			nbRows = ComputerService.getInstance().getNbRows();
+			nbRows = computerService.getNbRows();
 		} catch (SQLException e) {
 			DAOException.displayError(e.getMessage());
 		}
@@ -63,32 +76,34 @@ public class Dashboard extends HttpServlet {
 
 		String orderBy = (request.getParameter("columnName")!=null) ? request.getParameter("columnName"):"";
 		
+		List<Computer> computerListPag;
+		List<Computer> computerSearchedList;
 		
 		switch (orderBy){
 		case "computerName":
-			computerListPag = ComputerService.getInstance().orderByName((pageIterator - 1) * pageSize, pageSize);
+			computerListPag = computerService.orderByName((pageIterator - 1) * pageSize, pageSize);
 			break;
 		case "introduced":
-			computerListPag = ComputerService.getInstance().orderByIntroduced((pageIterator - 1) * pageSize, pageSize);
+			computerListPag = computerService.orderByIntroduced((pageIterator - 1) * pageSize, pageSize);
 			break;
 		case "discontinued":
-			computerListPag = ComputerService.getInstance().orderByDiscontinued((pageIterator - 1) * pageSize, pageSize);
+			computerListPag = computerService.orderByDiscontinued((pageIterator - 1) * pageSize, pageSize);
 			break;
 		case "company":
-			computerListPag = ComputerService.getInstance().orderByCompany((pageIterator - 1) * pageSize, pageSize);
+			computerListPag = computerService.orderByCompany((pageIterator - 1) * pageSize, pageSize);
 			break;
 		default:
-			computerListPag = ComputerService.getInstance().listPage((pageIterator - 1) * pageSize, pageSize);
+			computerListPag = computerService.listPage((pageIterator - 1) * pageSize, pageSize);
 		}
-		List<Computer> computerList = ComputerService.getInstance().list();
+		List<Computer> computerList = computerService.list();
 		
 		
 		
 		String search = request.getParameter("search");
 
-		int nbSearchedComputer = ComputerService.getInstance().nbSearchedComputer(search);
+		int nbSearchedComputer = computerService.nbSearchedComputer(search);
 
-		computerSearchedList = ComputerService.getInstance().find_by_name(search, (pageIterator - 1) * pageSize, pageSize);
+		computerSearchedList = computerService.find_by_name(search, (pageIterator - 1) * pageSize, pageSize);
 		
 
 		if (search != null) {
@@ -111,13 +126,14 @@ public class Dashboard extends HttpServlet {
 		request.getRequestDispatcher("/WEB-INF/views/dashboard.jsp").forward(request, response);
 	}
 
+	@PostMapping
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
 		String computerSelection = request.getParameter("selection");
 		List<String> computerToDelete = Arrays.asList(computerSelection.split(","));
 		for (String s : computerToDelete) {
-			ComputerService.getInstance().delete(Integer.parseInt(s));
+			computerService.delete(Integer.parseInt(s));
 		}
 		doGet(request, response);
 	}

@@ -16,7 +16,7 @@ public class CompanyMapper {
 			String companyName = resDetailCompany.getString("company.name");
 			company = new Company.CompanyBuilder().id(companyID).name(companyName).build();
 		} catch (SQLException e) {
-			e.printStackTrace();
+			System.out.println(e.getMessage());;
 		}
 		return company;
 	}

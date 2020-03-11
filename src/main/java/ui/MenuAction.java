@@ -3,11 +3,11 @@ package ui;
 import java.sql.SQLException;
 import java.util.Scanner;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import dao.CompanyDAO;
 import dao.ComputerDAO;
-import dao.ConnexionSQL;
 import model.Company;
 import model.Computer;
 import utils.DateUtils;
@@ -17,27 +17,13 @@ public class MenuAction {
 	
 	final ComputerDAO computerDAO;
 	final CompanyDAO companyDAO;
-	ConnexionSQL connexionSQL;
 
 	public Scanner sc = new Scanner(System.in);
-
-//	private static volatile MenuAction instance = null;
-
-//	public final static MenuAction getInstance() {
-//		if (MenuAction.instance == null) {
-//			synchronized (MenuAction.class) {
-//				if (MenuAction.instance == null) {
-//					MenuAction.instance = new MenuAction(ComputerDAO.getInstance(), CompanyDAO.getInstance());
-//				}
-//			}
-//		}
-//		return MenuAction.instance;
-//	}
 	
-	public MenuAction(ConnexionSQL instance) {
-		this.connexionSQL = instance;
-//		this.computerDAO = computerDAO;
-//		this.companyDAO = companyDAO;
+	@Autowired
+	public MenuAction(ComputerDAO computerDAO, CompanyDAO companyDAO) {
+		this.computerDAO = computerDAO;
+		this.companyDAO = companyDAO;
 	}
 
 	public void createComputer() throws SQLException {
@@ -61,7 +47,7 @@ public class MenuAction {
 
 	public void updateComputer() {
 		System.out.println("Saisir l'id de l'ordinateur à modifier :\n");
-		Computer computer = ComputerDAO.getInstance().findById(sc.nextInt());
+		Computer computer = computerDAO.findById(sc.nextInt());
 		System.out.println("Saisir le nouvel id :\n");
 		computer = new Computer.Builder().setId(sc.nextLong()).build();
 		System.out.println("Saisir le nouveau nom :\n");

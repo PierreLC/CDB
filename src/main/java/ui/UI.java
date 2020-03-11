@@ -2,15 +2,25 @@ package ui;
 
 import java.util.Scanner;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import dao.CompanyDAO;
 import dao.ComputerDAO;
 
+@Component
 public class UI {
 	private static Scanner scanner = new Scanner(System.in);
+	
+	private static ComputerDAO computerDAO;
+	private static MenuAction menuAction;
+	private static CompanyDAO companyDAO;
 
-
-	public UI(MenuAction menuAction) {
-		actions();
+	@Autowired
+	public UI(ComputerDAO computerInstance, MenuAction menuInstance, CompanyDAO companyInstance) {
+		this.computerDAO = computerInstance;
+		this.menuAction = menuInstance;
+		this.companyDAO = companyInstance;
 	}
 
 	public static int menu() {
@@ -51,30 +61,28 @@ public class UI {
 			switch (MenuEntry.entry(choice)) {
 
 			case LISTCOMPUTERS:
-				System.out.println(ComputerDAO.getInstance().list());
+				System.out.println(computerDAO.list());
 				break;
 			case PAGECOMPUTERS:
 				Pagination.computerPaginate();
 			case DELETECOMPUTER:
-				MenuAction.getInstance().deleteComputer();
+				menuAction.deleteComputer();
 				break;
 			case UPDATECOMPUTER:
-				MenuAction.getInstance().updateComputer();
+				menuAction.updateComputer();
 				break;
 			case ADDCOMPUTER:
-				MenuAction.getInstance().createComputer();
+				menuAction.createComputer();
 				break;
 			case DISPLAYCOMPANIES:
-				System.out.println(CompanyDAO.getInstance().list());
+				System.out.println(companyDAO.list());
 				break;
 			case DISPLAYDETAILS:
-				MenuAction.getInstance().displayComputer();
+				menuAction.displayComputer();
 				break;
 			default:
 				break;
 			}
-//		}   catch (ServiceException e1) {
-//			System.err.println(e1.getMessage());	
 		}	catch (Exception e3) {
 			System.err.println("Erreur inattendue" + e3.getMessage());
 			System.exit(-1);

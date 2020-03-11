@@ -12,25 +12,39 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+
 import model.Company;
 import model.Computer;
 import services.CompanyService;
 import services.ComputerService;
 
 @WebServlet(urlPatterns="/editComputer")
+@Controller
 public class UpdateComputer extends HttpServlet {
 	
 	private static final long serialVersionUID = 1L;
-	private static ComputerService service = ComputerService.getInstance();
+	private CompanyService companyService;
+	private ComputerService computerService;
 	
+	@Autowired
+	public UpdateComputer(CompanyService companyInstance, ComputerService computerInstance) {
+		this.computerService = computerInstance;
+		this.companyService = companyInstance;
+	}
+	
+	@GetMapping
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) 
 		throws ServletException, IOException {
 		
 		List<Company> companyList;
 		try {
-			companyList = CompanyService.getInstance().list();
+			companyList = companyService.list();
 			request.setAttribute("companyList", companyList);
-			Computer computer = service.find_by_id(Integer.parseInt(request.getParameter("id")));
+			Computer computer = computerService.find_by_id(Integer.parseInt(request.getParameter("id")));
 			
 			request.setAttribute("computerId", computer.getId());
 			request.setAttribute("computerName", computer.getName());
@@ -46,6 +60,7 @@ public class UpdateComputer extends HttpServlet {
 		
 	}
 	
+	@PostMapping
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 	throws ServletException, IOException{
 		
@@ -54,12 +69,12 @@ public class UpdateComputer extends HttpServlet {
 		LocalDate discontinued = LocalDate.parse(request.getParameter("discontinued"));
 		int companyId = Integer.parseInt(request.getParameter("companyId"));
 		
-		Company company = CompanyService.getInstance().find_by_id(companyId);
+		Company company = companyService.find_by_id(companyId);
 		
 		boolean testCompanyId = (request.getParameter("companyId").equals("none"));
 		
 		if(!testCompanyId) {
-			company = CompanyService.getInstance().find_by_id(companyId);
+			company = companyService.find_by_id(companyId);
 		}
 		
 		Computer computer = new Computer.Builder().setName(computerName)
@@ -68,7 +83,7 @@ public class UpdateComputer extends HttpServlet {
 				 .setCompany(company)
 				 .build();
 		
-		service.update(computer);
+		computerService.update(computer);
 		
 		response.sendRedirect(request.getContextPath()+"/dashboard");
 	}

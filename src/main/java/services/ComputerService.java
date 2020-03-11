@@ -6,29 +6,14 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import dao.ComputerDAO;
-import dao.ConnexionSQL;
 import model.Computer;
 
 @Service
 public class ComputerService {
-//	private static volatile ComputerService instance = null;
 	private static ComputerDAO computerDAO;
-	private ConnexionSQL connexionSQL;
 
-//	public final static ComputerService getInstance() {
-//		if (ComputerService.instance == null) {
-//			synchronized (ComputerService.class) {
-//				if (ComputerService.instance == null) {
-//					ComputerService.instance = new ComputerService(computerDAO);
-//				}
-//			}
-//		}
-//		return ComputerService.instance;
-//	}
-	
-	public ComputerService(ConnexionSQL instance) {
-//		ComputerService.computerDAO = ComputerDAO.getInstance();
-		this.connexionSQL = instance;
+	public ComputerService(ComputerDAO instance) {
+		this.computerDAO = instance;
 	}
 	
 	public void add(Computer computer) throws SQLException {

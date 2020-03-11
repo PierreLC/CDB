@@ -12,7 +12,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.springframework.stereotype.Component;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import dao.ComputerDAO;
 import model.Company;
@@ -20,14 +23,26 @@ import model.Computer;
 import services.CompanyService;
 
 @WebServlet(urlPatterns = "/addComputer")
+@Controller
 public class AddComputer extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	
+	private CompanyService companyService;
+	private ComputerDAO computerDAO;
+	
+	@Autowired
+	public AddComputer(CompanyService serviceInstance, ComputerDAO daoInstance) {
+		this.companyService = serviceInstance;
+		this.computerDAO = daoInstance;
 
+	}
+
+	@GetMapping
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		
 		try {
-			List<Company> companyList = CompanyService.getInstance().list();
+			List<Company> companyList = companyService.list();
 			request.setAttribute("companyList", companyList);
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -35,6 +50,7 @@ public class AddComputer extends HttpServlet {
 		request.getRequestDispatcher("WEB-INF/views/addComputer.jsp").forward(request,response);
 	}
 	
+	@PostMapping
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		
@@ -43,7 +59,7 @@ public class AddComputer extends HttpServlet {
 		LocalDate discontinued = LocalDate.parse(request.getParameter("discontinued"));
 		int companyId = Integer.parseInt(request.getParameter("companyId"));
 		
-		Company company = CompanyService.getInstance().find_by_id(companyId);
+		Company company = companyService.find_by_id(companyId);
 		
 		Computer computer = new Computer.Builder().setName(computerName)
 												 .setIntroducedDate(introduced.atTime(LocalTime.MIDNIGHT))
@@ -52,8 +68,7 @@ public class AddComputer extends HttpServlet {
 												 .build();
 		
 		try {
-			ComputerDAO.getInstance().add(computer);
-//			ComputerService.getInstance().add(computer);
+			computerDAO.add(computer);
 			response.sendRedirect(request.getContextPath()+"/dashboard");
 		} catch (SQLException e) {
 			e.printStackTrace();

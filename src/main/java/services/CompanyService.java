@@ -3,32 +3,19 @@ package services;
 import java.sql.SQLException;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import dao.CompanyDAO;
-import dao.ConnexionSQL;
 import model.Company;
 
 @Service
 public class CompanyService {
-//	private static volatile CompanyService instance = null;
 	private static CompanyDAO companyDAO;
-	private ConnexionSQL connexionSQL;
-
-//	public final static CompanyService getInstance() {
-//		if (CompanyService.instance == null) {
-//			synchronized (CompanyService.class) {
-//				if (CompanyService.instance == null) {
-//					CompanyService.instance = new CompanyService(companyDAO);
-//				}
-//			}
-//		}
-//		return CompanyService.instance;
-//	}
 	
-	public CompanyService(ConnexionSQL instance) {
-//		CompanyService.companyDAO = CompanyDAO.getInstance();
-		this.connexionSQL = instance;
+	@Autowired
+	public CompanyService(CompanyDAO instance) {
+		this.companyDAO = instance;
 	}
 	
 	public Company add(Company company) throws SQLException {
@@ -36,7 +23,7 @@ public class CompanyService {
 	}
 	
 	public List<Company> list() throws SQLException{
-		return CompanyDAO.list();
+		return companyDAO.list();
 	}
 	
 	public Company find_by_id(int id) {
