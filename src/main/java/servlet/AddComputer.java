@@ -6,15 +6,18 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 import dao.ComputerDAO;
 import model.Company;
@@ -26,14 +29,22 @@ import services.CompanyService;
 public class AddComputer extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
+	@Autowired
 	private CompanyService companyService;
+	@Autowired
 	private ComputerDAO computerDAO;
 	
-	public AddComputer(CompanyService serviceInstance, ComputerDAO daoInstance) {
-		this.companyService = serviceInstance;
-		this.computerDAO = daoInstance;
-
+	public void init(ServletConfig config) throws ServletException {
+		super.init(config);
+    	SpringBeanAutowiringSupport.processInjectionBasedOnServletContext(this,config.getServletContext());
 	}
+
+//Possibilité d'utiliser cette méthode une fois spring mvc implémenté avec l'@RestController
+//	public AddComputer(CompanyService serviceInstance, ComputerDAO daoInstance) {
+//		this.companyService = serviceInstance;
+//		this.computerDAO = daoInstance;
+//
+//	}
 
 	@GetMapping
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)

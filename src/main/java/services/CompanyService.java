@@ -14,12 +14,12 @@ public class CompanyService {
 	private static CompanyDAO companyDAO;
 	
 	@Autowired
-	public CompanyService(CompanyDAO instance) {
-		this.companyDAO = instance;
+	public CompanyService(CompanyDAO companyDAO) {
+		this.companyDAO = companyDAO;
 	}
 	
 	public Company add(Company company) throws SQLException {
-		return CompanyDAO.add(company);
+		return companyDAO.add(company);
 	}
 	
 	public List<Company> list() throws SQLException{

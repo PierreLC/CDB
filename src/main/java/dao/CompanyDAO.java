@@ -28,10 +28,11 @@ public final class CompanyDAO {
 		this.connexionSQL = instance;
 	}
 
-	public static Company add(Company company) throws SQLException {
+	public Company add(Company company) throws SQLException {
 		ResultSet resultAdd = null;
 		
-		try (PreparedStatement pstmAdd = connect.prepareStatement(SQLRequest.ADD_COMPANY.getQuery());) {
+		try (Connection connect = connexionSQL.connect();
+			 PreparedStatement pstmAdd = connect.prepareStatement(SQLRequest.ADD_COMPANY.getQuery());) {
 
 			pstmAdd.setString(1, company.getName());
 
@@ -47,7 +48,8 @@ public final class CompanyDAO {
 		List<Company> allCompanies = new ArrayList<Company>();
 		ResultSet resultSetList = null;
 
-		try (PreparedStatement stmt = connect.prepareStatement(SQLRequest.LIST_COMPANY.getQuery());) {
+		try (Connection connect = connexionSQL.connect();
+			 PreparedStatement stmt = connect.prepareStatement(SQLRequest.LIST_COMPANY.getQuery());) {
 			resultSetList = stmt.executeQuery();
 			while (resultSetList.next()) {
 				Company company = CompanyMapper.getCompanyResultSet(resultSetList);
@@ -64,7 +66,8 @@ public final class CompanyDAO {
 	public Company findById(int id) {
 		Company company = null;
 
-		try (PreparedStatement pstmFind = connect.prepareStatement(SQLRequest.GET_COMPANY_BY_ID.getQuery());) {
+		try (Connection connect = connexionSQL.connect();
+			 PreparedStatement pstmFind = connect.prepareStatement(SQLRequest.GET_COMPANY_BY_ID.getQuery());) {
 
 			pstmFind.setInt(1, id);
 			ResultSet resultFind = pstmFind.executeQuery();
@@ -82,7 +85,8 @@ public final class CompanyDAO {
 	
 	public void deleteCompany(int id) throws SQLException {
 		
-		try (PreparedStatement pstmDeleteComputer = connect.prepareStatement(SQLRequest.DELETE_COMPUTER_BY_COMPANY_ID.getQuery());
+		try (Connection connect = connexionSQL.connect();
+			 PreparedStatement pstmDeleteComputer = connect.prepareStatement(SQLRequest.DELETE_COMPUTER_BY_COMPANY_ID.getQuery());
 			 PreparedStatement pstmDeleteCompany = connect.prepareStatement(SQLRequest.DELETE_COMPANY.getQuery());) {
 			connect.setAutoCommit(false);
 			pstmDeleteComputer.setLong(1, id);

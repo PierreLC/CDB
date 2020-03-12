@@ -18,7 +18,8 @@ import model.Computer;
 @Repository
 public final class ComputerDAO {
 	static Connection connect;
-	private ConnexionSQL connection;
+	private ConnexionSQL connexionSQL;
+//	private ComputerMapper computerMapper;
 
 	public final String ADD_LOG = "Erreur lors de l'ajout : échec de la connexion à la base de donnée";
 	public final String LIST_LOG = " Erreur lors de l'affichage des ordinateur : échec de la connexion à la base de donnée";
@@ -30,12 +31,14 @@ public final class ComputerDAO {
 
 	@Autowired
 	private ComputerDAO(ConnexionSQL connectionSQL) {
-		this.connection = connectionSQL;
+		this.connexionSQL = connectionSQL;
+//		this.computerMapper = computerMapper;
 	}
 
 	public void add(Computer computer) throws SQLException {
 
-		try (PreparedStatement pstmAdd = connect.prepareStatement(SQLRequest.ADD.getQuery());) {
+		try (Connection connect = connexionSQL.connect();
+			 PreparedStatement pstmAdd = connect.prepareStatement(SQLRequest.ADD.getQuery());) {
 			pstmAdd.setString(1, computer.getName());
 			pstmAdd.setTimestamp(2,
 					computer.getIntroduced() != null ? Timestamp.valueOf(computer.getIntroduced()) : null);
@@ -54,7 +57,8 @@ public final class ComputerDAO {
 		ResultSet resultList;
 		List<Computer> computerList = new ArrayList<Computer>();
 
-		try (PreparedStatement pstmList = connect.prepareStatement(SQLRequest.LIST_COMPUTER.getQuery());) {
+		try (Connection connect = connexionSQL.connect();
+			 PreparedStatement pstmList = connect.prepareStatement(SQLRequest.LIST_COMPUTER.getQuery());) {
 			resultList = pstmList.executeQuery();
 			while (resultList.next()) {
 				Computer computer = ComputerMapper.getComputerResultSet(resultList);
@@ -72,7 +76,8 @@ public final class ComputerDAO {
 
 		List<Computer> compPagList = new ArrayList<Computer>();
 
-		try (PreparedStatement pstmPagList = connect.prepareStatement(SQLRequest.LIST_PAGE.getQuery());) {
+		try (Connection connect = connexionSQL.connect();
+			 PreparedStatement pstmPagList = connect.prepareStatement(SQLRequest.LIST_PAGE.getQuery());) {
 			pstmPagList.setInt(1, startPaginate);
 			pstmPagList.setInt(2, pageSize);
 			resultList = pstmPagList.executeQuery();
@@ -80,7 +85,6 @@ public final class ComputerDAO {
 				Computer computer = ComputerMapper.getComputerResultSet(resultList);
 				compPagList.add(computer);
 			}
-
 		} catch (SQLException e) {
 			DAOException.displayError(LIST_PAGE_LOG + e.getMessage());
 		}
@@ -89,7 +93,8 @@ public final class ComputerDAO {
 	}
 
 	public void deleteComputer(int id) {
-		try (PreparedStatement pstmDelete = connect.prepareStatement(SQLRequest.DELETE.getQuery());) {
+		try (Connection connect = connexionSQL.connect();
+			 PreparedStatement pstmDelete = connect.prepareStatement(SQLRequest.DELETE.getQuery());) {
 			pstmDelete.setLong(1, id);
 			pstmDelete.executeUpdate();
 		} catch (SQLException e) {
@@ -101,17 +106,16 @@ public final class ComputerDAO {
 		Computer computer = null;
 		ResultSet resultFindId;
 
-		try (PreparedStatement pstmFind = connect.prepareStatement(SQLRequest.FIND_BY_ID.getQuery());) {
+		try (Connection connect = connexionSQL.connect();
+			 PreparedStatement pstmFind = connect.prepareStatement(SQLRequest.FIND_BY_ID.getQuery());) {
 			pstmFind.setLong(1, id);
 			resultFindId = pstmFind.executeQuery();
 			if (resultFindId.first()) {
 				computer = ComputerMapper.getComputerResultSet(resultFindId);
 			}
-
 		} catch (SQLException e) {
 			DAOException.displayError(DISPLAY_LOG + e.getMessage());
 		}
-
 		return computer;
 	}
 
@@ -119,7 +123,8 @@ public final class ComputerDAO {
 		ResultSet resultFindName;
 		List<Computer> computerSearched = new ArrayList<Computer>();
 
-		try (PreparedStatement pstmFind = connect.prepareStatement(SQLRequest.FIND_BY_NAME_PAG.getQuery());) {
+		try (Connection connect = connexionSQL.connect();
+			 PreparedStatement pstmFind = connect.prepareStatement(SQLRequest.FIND_BY_NAME_PAG.getQuery());) {
 			pstmFind.setString(1, "%"+name+"%");
 			pstmFind.setInt(2, offset);
 			pstmFind.setInt(3, step);
@@ -130,7 +135,6 @@ public final class ComputerDAO {
 		}catch (SQLException e) {
 			DAOException.displayError(DISPLAY_LOG + e.getMessage());
 		}
-
 		return computerSearched;
 	}
 	
@@ -138,7 +142,8 @@ public final class ComputerDAO {
 		ResultSet resultFindName;
 		List<Computer> computerSearched = new ArrayList<Computer>();
 
-		try (PreparedStatement pstmFind = connect.prepareStatement(SQLRequest.FIND_BY_NAME.getQuery());) {
+		try (Connection connect = connexionSQL.connect();
+			 PreparedStatement pstmFind = connect.prepareStatement(SQLRequest.FIND_BY_NAME.getQuery());) {
 			pstmFind.setString(1, "%"+name+"%");
 			resultFindName = pstmFind.executeQuery();
 			while (resultFindName.next()) {
@@ -152,7 +157,8 @@ public final class ComputerDAO {
 	
 	public void update(Computer computer) {
 
-		try (PreparedStatement pstmUpdate = connect.prepareStatement(SQLRequest.UPDATE.getQuery());) {
+		try (Connection connect = connexionSQL.connect();
+			 PreparedStatement pstmUpdate = connect.prepareStatement(SQLRequest.UPDATE.getQuery());) {
 
 			pstmUpdate.setString(1, computer.getName());
 			pstmUpdate.setTimestamp(2, Timestamp.valueOf(computer.getIntroduced()));
@@ -168,16 +174,16 @@ public final class ComputerDAO {
 
 	public int getNbRows() throws SQLException {
 		int nbRows = -1;
-
-		try (PreparedStatement pstmRows = connect.prepareStatement(SQLRequest.NB_ROWS.getQuery());) {
-			try (ResultSet resultRows = pstmRows.executeQuery()) {
+		try (Connection connect = connexionSQL.connect();
+			 PreparedStatement pstmRows = connect.prepareStatement(SQLRequest.NB_ROWS.getQuery()); 
+			 ResultSet resultRows = pstmRows.executeQuery();) {
 				if (resultRows.first()) {
 					nbRows = resultRows.getInt("Rows");
 				}
-			}
 		} catch (SQLException e) {
 			DAOException.displayError(ROWS_LOG + e.getMessage());
 		}
+		System.out.println("au moment de la dao nbrows vaut"+nbRows);
 		return nbRows;
 	}
 	
@@ -186,7 +192,8 @@ public final class ComputerDAO {
 		ResultSet resultOrderByName;
 		List<Computer> orderByName = new ArrayList<Computer>();
 
-		try (PreparedStatement pstmOrderByName = connect.prepareStatement(OrderByRequest.ORDER_BY_NAME.getQuery());) {
+		try (Connection connect = connexionSQL.connect();
+			 PreparedStatement pstmOrderByName = connect.prepareStatement(OrderByRequest.ORDER_BY_NAME.getQuery());) {
 			pstmOrderByName.setInt(1, startPaginate);
 			pstmOrderByName.setInt(2, pageSize);
 			resultOrderByName = pstmOrderByName.executeQuery();
@@ -205,7 +212,8 @@ public final class ComputerDAO {
 		ResultSet resultOrderByName;
 		List<Computer> orderByName = new ArrayList<Computer>();
 
-		try (PreparedStatement pstmOrderByName = connect.prepareStatement(OrderByRequest.ORDER_BY_NAME.getQuery());) {
+		try (Connection connect = connexionSQL.connect();
+			 PreparedStatement pstmOrderByName = connect.prepareStatement(OrderByRequest.ORDER_BY_NAME.getQuery());) {
 			pstmOrderByName.setInt(1, startPaginate);
 			pstmOrderByName.setInt(2, pageSize);
 			resultOrderByName = pstmOrderByName.executeQuery();
@@ -224,7 +232,8 @@ public final class ComputerDAO {
 		ResultSet resultOrderByName;
 		List<Computer> orderByName = new ArrayList<Computer>();
 
-		try (PreparedStatement pstmOrderByName = connect.prepareStatement(OrderByRequest.ORDER_BY_NAME.getQuery());) {
+		try (Connection connect = connexionSQL.connect();
+			 PreparedStatement pstmOrderByName = connect.prepareStatement(OrderByRequest.ORDER_BY_NAME.getQuery());) {
 			pstmOrderByName.setInt(1, startPaginate);
 			pstmOrderByName.setInt(2, pageSize);
 			resultOrderByName = pstmOrderByName.executeQuery();
@@ -243,7 +252,8 @@ public final class ComputerDAO {
 		ResultSet resultOrderByName;
 		List<Computer> orderByName = new ArrayList<Computer>();
 
-		try (PreparedStatement pstmOrderByName = connect.prepareStatement(OrderByRequest.ORDER_BY_NAME.getQuery());) {
+		try (Connection connect = connexionSQL.connect();
+			 PreparedStatement pstmOrderByName = connect.prepareStatement(OrderByRequest.ORDER_BY_NAME.getQuery());) {
 			pstmOrderByName.setInt(1, startPaginate);
 			pstmOrderByName.setInt(2, pageSize);
 			resultOrderByName = pstmOrderByName.executeQuery();
@@ -256,5 +266,4 @@ public final class ComputerDAO {
 		}
 		return orderByName;
 	}
-
 }

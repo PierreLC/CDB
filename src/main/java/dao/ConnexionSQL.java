@@ -3,7 +3,7 @@ package dao;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
 import com.zaxxer.hikari.HikariConfig;
@@ -12,28 +12,15 @@ import com.zaxxer.hikari.HikariDataSource;
 @Component
 public final class ConnexionSQL {
 
-//	private static volatile ConnexionSQL instance;
 	private static HikariConfig configProperties;
 	private static HikariDataSource dataSource;
 	private static final String CONFIGURATION_LOCATION = "/database.properties";
 
-	@Autowired
 	public ConnexionSQL() {
-		super();
-		
+		super();	
 	}
 
-//	public final static ConnexionSQL getInstance() {
-//		if (ConnexionSQL.instance == null) {
-//			synchronized (ConnexionSQL.class) {
-//				if (ConnexionSQL.instance == null) {
-//					ConnexionSQL.instance = new ConnexionSQL();
-//				}
-//			}
-//		}
-//		return ConnexionSQL.instance;
-//	}
-
+	@Bean
 	public Connection connect() {
 
 		configProperties = new HikariConfig(CONFIGURATION_LOCATION);
@@ -41,10 +28,8 @@ public final class ConnexionSQL {
 
 		try {
 			return dataSource.getConnection();
-
 		} catch (SQLException e) {
 			e.printStackTrace();
-			System.exit(0);
 			return null;
 		}
 	}

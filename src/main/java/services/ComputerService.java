@@ -3,6 +3,7 @@ package services;
 import java.sql.SQLException;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import dao.ComputerDAO;
@@ -10,10 +11,11 @@ import model.Computer;
 
 @Service
 public class ComputerService {
-	private static ComputerDAO computerDAO;
+	private ComputerDAO computerDAO;
 
-	public ComputerService(ComputerDAO instance) {
-		this.computerDAO = instance;
+	@Autowired
+	public ComputerService(ComputerDAO computerDAO) {
+		this.computerDAO = computerDAO;
 	}
 	
 	public void add(Computer computer) throws SQLException {
@@ -44,6 +46,7 @@ public class ComputerService {
 	}
 	
 	public int getNbRows() throws SQLException {
+		System.out.println("au niveau du service rows vaut "+computerDAO.getNbRows());
 		return computerDAO.getNbRows();
 	}
 	

@@ -7,7 +7,7 @@ import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 
 @Configuration
-@ComponentScan(basePackages = {"dao", "services", "servlet", "ui", "model"})
+@ComponentScan(basePackages = {"dao", "services", "servlet", "ui", "model", "mapper"})
 public class SpringContext extends AbstractContextLoaderInitializer {
 	
 	@Override

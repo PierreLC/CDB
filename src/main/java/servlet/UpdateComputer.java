@@ -6,15 +6,18 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 import model.Company;
 import model.Computer;
@@ -26,13 +29,22 @@ import services.ComputerService;
 public class UpdateComputer extends HttpServlet {
 	
 	private static final long serialVersionUID = 1L;
+	
+	@Autowired
 	private CompanyService companyService;
+	@Autowired
 	private ComputerService computerService;
 	
-	public UpdateComputer(CompanyService companyInstance, ComputerService computerInstance) {
-		this.computerService = computerInstance;
-		this.companyService = companyInstance;
+	public void init(ServletConfig config) throws ServletException {
+		super.init(config);
+    	SpringBeanAutowiringSupport.processInjectionBasedOnServletContext(this,config.getServletContext());
 	}
+	
+//Possibilité d'utiliser cette méthode une fois spring mvc implémenté avec l'@RestController
+//	public UpdateComputer(CompanyService companyInstance, ComputerService computerInstance) {
+//		this.computerService = computerInstance;
+//		this.companyService = companyInstance;
+//	}
 	
 	@GetMapping
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) 
@@ -53,9 +65,7 @@ public class UpdateComputer extends HttpServlet {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
 		this.getServletContext().getRequestDispatcher("/WEB-INF/views/editComputer.jsp").forward(request,response);
-		
 	}
 	
 	@PostMapping
