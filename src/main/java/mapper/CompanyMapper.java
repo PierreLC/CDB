@@ -8,6 +8,11 @@ import org.springframework.jdbc.core.RowMapper;
 import model.Company;
 
 public class CompanyMapper implements RowMapper<Company> {
+	
+	@Override
+	public Company mapRow(ResultSet resultSet, int rowNum) throws SQLException {
+		return mapCompany(resultSet);
+	}
 
 	public static Company mapCompany(ResultSet resultSet) throws SQLException {
 
@@ -17,10 +22,5 @@ public class CompanyMapper implements RowMapper<Company> {
 		company.setName(resultSet.getString("name"));
 
 		return company;
-	}
-
-	@Override
-	public Company mapRow(ResultSet resultSet, int rowNum) throws SQLException {
-		return mapCompany(resultSet);
 	}
 }
