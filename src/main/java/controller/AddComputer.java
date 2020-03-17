@@ -1,4 +1,4 @@
-package servlet;
+package controller;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -19,58 +19,49 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
+import dao.ComputerDAO;
 import model.Company;
 import model.Computer;
 import services.CompanyService;
-import services.ComputerService;
 
-@WebServlet(urlPatterns="/editComputer")
+@WebServlet(urlPatterns = "/addComputer")
 @Controller
-public class UpdateComputer extends HttpServlet {
-	
+public class AddComputer extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
 	@Autowired
 	private CompanyService companyService;
 	@Autowired
-	private ComputerService computerService;
+	private ComputerDAO computerDAO;
 	
 	public void init(ServletConfig config) throws ServletException {
 		super.init(config);
     	SpringBeanAutowiringSupport.processInjectionBasedOnServletContext(this,config.getServletContext());
 	}
-	
+
 //Possibilité d'utiliser cette méthode une fois spring mvc implémenté avec l'@RestController
-//	public UpdateComputer(CompanyService companyInstance, ComputerService computerInstance) {
-//		this.computerService = computerInstance;
-//		this.companyService = companyInstance;
+//	public AddComputer(CompanyService serviceInstance, ComputerDAO daoInstance) {
+//		this.companyService = serviceInstance;
+//		this.computerDAO = daoInstance;
+//
 //	}
-	
+
 	@GetMapping
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) 
-		throws ServletException, IOException {
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		
-		List<Company> companyList;
 		try {
-			companyList = companyService.list();
+			List<Company> companyList = companyService.list();
 			request.setAttribute("companyList", companyList);
-			Computer computer = computerService.find_by_id(Integer.parseInt(request.getParameter("id")));
-			
-			request.setAttribute("computerId", computer.getId());
-			request.setAttribute("computerName", computer.getName());
-			request.setAttribute("introduced", computer.getIntroduced());
-			request.setAttribute("discontinued", computer.getDiscontinued());
-			request.setAttribute("company", computer.getCompany());
-			
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		this.getServletContext().getRequestDispatcher("/WEB-INF/views/editComputer.jsp").forward(request,response);
+		request.getRequestDispatcher("WEB-INF/views/addComputer.jsp").forward(request,response);
 	}
 	
 	@PostMapping
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-	throws ServletException, IOException{
+			throws ServletException, IOException {
 		
 		String computerName = request.getParameter("computerName");
 		LocalDate introduced = LocalDate.parse(request.getParameter("introduced"));
@@ -79,20 +70,17 @@ public class UpdateComputer extends HttpServlet {
 		
 		Company company = companyService.find_by_id(companyId);
 		
-		boolean testCompanyId = (request.getParameter("companyId").equals("none"));
-		
-		if(!testCompanyId) {
-			company = companyService.find_by_id(companyId);
-		}
-		
 		Computer computer = new Computer.Builder().setName(computerName)
-				 .setIntroducedDate(introduced.atTime(LocalTime.MIDNIGHT))
-				 .setDiscontinuedDate(discontinued.atTime(LocalTime.MIDNIGHT))
-				 .setCompany(company)
-				 .build();
+												 .setIntroducedDate(introduced.atTime(LocalTime.MIDNIGHT))
+												 .setDiscontinuedDate(discontinued.atTime(LocalTime.MIDNIGHT))
+												 .setCompany(company)
+												 .build();
 		
-		computerService.update(computer);
-		
-		response.sendRedirect(request.getContextPath()+"/dashboard");
+		try {
+			computerDAO.add(computer);
+			response.sendRedirect(request.getContextPath()+"/dashboard");
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 }

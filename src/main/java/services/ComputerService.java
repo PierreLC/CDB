@@ -34,10 +34,10 @@ public class ComputerService {
 		computerDAO.deleteComputer(id);
 	}
 	
-	public Computer find_by_id(int i) {
+	public Computer findById(int i) {
 		return computerDAO.findById(i);
 	}
-	public List<Computer> find_by_name(String name, int startPaginate, int pageSize) {
+	public List<Computer> findByName(String name, int startPaginate, int pageSize) {
 		return computerDAO.findByName(name, startPaginate, pageSize);
 	}
 	

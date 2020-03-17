@@ -1,4 +1,4 @@
-package servlet;
+package controller;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -25,16 +25,18 @@ import services.ComputerService;
 @WebServlet(urlPatterns = "/dashboard")
 @Controller
 public class Dashboard extends HttpServlet {
+
 	private static final long serialVersionUID = 1L;
+	
 	@Autowired
 	private ComputerService computerService;
-	
+
 	public void init(ServletConfig config) throws ServletException {
 		super.init(config);
-    	SpringBeanAutowiringSupport.processInjectionBasedOnServletContext(this,config.getServletContext());
+		SpringBeanAutowiringSupport.processInjectionBasedOnServletContext(this, config.getServletContext());
 	}
 
-	//GetMapping + param url
+	// GetMapping + param url
 	@GetMapping
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
@@ -42,10 +44,10 @@ public class Dashboard extends HttpServlet {
 		int pageSize = 10;
 		int pageIterator = 1;
 		int nbRows = 0;
-		
+
 		try {
 			nbRows = computerService.getNbRows();
-			System.out.println("nbrows vaut dans le servlet "+nbRows);
+			System.out.println("nbrows vaut dans le servlet " + nbRows);
 		} catch (SQLException e) {
 			DAOException.displayError(e.getMessage());
 		}
@@ -76,12 +78,12 @@ public class Dashboard extends HttpServlet {
 			System.exit(0);
 		}
 
-		String orderBy = (request.getParameter("columnName")!=null) ? request.getParameter("columnName"):"";
-		
+		String orderBy = (request.getParameter("columnName") != null) ? request.getParameter("columnName") : "";
+
 		List<Computer> computerListPag;
 		List<Computer> computerSearchedList;
-		
-		switch (orderBy){
+
+		switch (orderBy) {
 		case "computerName":
 			computerListPag = computerService.orderByName((pageIterator - 1) * pageSize, pageSize);
 			break;
@@ -98,15 +100,12 @@ public class Dashboard extends HttpServlet {
 			computerListPag = computerService.listPage((pageIterator - 1) * pageSize, pageSize);
 		}
 		List<Computer> computerList = computerService.list();
-		
-		
-		
+
 		String search = request.getParameter("search");
 
 		int nbSearchedComputer = computerService.nbSearchedComputer(search);
 
-		computerSearchedList = computerService.find_by_name(search, (pageIterator - 1) * pageSize, pageSize);
-		
+		computerSearchedList = computerService.findByName(search, (pageIterator - 1) * pageSize, pageSize);
 
 		if (search != null) {
 			int lastPage = (int) Math.ceil((double) nbSearchedComputer / pageSize);
@@ -115,7 +114,7 @@ public class Dashboard extends HttpServlet {
 			int lastPage = (int) Math.ceil((double) computerList.size() / pageSize);
 			request.setAttribute("lastPage", lastPage);
 		}
-		
+
 		request.setAttribute("orderBy", orderBy);
 		request.setAttribute("search", search);
 		request.setAttribute("nbSearchedComputer", nbSearchedComputer);

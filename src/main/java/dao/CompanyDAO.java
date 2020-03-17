@@ -1,107 +1,48 @@
 package dao;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import javax.sql.DataSource;
+
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.stereotype.Repository;
 
-import exceptions.DAOException;
 import mapper.CompanyMapper;
 import model.Company;
 
 @Repository
 public final class CompanyDAO {
-	static Connection connect;
-	ConnexionSQL connexionSQL;
+	private DataSource dataSource;
+	private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
+	CompanyMapper companyMapper;
 	
-	private final static String ADD_COMPANY_LOG = "Erreur lors de l'ajout : échec de la connexion à la base de donnée";
-	private final static String LIST_COMPANY_LOG = "Erreur au moment de lister les marques : échec de la connexion à la base de donnée";
-	private final static String GET_COMPANY_LOG = "Erreur au moment d'obtenir la marque : échec de la connexion à la base de donnée";
 
-	@Autowired
-	private CompanyDAO(ConnexionSQL instance) {
-		this.connexionSQL = instance;
+	private CompanyDAO(DataSource dataSource, NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
+		this.dataSource = dataSource;
+		this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
+		companyMapper = new CompanyMapper();
 	}
 
-	public Company add(Company company) throws SQLException {
-		ResultSet resultAdd = null;
-		
-		try (Connection connect = connexionSQL.connect();
-			 PreparedStatement pstmAdd = connect.prepareStatement(SQLRequest.ADD_COMPANY.getQuery());) {
-
-			pstmAdd.setString(1, company.getName());
-
-			resultAdd = pstmAdd.executeQuery();
-
-		} catch (SQLException e) {
-			DAOException.displayError(ADD_COMPANY_LOG + e.getMessage());
-		}
-		return CompanyMapper.getCompanyResultSet(resultAdd);
+	public void add(Company company) throws SQLException {
+		SqlParameterSource namedParameter = new MapSqlParameterSource();
+		namedParameterJdbcTemplate.query(SQLRequest.ADD_COMPANY.getQuery(), namedParameter, this.companyMapper);
 	}
 
 	public List<Company> list() throws SQLException {
-		List<Company> allCompanies = new ArrayList<Company>();
-		ResultSet resultSetList = null;
-
-		try (Connection connect = connexionSQL.connect();
-			 PreparedStatement stmt = connect.prepareStatement(SQLRequest.LIST_COMPANY.getQuery());) {
-			resultSetList = stmt.executeQuery();
-			while (resultSetList.next()) {
-				Company company = CompanyMapper.getCompanyResultSet(resultSetList);
-				allCompanies.add(company);
-			}
-		} catch (SQLException e) {
-			DAOException.displayError(LIST_COMPANY_LOG+e.getMessage());
-		} finally {
-			resultSetList.close();
-		}
-		return allCompanies;
+		return namedParameterJdbcTemplate.query(SQLRequest.LIST_COMPANY.getQuery(), new CompanyMapper());
 	}
 
-	public Company findById(int id) {
-		Company company = null;
-
-		try (Connection connect = connexionSQL.connect();
-			 PreparedStatement pstmFind = connect.prepareStatement(SQLRequest.GET_COMPANY_BY_ID.getQuery());) {
-
-			pstmFind.setInt(1, id);
-			ResultSet resultFind = pstmFind.executeQuery();
-
-			if (resultFind.first()) {
-				company = CompanyMapper.getCompanyResultSet(resultFind);
-			}
-			connect.close();
-		} catch (SQLException e) {
-			DAOException.displayError(GET_COMPANY_LOG+e.getMessage());
-		}
-
+	public Company findById(long id) {
+		SqlParameterSource namedParameter = new MapSqlParameterSource().addValue("id", id);
+		Company company = (Company) namedParameterJdbcTemplate.query(SQLRequest.GET_COMPANY_BY_ID.getQuery(), namedParameter, this.companyMapper);
 		return company;
 	}
 	
-	public void deleteCompany(int id) throws SQLException {
-		
-		try (Connection connect = connexionSQL.connect();
-			 PreparedStatement pstmDeleteComputer = connect.prepareStatement(SQLRequest.DELETE_COMPUTER_BY_COMPANY_ID.getQuery());
-			 PreparedStatement pstmDeleteCompany = connect.prepareStatement(SQLRequest.DELETE_COMPANY.getQuery());) {
-			connect.setAutoCommit(false);
-			pstmDeleteComputer.setLong(1, id);
-			pstmDeleteCompany.setLong(1, id);
-			
-			pstmDeleteComputer.executeUpdate();
-			pstmDeleteCompany.executeUpdate();
-			connect.commit();
-			connect.setAutoCommit(true);
-			
-		} catch (SQLException e) {
-			//TODO don't show message to users
-			System.out.println(e.getMessage());
-			
-		}
+	public void deleteCompany(long id) throws SQLException {
+		SqlParameterSource namedParameter = new MapSqlParameterSource().addValue("id", id);
+		namedParameterJdbcTemplate.query(SQLRequest.DELETE_COMPANY.getQuery(), namedParameter, this.companyMapper);
 	}
-
 }

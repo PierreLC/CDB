@@ -11,6 +11,7 @@ import model.Company;
 
 @Service
 public class CompanyService {
+	
 	private static CompanyDAO companyDAO;
 	
 	@Autowired
@@ -18,8 +19,8 @@ public class CompanyService {
 		this.companyDAO = companyDAO;
 	}
 	
-	public Company add(Company company) throws SQLException {
-		return companyDAO.add(company);
+	public void add(Company company) throws SQLException {
+		companyDAO.add(company);
 	}
 	
 	public List<Company> list() throws SQLException{
