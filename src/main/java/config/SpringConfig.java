@@ -25,20 +25,20 @@ public class SpringConfig implements WebMvcConfigurer, WebApplicationInitializer
 	@Autowired
 	private Environment environment;
 	
-	@Bean
-	NamedParameterJdbcTemplate namedParameterJdbcTemplate(DataSource dataSource) {
-		
-		NamedParameterJdbcTemplate namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
-		
-		return namedParameterJdbcTemplate;
-	}
+//	@Bean
+//	NamedParameterJdbcTemplate namedParameterJdbcTemplate(DataSource dataSource) {
+//		
+//		NamedParameterJdbcTemplate namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
+//		
+//		return namedParameterJdbcTemplate;
+//	}
 	
 	public DataSource sqlDataSource() {
 		DriverManagerDataSource dataSource = new DriverManagerDataSource();
 		dataSource.setDriverClassName(environment.getRequiredProperty("dataSource.jdbc.driver"));
-		dataSource.setUrl(environment.getRequiredProperty("dataSource.jdbc.url"));
-		dataSource.setUsername(environment.getRequiredProperty("dataSource.jdbc.username"));
-		dataSource.setPassword(environment.getRequiredProperty("dataSource.jdbc.password"));
+		dataSource.setUrl(environment.getRequiredProperty("dataSource.url"));
+		dataSource.setUsername(environment.getRequiredProperty("dataSource.name"));
+		dataSource.setPassword(environment.getRequiredProperty("dataSource.password"));
 		return dataSource;
 	}
 

@@ -26,7 +26,7 @@ public class Dashboard {
 		this.computerService = computerService;
 	}
 
-	@GetMapping("/dashboard")
+	@GetMapping(value="/dashboard")
 	protected String getDashboard(@RequestParam(value="search", required = false) String search,
 								  @RequestParam(value="orderBy", required = false) String orderBy,
 								  @RequestParam(value="columnName", required = false) String columnName,
@@ -92,7 +92,7 @@ public class Dashboard {
 		return "dashboard";
 	}
 
-	@PostMapping("/dashboard")
+	@PostMapping(value="/dashboard")
 	protected String postDashboard(@RequestParam(value="selection", required = false) String computerSelection,
 								 ModelMap modelMap)
 			throws ServletException, IOException {
@@ -102,6 +102,6 @@ public class Dashboard {
 			computerService.delete(Integer.parseInt(s));
 		}
 		
-		return "redirect:/dashboard";
+		return "/dashboard";
 	}
 }

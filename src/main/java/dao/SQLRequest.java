@@ -14,7 +14,7 @@ public enum SQLRequest {
 			+"company.name FROM computer LEFT JOIN company ON company_id = company.id  WHERE computer.name LIKE ? LIMIT ?, ?;"),
 	FIND_BY_NAME("SELECT computer.id, computer.name, computer.introduced, computer.discontinued, computer.company_id, company.name "
 			+"FROM computer LEFT JOIN company ON company_id = company.id  WHERE computer.name LIKE ?;"),
-	NB_ROWS("SELECT COUNT(*) AS \"Rows\" FROM computer;"),
+	NB_ROWS("SELECT COUNT(*) AS RECORDS FROM computer;"),
 	
 	ADD_COMPANY("INSERT INTO company(name) VALUES (?);"),
 	LIST_COMPANY("SELECT id, name FROM company;"),

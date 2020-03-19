@@ -20,6 +20,9 @@ public final class CompanyDAO {
 	private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 	CompanyMapper companyMapper;
 	
+	public CompanyDAO() {
+		
+	}
 
 	private CompanyDAO(DataSource dataSource) {
 		
@@ -46,10 +49,10 @@ public final class CompanyDAO {
 		return company;	
 	}
 	
-//	@Transactional
-//	public void deleteCompany(long id) throws SQLException {
-//		
-//		SqlParameterSource namedParameter = new MapSqlParameterSource().addValue("id", id);
-//		namedParameterJdbcTemplate.query(SQLRequest.DELETE_COMPANY.getQuery(), namedParameter, this.companyMapper);
-//	}
+	@Transactional
+	public void deleteCompany(long id) throws SQLException {
+		
+		SqlParameterSource namedParameter = new MapSqlParameterSource().addValue("id", id);
+		namedParameterJdbcTemplate.query(SQLRequest.DELETE_COMPANY.getQuery(), namedParameter, this.companyMapper);
+	}
 }

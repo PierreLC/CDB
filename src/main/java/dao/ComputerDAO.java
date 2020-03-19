@@ -19,6 +19,9 @@ public final class ComputerDAO {
 	private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 	ComputerMapper computerMapper;
 
+	public ComputerDAO() {
+	}
+	
 	private ComputerDAO(DataSource dataSource) {
 		this.namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
 		computerMapper = new ComputerMapper();
@@ -84,9 +87,9 @@ public final class ComputerDAO {
 
 	public int getNbRows() throws SQLException {
 
-		MapSqlParameterSource parameterMap = new MapSqlParameterSource();
+		MapSqlParameterSource mapParameter = new MapSqlParameterSource();
 
-		return namedParameterJdbcTemplate.queryForObject(SQLRequest.NB_ROWS.getQuery(), parameterMap, Integer.class);
+		return namedParameterJdbcTemplate.queryForObject(SQLRequest.NB_ROWS.getQuery(), mapParameter, Integer.class);
 	}
 
 	public List<Computer> orderByName(int startPaginate, int pageSize) {
