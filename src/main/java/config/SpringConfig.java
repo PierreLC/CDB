@@ -10,35 +10,26 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.web.WebApplicationInitializer;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 import org.springframework.web.servlet.DispatcherServlet;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 @ComponentScan(basePackages = {"dao", "services", "controller", "ui", "model", "mapper", "dto", "exceptions", "utils"})
 @PropertySource("classpath:database.properties")
-public class SpringConfig implements WebMvcConfigurer, WebApplicationInitializer {
+public class SpringConfig implements WebApplicationInitializer {
 	
 	@Autowired
 	private Environment environment;
 	
-//	@Bean
-//	NamedParameterJdbcTemplate namedParameterJdbcTemplate(DataSource dataSource) {
-//		
-//		NamedParameterJdbcTemplate namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
-//		
-//		return namedParameterJdbcTemplate;
-//	}
-	
-	public DataSource sqlDataSource() {
+	@Bean
+	public DataSource DataSource() {
 		DriverManagerDataSource dataSource = new DriverManagerDataSource();
-		dataSource.setDriverClassName(environment.getRequiredProperty("dataSource.jdbc.driver"));
+		dataSource.setDriverClassName(environment.getRequiredProperty("spring.datasource.driver-class-name"));
 		dataSource.setUrl(environment.getRequiredProperty("dataSource.url"));
-		dataSource.setUsername(environment.getRequiredProperty("dataSource.name"));
-		dataSource.setPassword(environment.getRequiredProperty("dataSource.password"));
+		dataSource.setUsername(environment.getRequiredProperty("spring.datasource.username"));
+		dataSource.setPassword(environment.getRequiredProperty("spring.datasource.password"));
 		return dataSource;
 	}
 
