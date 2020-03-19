@@ -5,83 +5,46 @@ import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.List;
 
-import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.context.support.SpringBeanAutowiringSupport;
+import org.springframework.web.bind.annotation.RequestParam;
 
-import exceptions.DAOException;
 import model.Computer;
 import services.ComputerService;
 
-@WebServlet(urlPatterns = "/dashboard")
 @Controller
-public class Dashboard extends HttpServlet {
-
-	private static final long serialVersionUID = 1L;
+public class Dashboard {
 	
-	@Autowired
 	private ComputerService computerService;
-
-	public void init(ServletConfig config) throws ServletException {
-		super.init(config);
-		SpringBeanAutowiringSupport.processInjectionBasedOnServletContext(this, config.getServletContext());
+	
+	public Dashboard(ComputerService computerService) {
+		
+		this.computerService = computerService;
 	}
 
-	// GetMapping + param url
-	@GetMapping
-	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+	@GetMapping("/dashboard")
+	protected String getDashboard(@RequestParam(value="search", required = false) String search,
+								  @RequestParam(value="orderBy", required = false) String orderBy,
+								  @RequestParam(value="columnName", required = false) String columnName,
+								  @RequestParam(value="pageIterator", defaultValue="1", required = false) int pageIterator,
+								  @RequestParam(value="step", defaultValue="10", required = false) int pageSize,
+								  ModelMap modelMap)
 			throws ServletException, IOException {
 
-		int pageSize = 10;
-		int pageIterator = 1;
 		int nbRows = 0;
-
-		try {
-			nbRows = computerService.getNbRows();
-			System.out.println("nbrows vaut dans le servlet " + nbRows);
-		} catch (SQLException e) {
-			DAOException.displayError(e.getMessage());
-		}
-
-		try {
-
-			if (request.getParameter("pageIterator") != null) {
-				String s = request.getParameter("pageIterator");
-				try {
-					pageIterator = Integer.parseInt(s);
-				} catch (NumberFormatException e) {
-					this.getServletContext().getRequestDispatcher("/WEB-INF/views/dashboard.jsp").forward(request,
-							response);
-				}
-			}
-
-			if (request.getParameter("step") != null) {
-				String s = request.getParameter("step");
-				try {
-					pageSize = Integer.parseInt(s);
-				} catch (NumberFormatException e) {
-					this.getServletContext().getRequestDispatcher("/WEB-INF/views/dashboard.jsp").forward(request,
-							response);
-				}
-			}
-
-		} catch (Exception e) {
-			System.exit(0);
-		}
-
-		String orderBy = (request.getParameter("columnName") != null) ? request.getParameter("columnName") : "";
 
 		List<Computer> computerListPag;
 		List<Computer> computerSearchedList;
+		
+		try {
+			nbRows = computerService.getNbRows();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 
 		switch (orderBy) {
 		case "computerName":
@@ -99,43 +62,46 @@ public class Dashboard extends HttpServlet {
 		default:
 			computerListPag = computerService.listPage((pageIterator - 1) * pageSize, pageSize);
 		}
+		
 		List<Computer> computerList = computerService.list();
 
-		String search = request.getParameter("search");
-
 		int nbSearchedComputer = computerService.nbSearchedComputer(search);
-
+		
 		computerSearchedList = computerService.findByName(search, (pageIterator - 1) * pageSize, pageSize);
 
 		if (search != null) {
 			int lastPage = (int) Math.ceil((double) nbSearchedComputer / pageSize);
-			request.setAttribute("lastPage", lastPage);
+			
+			modelMap.put("lastPage", lastPage);
 		} else {
 			int lastPage = (int) Math.ceil((double) computerList.size() / pageSize);
-			request.setAttribute("lastPage", lastPage);
+			
+			modelMap.put("lastPage", lastPage);
 		}
 
-		request.setAttribute("orderBy", orderBy);
-		request.setAttribute("search", search);
-		request.setAttribute("nbSearchedComputer", nbSearchedComputer);
-		request.setAttribute("computerSearchedList", computerSearchedList);
-		request.setAttribute("nbRows", nbRows);
-		request.setAttribute("pageIterator", pageIterator);
-		request.setAttribute("step", pageSize);
-		request.setAttribute("computerList", computerList);
-		request.setAttribute("computerListPag", computerListPag);
-		request.getRequestDispatcher("/WEB-INF/views/dashboard.jsp").forward(request, response);
+		modelMap.put("search", search);
+		modelMap.put("orderBy", orderBy);
+		modelMap.put("nbSearchedComputer", nbSearchedComputer);
+		modelMap.put("computerSearchedList", computerSearchedList);
+		modelMap.put("nbRows", nbRows);
+		modelMap.put("pageIterator", pageIterator);
+		modelMap.put("step", pageSize);
+		modelMap.put("computerList", computerList);
+		modelMap.put("computerListPag", computerListPag);
+		
+		return "dashboard";
 	}
 
-	@PostMapping
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+	@PostMapping("/dashboard")
+	protected String postDashboard(@RequestParam(value="selection", required = false) String computerSelection,
+								 ModelMap modelMap)
 			throws ServletException, IOException {
 
-		String computerSelection = request.getParameter("selection");
 		List<String> computerToDelete = Arrays.asList(computerSelection.split(","));
 		for (String s : computerToDelete) {
 			computerService.delete(Integer.parseInt(s));
 		}
-		doGet(request, response);
+		
+		return "redirect:/dashboard";
 	}
 }

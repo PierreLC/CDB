@@ -9,6 +9,7 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import mapper.CompanyMapper;
 import model.Company;
@@ -40,14 +41,15 @@ public final class CompanyDAO {
 	public Company findById(long id) {
 		
 		SqlParameterSource namedParameter = new MapSqlParameterSource().addValue("id", id);
-		Company company = (Company) namedParameterJdbcTemplate.query(SQLRequest.GET_COMPANY_BY_ID.getQuery(), namedParameter, this.companyMapper);
+		Company company = namedParameterJdbcTemplate.queryForObject(SQLRequest.GET_COMPANY_BY_ID.getQuery(), namedParameter, this.companyMapper);
 		
 		return company;	
 	}
 	
-	public void deleteCompany(long id) throws SQLException {
-		
-		SqlParameterSource namedParameter = new MapSqlParameterSource().addValue("id", id);
-		namedParameterJdbcTemplate.query(SQLRequest.DELETE_COMPANY.getQuery(), namedParameter, this.companyMapper);
-	}
+//	@Transactional
+//	public void deleteCompany(long id) throws SQLException {
+//		
+//		SqlParameterSource namedParameter = new MapSqlParameterSource().addValue("id", id);
+//		namedParameterJdbcTemplate.query(SQLRequest.DELETE_COMPANY.getQuery(), namedParameter, this.companyMapper);
+//	}
 }

@@ -2,97 +2,78 @@ package controller;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.time.LocalDate;
-import java.time.LocalTime;
+import java.time.LocalDateTime;
 import java.util.List;
 
-import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.context.support.SpringBeanAutowiringSupport;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import model.Company;
 import model.Computer;
 import services.CompanyService;
 import services.ComputerService;
 
-@WebServlet(urlPatterns="/editComputer")
 @Controller
-public class UpdateComputer extends HttpServlet {
+public class UpdateComputer {
 	
-	private static final long serialVersionUID = 1L;
-	
-	@Autowired
 	private CompanyService companyService;
-	@Autowired
 	private ComputerService computerService;
 	
-	public void init(ServletConfig config) throws ServletException {
-		super.init(config);
-    	SpringBeanAutowiringSupport.processInjectionBasedOnServletContext(this,config.getServletContext());
+	public UpdateComputer(CompanyService companyInstance, ComputerService computerInstance) {
+		this.computerService = computerInstance;
+		this.companyService = companyInstance;
 	}
 	
-//Possibilité d'utiliser cette méthode une fois spring mvc implémenté avec l'@RestController
-//	public UpdateComputer(CompanyService companyInstance, ComputerService computerInstance) {
-//		this.computerService = computerInstance;
-//		this.companyService = companyInstance;
-//	}
-	
-	@GetMapping
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) 
+	@GetMapping("/updateComputer")
+	protected String getUpdate(@RequestParam(value="id", required = false) String id,
+						 ModelMap modelMap) 
 		throws ServletException, IOException {
 		
 		List<Company> companyList;
 		try {
 			companyList = companyService.list();
-			request.setAttribute("companyList", companyList);
-			Computer computer = computerService.findById(Integer.parseInt(request.getParameter("id")));
+			modelMap.put("companyList", companyList);
 			
-			request.setAttribute("computerId", computer.getId());
-			request.setAttribute("computerName", computer.getName());
-			request.setAttribute("introduced", computer.getIntroduced());
-			request.setAttribute("discontinued", computer.getDiscontinued());
-			request.setAttribute("company", computer.getCompany());
+			Computer computer = computerService.findById(Integer.parseInt(id));
+			
+			modelMap.put("computerId", computer.getId());
+			modelMap.put("computerName", computer.getName());
+			modelMap.put("introduced", computer.getIntroduced());
+			modelMap.put("discontinued", computer.getDiscontinued());
+			modelMap.put("company", computer.getCompany());
 			
 		} catch (SQLException e) {
-			e.printStackTrace();
+			e.getMessage();
 		}
-		this.getServletContext().getRequestDispatcher("/WEB-INF/views/editComputer.jsp").forward(request,response);
+		
+		return "updateComputer";
 	}
 	
-	@PostMapping
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+	@PostMapping("/updateComputer")
+	protected String postUpdate(@RequestParam(value="computerId", required = false) String computerName,
+						 @RequestParam(value="introduced", required = false) String introduced,
+						 @RequestParam(value="discontinued", required = false) String discontinued,
+						 @RequestParam(value="companyId", required = false) String companyId,
+						 ModelMap modelMap)
 	throws ServletException, IOException{
 		
-		String computerName = request.getParameter("computerName");
-		LocalDate introduced = LocalDate.parse(request.getParameter("introduced"));
-		LocalDate discontinued = LocalDate.parse(request.getParameter("discontinued"));
-		int companyId = Integer.parseInt(request.getParameter("companyId"));
+		int id = Integer.parseInt(companyId);
 		
-		Company company = companyService.find_by_id(companyId);
-		
-		boolean testCompanyId = (request.getParameter("companyId").equals("none"));
-		
-		if(!testCompanyId) {
-			company = companyService.find_by_id(companyId);
-		}
+		Company company = companyService.find_by_id(id);
 		
 		Computer computer = new Computer.Builder().setName(computerName)
-				 .setIntroducedDate(introduced.atTime(LocalTime.MIDNIGHT))
-				 .setDiscontinuedDate(discontinued.atTime(LocalTime.MIDNIGHT))
+				 .setIntroducedDate(LocalDateTime.parse(introduced))
+				 .setDiscontinuedDate(LocalDateTime.parse(discontinued))
 				 .setCompany(company)
 				 .build();
 		
 		computerService.update(computer);
 		
-		response.sendRedirect(request.getContextPath()+"/dashboard");
+		return "redirect:/dashbord";
 	}
 }

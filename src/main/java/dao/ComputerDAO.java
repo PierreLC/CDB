@@ -49,7 +49,7 @@ public final class ComputerDAO {
 	public Computer findById(int id) {
 
 		SqlParameterSource namedParameter = new MapSqlParameterSource().addValue("id", id);
-		Computer computer = (Computer) namedParameterJdbcTemplate.query(SQLRequest.FIND_BY_ID.getQuery(), namedParameter, this.computerMapper);
+		Computer computer = namedParameterJdbcTemplate.queryForObject(SQLRequest.FIND_BY_ID.getQuery(), namedParameter, this.computerMapper);
 
 		return computer;
 	}
@@ -59,7 +59,7 @@ public final class ComputerDAO {
 		SqlParameterSource namedParameter = new MapSqlParameterSource().addValue("name", '%' + name + '%')
 				.addValue("offset", offset).addValue("step", step);
 
-		List<Computer> computer = (List<Computer>) namedParameterJdbcTemplate.query(SQLRequest.FIND_BY_NAME.getQuery(), namedParameter, this.computerMapper);
+		List<Computer> computer = namedParameterJdbcTemplate.query(SQLRequest.FIND_BY_NAME.getQuery(), namedParameter, this.computerMapper);
 
 		return computer;
 	}
