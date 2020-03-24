@@ -17,24 +17,27 @@ import org.springframework.web.servlet.DispatcherServlet;
 
 @Configuration
 @ComponentScan(basePackages = {"dao", "services", "controller", "ui", "model", "mapper", "dto", "exceptions", "utils"})
-@PropertySource("classpath:database.properties")
+@PropertySource(value = "classpath:application.properties")
 public class SpringConfig implements WebApplicationInitializer {
 	
 	@Autowired
 	private Environment environment;
 	
 	@Bean
-	public DataSource DataSource() {
+	public DataSource dataSource() {
+		
 		DriverManagerDataSource dataSource = new DriverManagerDataSource();
-		dataSource.setDriverClassName(environment.getRequiredProperty("spring.datasource.driver-class-name"));
-		dataSource.setUrl(environment.getRequiredProperty("dataSource.url"));
-		dataSource.setUsername(environment.getRequiredProperty("spring.datasource.username"));
-		dataSource.setPassword(environment.getRequiredProperty("spring.datasource.password"));
+		dataSource.setUrl(environment.getProperty("datasource.jdbcUrl"));
+		dataSource.setUsername(environment.getProperty("datasource.username"));
+		dataSource.setPassword(environment.getProperty("datasource.password"));
+		dataSource.setDriverClassName(environment.getProperty("datasource.driverClassName"));
+		
 		return dataSource;
 	}
 
 	@Override
 	public void onStartup(ServletContext servletContext) {
+		
 		AnnotationConfigWebApplicationContext webContext = new AnnotationConfigWebApplicationContext();
 		webContext.register(SpringConfig.class, MvcConfig.class);
 		webContext.setServletContext(servletContext);

@@ -18,9 +18,6 @@ public final class ComputerDAO {
 
 	private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 	ComputerMapper computerMapper;
-
-//	public ComputerDAO() {
-//	}
 	
 	private ComputerDAO(DataSource dataSource) {
 		System.out.println(dataSource);
@@ -30,7 +27,8 @@ public final class ComputerDAO {
 
 	public void add(Computer computer) throws SQLException {
 
-		SqlParameterSource namedParameter = new MapSqlParameterSource();
+		SqlParameterSource namedParameter = new MapSqlParameterSource().addValue("computer", computer);
+		
 		namedParameterJdbcTemplate.query(SQLRequest.ADD.getQuery(), namedParameter, this.computerMapper);
 	}
 
@@ -39,20 +37,25 @@ public final class ComputerDAO {
 		return namedParameterJdbcTemplate.query(SQLRequest.LIST_COMPUTER.getQuery(), this.computerMapper);
 	}
 
-	public List<Computer> listPage(int startPaginate, int pageSize) {
+	public List<Computer> listPage(int offset, int pageSize) {
 
-		return namedParameterJdbcTemplate.query(SQLRequest.LIST_COMPANY.getQuery(), this.computerMapper);
+		SqlParameterSource namedParameter = new MapSqlParameterSource().addValue("offset", offset)
+																	   .addValue("pageSize", pageSize);
+		
+		return namedParameterJdbcTemplate.query(SQLRequest.LIST_PAGE.getQuery(), namedParameter, this.computerMapper);
 	}
 
 	public void deleteComputer(int id) {
 
 		SqlParameterSource namedParameter = new MapSqlParameterSource().addValue("id", id);
+		
 		namedParameterJdbcTemplate.query(SQLRequest.DELETE.getQuery(), namedParameter, this.computerMapper);
 	}
 
 	public Computer findById(int id) {
 
 		SqlParameterSource namedParameter = new MapSqlParameterSource().addValue("id", id);
+		
 		Computer computer = namedParameterJdbcTemplate.queryForObject(SQLRequest.FIND_BY_ID.getQuery(), namedParameter, this.computerMapper);
 
 		return computer;
@@ -61,7 +64,8 @@ public final class ComputerDAO {
 	public List<Computer> findByName(String name, int offset, int step) {
 
 		SqlParameterSource namedParameter = new MapSqlParameterSource().addValue("name", '%' + name + '%')
-				.addValue("offset", offset).addValue("step", step);
+																	   .addValue("offset", offset)
+																	   .addValue("step", step);
 
 		List<Computer> computer = namedParameterJdbcTemplate.query(SQLRequest.FIND_BY_NAME.getQuery(), namedParameter, this.computerMapper);
 
@@ -80,53 +84,49 @@ public final class ComputerDAO {
 	public void update(Computer computer) {
 
 		SqlParameterSource namedParameter = new MapSqlParameterSource().addValue("id", computer.getId())
-				.addValue("name", computer.getName()).addValue("introduced", computer.getIntroduced())
-				.addValue("discontinued", computer.getDiscontinued()).addValue("company", computer.getCompany());
+																	   .addValue("name", computer.getName())
+																	   .addValue("introduced", computer.getIntroduced())
+																	   .addValue("discontinued", computer.getDiscontinued())
+																	   .addValue("company", computer.getCompany());
 
 		namedParameterJdbcTemplate.update(SQLRequest.UPDATE.getQuery(), namedParameter);
 	}
 
 	public int getNbRows() throws SQLException {
 
-		if(namedParameterJdbcTemplate == null) {
-			System.out.println("t'es con");
-		}else {
-			System.out.println("pense à supprimer le syso");
-		}
-
 		MapSqlParameterSource mapParameter = new MapSqlParameterSource();
 		
 		return namedParameterJdbcTemplate.queryForObject(SQLRequest.NB_ROWS.getQuery(), mapParameter, Integer.class);
 	}
 
-	public List<Computer> orderByName(int startPaginate, int pageSize) {
+	public List<Computer> orderByName(int offset, int pageSize) {
 
-		SqlParameterSource namedParameter = new MapSqlParameterSource().addValue("startPaginate", startPaginate)
+		SqlParameterSource namedParameter = new MapSqlParameterSource().addValue("offset", offset)
 																	   .addValue("pageSize", pageSize);
 
 		return namedParameterJdbcTemplate.query(OrderByRequest.ORDER_BY_NAME.getQuery(), namedParameter, this.computerMapper);
 	}
 
-	public List<Computer> orderByIntroduced(int startPaginate, int pageSize) {
+	public List<Computer> orderByIntroduced(int offset, int pageSize) {
 
-		SqlParameterSource namedParameter = new MapSqlParameterSource().addValue("startPaginate", startPaginate)
+		SqlParameterSource namedParameter = new MapSqlParameterSource().addValue("offset", offset)
 																	   .addValue("pageSize", pageSize);
 
 		return namedParameterJdbcTemplate.query(OrderByRequest.ORDER_BY_INTRODUCED.getQuery(), namedParameter, this.computerMapper);
 	}
 
-	public List<Computer> orderByDiscontinued(int startPaginate, int pageSize) {
+	public List<Computer> orderByDiscontinued(int offset, int pageSize) {
 
-		SqlParameterSource namedParameter = new MapSqlParameterSource().addValue("startPaginate", startPaginate)
+		SqlParameterSource namedParameter = new MapSqlParameterSource().addValue("offset", offset)
 				                                                       .addValue("pageSize", pageSize);
 
 		return namedParameterJdbcTemplate.query(OrderByRequest.ORDER_BY_DISCONTINUED.getQuery(), namedParameter,
 				this.computerMapper);
 	}
 
-	public List<Computer> orderByCompany(int startPaginate, int pageSize) {
+	public List<Computer> orderByCompany(int offset, int pageSize) {
 
-		SqlParameterSource namedParameter = new MapSqlParameterSource().addValue("startPaginate", startPaginate)
+		SqlParameterSource namedParameter = new MapSqlParameterSource().addValue("offset", offset)
 				                                                       .addValue("pageSize", pageSize);
 
 		return namedParameterJdbcTemplate.query(OrderByRequest.ORDER_BY_COMPANY.getQuery(), namedParameter, this.computerMapper);

@@ -31,13 +31,14 @@ public class Dashboard {
 								  @RequestParam(value="orderBy", required = false) String orderBy,
 								  @RequestParam(value="columnName", required = false) String columnName,
 								  @RequestParam(value="pageIterator", defaultValue="1", required = false) int pageIterator,
-								  @RequestParam(value="step", defaultValue="10", required = false) int pageSize,
+								  @RequestParam(value="pageSize", defaultValue="10", required = false) int pageSize,
 								  ModelMap modelMap)
 			throws ServletException, IOException {
 
 		int nbRows = 0;
+		int offset  = (pageIterator - 1) * pageSize;
 
-		List<Computer> computerListPag;
+		List<Computer> computerListPag = computerService.listPage((pageIterator - 1) * pageSize, pageSize);
 		List<Computer> computerSearchedList;
 		
 		try {
@@ -45,29 +46,29 @@ public class Dashboard {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-
+		
 		switch (orderBy) {
 		case "computerName":
-			computerListPag = computerService.orderByName((pageIterator - 1) * pageSize, pageSize);
+			computerListPag = computerService.orderByName(offset, pageSize);
 			break;
 		case "introduced":
-			computerListPag = computerService.orderByIntroduced((pageIterator - 1) * pageSize, pageSize);
+			computerListPag = computerService.orderByIntroduced(offset, pageSize);
 			break;
 		case "discontinued":
-			computerListPag = computerService.orderByDiscontinued((pageIterator - 1) * pageSize, pageSize);
+			computerListPag = computerService.orderByDiscontinued(offset, pageSize);
 			break;
 		case "company":
-			computerListPag = computerService.orderByCompany((pageIterator - 1) * pageSize, pageSize);
+			computerListPag = computerService.orderByCompany(offset, pageSize);
 			break;
 		default:
-			computerListPag = computerService.listPage((pageIterator - 1) * pageSize, pageSize);
+			computerListPag = computerService.listPage(offset, pageSize);
 		}
 		
 		List<Computer> computerList = computerService.list();
 
 		int nbSearchedComputer = computerService.nbSearchedComputer(search);
 		
-		computerSearchedList = computerService.findByName(search, (pageIterator - 1) * pageSize, pageSize);
+		computerSearchedList = computerService.findByName(search, offset, pageSize);
 
 		if (search != null) {
 			int lastPage = (int) Math.ceil((double) nbSearchedComputer / pageSize);
@@ -85,7 +86,7 @@ public class Dashboard {
 		modelMap.put("computerSearchedList", computerSearchedList);
 		modelMap.put("nbRows", nbRows);
 		modelMap.put("pageIterator", pageIterator);
-		modelMap.put("step", pageSize);
+		modelMap.put("pageSize", pageSize);
 		modelMap.put("computerList", computerList);
 		modelMap.put("computerListPag", computerListPag);
 		

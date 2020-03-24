@@ -21,7 +21,6 @@ public final class CompanyDAO {
 	CompanyMapper companyMapper;
 	
 	public CompanyDAO() {
-		
 	}
 
 	private CompanyDAO(DataSource dataSource) {

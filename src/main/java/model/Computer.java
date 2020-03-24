@@ -10,12 +10,12 @@ public class Computer {
 	private LocalDateTime discontinued;
 	private Company company;
 
-	public Computer(Builder computerBuilder) {
-		this.id = computerBuilder.id;
-		this.name = computerBuilder.name;
-		this.introduced = computerBuilder.introduced;
-		this.discontinued = computerBuilder.discontinued;
-		this.company = computerBuilder.company;
+	public Computer(Builder builder) {
+		this.id = builder.id;
+		this.name = builder.name;
+		this.introduced = builder.introduced;
+		this.discontinued = builder.discontinued;
+		this.company = builder.company;
 	}
 
 	public Computer() {

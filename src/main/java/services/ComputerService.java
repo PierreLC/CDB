@@ -26,8 +26,8 @@ public class ComputerService {
 		return computerDAO.list();
 	}
 	
-	public List<Computer> listPage(int startPaginate, int pageSize){
-		return computerDAO.listPage(startPaginate, pageSize);
+	public List<Computer> listPage(int offset, int pageSize){
+		return computerDAO.listPage(offset, pageSize);
 	}
 	
 	public void delete(int id) {
@@ -37,8 +37,8 @@ public class ComputerService {
 	public Computer findById(int i) {
 		return computerDAO.findById(i);
 	}
-	public List<Computer> findByName(String name, int startPaginate, int pageSize) {
-		return computerDAO.findByName(name, startPaginate, pageSize);
+	public List<Computer> findByName(String name, int offset, int pageSize) {
+		return computerDAO.findByName(name, offset, pageSize);
 	}
 	
 	public void update(Computer computer) {
@@ -46,7 +46,6 @@ public class ComputerService {
 	}
 	
 	public int getNbRows() throws SQLException {
-		System.out.println("au niveau du service rows vaut "+computerDAO.getNbRows());
 		return computerDAO.getNbRows();
 	}
 	
@@ -54,19 +53,19 @@ public class ComputerService {
 		return computerDAO.nbSearchedComputer(name);
 	}
 	
-	public List<Computer> orderByName(int startPaginate, int pageSize){
-		return computerDAO.orderByName(startPaginate, pageSize);
+	public List<Computer> orderByName(int offset, int pageSize){
+		return computerDAO.orderByName(offset, pageSize);
 	}
 	
-	public List<Computer> orderByIntroduced(int startPaginate, int pageSize){
-		return computerDAO.orderByIntroduced(startPaginate, pageSize);
+	public List<Computer> orderByIntroduced(int offset, int pageSize){
+		return computerDAO.orderByIntroduced(offset, pageSize);
 	}
 	
-	public List<Computer> orderByDiscontinued(int startPaginate, int pageSize){
-		return computerDAO.orderByDiscontinued(startPaginate, pageSize);
+	public List<Computer> orderByDiscontinued(int offset, int pageSize){
+		return computerDAO.orderByDiscontinued(offset, pageSize);
 	}
 	
-	public List<Computer> orderByCompany(int startPaginate, int pageSize){
-		return computerDAO.orderByCompany(startPaginate, pageSize);
+	public List<Computer> orderByCompany(int offset, int pageSize){
+		return computerDAO.orderByCompany(offset, pageSize);
 	}
 }

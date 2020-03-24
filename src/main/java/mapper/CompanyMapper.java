@@ -16,7 +16,7 @@ public class CompanyMapper implements RowMapper<Company> {
 
 	public static Company mapCompany(ResultSet resultSet) throws SQLException {
 
-		Company company = new Company.CompanyBuilder().build();
+		Company company = new Company.Builder().build();
 
 		company.setId(resultSet.getLong("id"));
 		company.setName(resultSet.getString("name"));

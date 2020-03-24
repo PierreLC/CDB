@@ -36,7 +36,7 @@ public class MenuAction {
 		Company company = companyDAO.findById(sc.nextInt());
 		if (company == null) {
 			System.out.println("La compagnie n'existe pas, rentrez le nom de la nouvelle compagnie :");
-			company = new Company.CompanyBuilder().name(sc.nextLine()).build();
+			company = new Company.Builder().setName(sc.nextLine()).build();
 		}
 		//Check that the method still work, it will not set the company into the computer right now
 		companyDAO.add(company);
@@ -56,7 +56,7 @@ public class MenuAction {
 		System.out.println("Saisir la nouvelle date de fin de production :\n");
 		computer.setDiscontinued(DateUtils.convertToLDT(sc.next()));
 		System.out.println("Saisir le nouvel id de la marque :\n");
-		Company company = new Company.CompanyBuilder().id(sc.nextLong()).build();
+		Company company = new Company.Builder().setId(sc.nextLong()).build();
 		computer.setCompany(company);
 		computerDAO.update(computer);
 	}

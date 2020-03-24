@@ -5,9 +5,9 @@ public class Company {
 	private Long id;
 	private String name;
 
-	private Company(long id, String name) {
-		this.id = id;
-		this.name = name;
+	private Company(Builder builder) {
+		this.id = builder.id;
+		this.name = builder.name;
 	}
 
 	public long getId() {
@@ -26,22 +26,22 @@ public class Company {
 		this.name = name;
 	}
 
-	public static class CompanyBuilder {
+	public static class Builder {
 		private Long id;
 		private String name;
-
-		public CompanyBuilder name(String name) {
-			this.name = name;
-			return this;
-		}
-
-		public CompanyBuilder id(Long id) {
+		
+		public Builder setId(Long id) {
 			this.id = id;
 			return this;
 		}
 
+		public Builder setName(String name) {
+			this.name = name;
+			return this;
+		}
+
 		public Company build() {
-			return new Company(id,name);
+			return new Company(this);
 		}
 	}
 
