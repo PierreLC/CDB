@@ -14,6 +14,7 @@ public enum SQLRequest {
 			+"company.name FROM computer LEFT JOIN company ON company_id = company.id  WHERE computer.name LIKE :search LIMIT :offset, :step;"),
 	FIND_BY_NAME("SELECT computer.id, computer.name, computer.introduced, computer.discontinued, computer.company_id, company.name "
 			+"FROM computer LEFT JOIN company ON company_id = company.id  WHERE computer.name LIKE :search;"),
+	NB_SEARCHED_COMPUTER("SELECT COUNT(*) AS RECORD FROM computer WHERE computer.name LIKE :search;"),
 	NB_ROWS("SELECT COUNT(*) AS RECORDS FROM computer;"),
 	
 	ADD_COMPANY("INSERT INTO company(name) VALUES (:company.name);"),

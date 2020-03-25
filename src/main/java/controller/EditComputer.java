@@ -19,18 +19,18 @@ import services.CompanyService;
 import services.ComputerService;
 
 @Controller
-public class UpdateComputer {
+public class EditComputer {
 	
 	private CompanyService companyService;
 	private ComputerService computerService;
 	
-	public UpdateComputer(CompanyService companyInstance, ComputerService computerInstance) {
-		this.computerService = computerInstance;
-		this.companyService = companyInstance;
+	public EditComputer(CompanyService companyService, ComputerService computerService) {
+		this.computerService = computerService;
+		this.companyService = companyService;
 	}
 	
-	@GetMapping("/updateComputer")
-	protected String getUpdate(@RequestParam(value="id", required = false) String id,
+	@GetMapping("/editComputer")
+	protected void getUpdate(@RequestParam(value="id", required = false) String id,
 						 ModelMap modelMap) 
 		throws ServletException, IOException {
 		
@@ -50,11 +50,9 @@ public class UpdateComputer {
 		} catch (SQLException e) {
 			e.getMessage();
 		}
-		
-		return "updateComputer";
 	}
 	
-	@PostMapping("/updateComputer")
+	@PostMapping("/editComputer")
 	protected String postUpdate(@RequestParam(value="computerId", required = false) String computerName,
 						 @RequestParam(value="introduced", required = false) String introduced,
 						 @RequestParam(value="discontinued", required = false) String discontinued,

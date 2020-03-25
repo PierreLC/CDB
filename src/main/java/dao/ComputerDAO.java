@@ -20,7 +20,6 @@ public final class ComputerDAO {
 	ComputerMapper computerMapper;
 	
 	private ComputerDAO(DataSource dataSource) {
-		System.out.println(dataSource);
 		this.namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
 		computerMapper = new ComputerMapper();
 	}
@@ -49,7 +48,7 @@ public final class ComputerDAO {
 
 		SqlParameterSource namedParameter = new MapSqlParameterSource().addValue("id", id);
 		
-		namedParameterJdbcTemplate.query(SQLRequest.DELETE.getQuery(), namedParameter, this.computerMapper);
+		namedParameterJdbcTemplate.update(SQLRequest.DELETE.getQuery(), namedParameter);
 	}
 
 	public Computer findById(int id) {
@@ -74,11 +73,9 @@ public final class ComputerDAO {
 
 	public int nbSearchedComputer(String search) {
 
-		SqlParameterSource namedParameter = new MapSqlParameterSource().addValue("search", search);
+		MapSqlParameterSource mapParameter = new MapSqlParameterSource().addValue("search", '%' + search + '%');
 
-		List<Computer> nbSearchedComputer = namedParameterJdbcTemplate.query(SQLRequest.FIND_BY_NAME.getQuery(), namedParameter, this.computerMapper);
-
-		return nbSearchedComputer.size();
+		return namedParameterJdbcTemplate.queryForObject(SQLRequest.NB_SEARCHED_COMPUTER.getQuery(), mapParameter, Integer.class);
 	}
 
 	public void update(Computer computer) {

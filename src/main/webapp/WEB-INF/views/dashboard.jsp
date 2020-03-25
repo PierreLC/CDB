@@ -62,7 +62,7 @@
 
 						<input type="search" id="searchbox" name="search"
 							class="form-control" placeholder="<spring:message code = "label.searchByName"/>" /> <input
-							type="submit" id="searchsubmit" value="<spring:message code = "label.filterByName"/>"
+							type="submit" id="searchsubmit" value="<spring:message code = "label.search"/>"
 							class="btn btn-primary" />
 					</form>
 				</div>

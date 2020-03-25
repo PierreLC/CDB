@@ -25,7 +25,6 @@ public class AddComputer {
 	private ComputerDAO computerDAO;
 
 	public AddComputer(CompanyService companyService, ComputerDAO computerDAO) {
-		
 		this.companyService = companyService;
 		this.computerDAO = computerDAO;
 	}

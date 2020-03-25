@@ -26,7 +26,7 @@ public class Dashboard {
 		this.computerService = computerService;
 	}
 
-	@GetMapping(value="/dashboard")
+	@GetMapping(value = "/dashboard")
 	protected String getDashboard(@RequestParam(value="search", required = false) String search,
 								  @RequestParam(value="orderBy", defaultValue = "default", required = false) String orderBy,
 								  @RequestParam(value="columnName", required = false) String columnName,
@@ -67,7 +67,7 @@ public class Dashboard {
 		List<Computer> computerList = computerService.list();
 
 		int nbSearchedComputer = computerService.nbSearchedComputer(search);
-		
+
 		computerSearchedList = computerService.findByName(search, offset, pageSize);
 
 		if (search != null) {
@@ -79,7 +79,7 @@ public class Dashboard {
 			
 			modelMap.put("lastPage", lastPage);
 		}
-
+		
 		modelMap.put("search", search);
 		modelMap.put("orderBy", orderBy);
 		modelMap.put("nbSearchedComputer", nbSearchedComputer);
@@ -103,6 +103,6 @@ public class Dashboard {
 			computerService.delete(Integer.parseInt(s));
 		}
 		
-		return "/dashboard";
+		return "redirect:/dashboard";
 	}
 }

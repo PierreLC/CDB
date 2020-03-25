@@ -49,8 +49,8 @@ public class ComputerService {
 		return computerDAO.getNbRows();
 	}
 	
-	public int nbSearchedComputer(String name) {
-		return computerDAO.nbSearchedComputer(name);
+	public int nbSearchedComputer(String search) {
+		return computerDAO.nbSearchedComputer(search);
 	}
 	
 	public List<Computer> orderByName(int offset, int pageSize){
