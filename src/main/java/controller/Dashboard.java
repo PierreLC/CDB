@@ -28,10 +28,10 @@ public class Dashboard {
 
 	@GetMapping(value="/dashboard")
 	protected String getDashboard(@RequestParam(value="search", required = false) String search,
-								  @RequestParam(value="orderBy", required = false) String orderBy,
+								  @RequestParam(value="orderBy", defaultValue = "default", required = false) String orderBy,
 								  @RequestParam(value="columnName", required = false) String columnName,
-								  @RequestParam(value="pageIterator", defaultValue="1", required = false) int pageIterator,
-								  @RequestParam(value="pageSize", defaultValue="10", required = false) int pageSize,
+								  @RequestParam(value="pageIterator", defaultValue = "1", required = false) int pageIterator,
+								  @RequestParam(value="pageSize", defaultValue = "10", required = false) int pageSize,
 								  ModelMap modelMap)
 			throws ServletException, IOException {
 

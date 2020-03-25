@@ -4,25 +4,34 @@
 <%@ page isELIgnored="false"%>
 
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 
 <!DOCTYPE html>
 <html>
 <head>
-<title>Computer Database</title>
+<title><spring:message code="label.title"/></title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta charset="utf-8">
+
 <!-- Bootstrap -->
-<link href="resources/css/bootstrap.min.css" rel="stylesheet"
-	media="screen">
-<link href="resources/css/font-awesome.css" rel="stylesheet"
-	media="screen">
-<link href="resources/css/main.css" rel="stylesheet" media="screen">
+
+<spring:url value = "resources/css/bootstrap.min.css" var = "bootstrapCSS"/>
+<spring:url value = "resources/css/font-awesome.css" var = "fontAwesomeCSS"/>
+<spring:url value = "resources/css/main.css" var = "mainCSS"/>
+<spring:url value = "https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.3.0/css/flag-icon.min.css" var = "flagCSS"/>
+
+<link href = "${bootstrapCSS}" rel = "stylesheet" media = "screen">
+<link href = "${fontAwesomeCSS}" rel = "stylesheet" media = "screen">
+<link href = "${mainCSS}" rel = "stylesheet" media = "screen">
+<link href = "${flagCSS}" rel = "stylesheet" media = "screen">
 </head>
+
 <body>
 	<header class="navbar navbar-inverse navbar-fixed-top">
 		<div class="container">
-			<a class="navbar-brand" href="dashboard.jsp"> Application -
-				Computer Database </a>
+			<span class = "flag-icon flag-icon-<spring:message code = "label.flag"/> navbar-brand" style = "width:1%;"></span>
+			<a class="navbar-brand" href="dashboard.jsp"><spring:message code = "label.title"/></a>
 		</div>
 	</header>
 
@@ -30,21 +39,20 @@
 		<div class="container">
 			<c:choose>
 				<c:when test="${ search != null }">
-					<h1 id="homeTitle">${ nbSearchedComputer } Computers
-						found for ${ search }</h1>
+					<h1 id="homeTitle">${ nbSearchedComputer } <spring:message code = "label.searchedComputerFound"/> ${ search }</h1>
 				</c:when>
 				<c:otherwise>
 					<h1 id="homeTitle">
-						<b>Computer Database : ${ nbRows } computers found</b>
+						<b><spring:message code = "label.computerDatabase"/> ${ nbRows } <spring:message code = "label.computerFound"/></b>
 					</h1>
 				</c:otherwise>
 			</c:choose>
 			<c:choose>
 				<c:when test="${ pageIterator > 0 && pageIterator <= lastPage }">
-					<h4>Page ${ pageIterator }</h4>
+					<h4><spring:message code = "Page"/> ${ pageIterator }</h4>
 				</c:when>
 				<c:otherwise>
-					<h4>No page found</h4>
+					<h4><spring:message code = "label.noPage"/></h4>
 				</c:otherwise>
 			</c:choose>
 
@@ -53,15 +61,14 @@
 					<form id="searchForm" action="#" method="GET" class="form-inline">
 
 						<input type="search" id="searchbox" name="search"
-							class="form-control" placeholder="Search name" /> <input
-							type="submit" id="searchsubmit" value="Filter by name"
+							class="form-control" placeholder="<spring:message code = "label.searchByName"/>" /> <input
+							type="submit" id="searchsubmit" value="<spring:message code = "label.filterByName"/>"
 							class="btn btn-primary" />
 					</form>
 				</div>
 				<div class="pull-right">
-					<a class="btn btn-success" id="addComputer" href="addComputer">Add
-						Computer</a> <a class="btn btn-default" id="editComputer" href="#"
-						onclick="$.fn.toggleEditMode();">Edit</a>
+					<a class="btn btn-success" id="addComputer" href="addComputer"><spring:message code = "label.addComputer"/></a> 
+						<a class="btn btn-default" id="editComputer" href="#" onclick="$.fn.toggleEditMode();"><spring:message code = "label.editComputer"/></a>
 				</div>
 			</div>
 		</div>
@@ -74,6 +81,7 @@
 			<table class="table table-striped table-bordered">
 				<thead>
 					<tr>
+					
 						<!-- Variable declarations for passing labels as parameters -->
 						<!-- Table header for Computer Name -->
 
@@ -84,15 +92,16 @@
 									class="fa fa-trash-o fa-lg"></i>
 							</a>
 						</span></th>
-						<th><a href="dashboard?columnName=computerName">Computer Name</a></th>
-						<th><a href="dashboard?columnName=introduced">Introduced date</a></th>
-						<th><a href="dashboard?columnName=discontinued">Discontinued date</a></th>
-						<th><a href="dashboard?columnName=company">Company</a></th>
+						<th><a href="dashboard?columnName=computerName"><spring:message code = "label.computerName"/></a></th>
+						<th><a href="dashboard?columnName=introduced"><spring:message code = "label.introducedDate"/></a></th>
+						<th><a href="dashboard?columnName=discontinued"><spring:message code = "label.discontinuedDate"/></a></th>
+						<th><a href="dashboard?columnName=company"><spring:message code = "label.company"/></a></th>
 
 					</tr>
 				</thead>
 
 				<!-- Browse attribute computers -->
+				
 				<tbody id="results">
 					<c:choose>
 						<c:when test="${search != null}">
@@ -242,9 +251,13 @@
 		</div>
 
 	</footer>
-	<script src="resources/js/jquery.min.js"></script>
-	<script src="resources/js/bootstrap.min.js"></script>
-	<script src="resources/js/dashboard.js"></script>
+	<spring:url value = "resources/js/jquery.min.js" var = "jqueryJS"/>
+	<spring:url value = "resources/js/bootstrap.min.js" var = "bootsrapJS"/>
+	<spring:url value = "resources/js/dashboard.js" var = "dashboardJS"/>
+	
+	<script src = "${jqueryJS}"></script>
+	<script src = "${bootstrapJS}"></script>
+	<script src = "${dashboardJS}"></script>
 
 </body>
 </html>

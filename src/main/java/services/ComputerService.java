@@ -37,8 +37,8 @@ public class ComputerService {
 	public Computer findById(int i) {
 		return computerDAO.findById(i);
 	}
-	public List<Computer> findByName(String name, int offset, int pageSize) {
-		return computerDAO.findByName(name, offset, pageSize);
+	public List<Computer> findByName(String search, int offset, int pageSize) {
+		return computerDAO.findByName(search, offset, pageSize);
 	}
 	
 	public void update(Computer computer) {

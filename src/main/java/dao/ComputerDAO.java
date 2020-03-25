@@ -61,9 +61,9 @@ public final class ComputerDAO {
 		return computer;
 	}
 
-	public List<Computer> findByName(String name, int offset, int step) {
+	public List<Computer> findByName(String search, int offset, int step) {
 
-		SqlParameterSource namedParameter = new MapSqlParameterSource().addValue("name", '%' + name + '%')
+		SqlParameterSource namedParameter = new MapSqlParameterSource().addValue("search", '%' + search + '%')
 																	   .addValue("offset", offset)
 																	   .addValue("step", step);
 
@@ -72,9 +72,9 @@ public final class ComputerDAO {
 		return computer;
 	}
 
-	public int nbSearchedComputer(String name) {
+	public int nbSearchedComputer(String search) {
 
-		SqlParameterSource namedParameter = new MapSqlParameterSource().addValue("name", name);
+		SqlParameterSource namedParameter = new MapSqlParameterSource().addValue("search", search);
 
 		List<Computer> nbSearchedComputer = namedParameterJdbcTemplate.query(SQLRequest.FIND_BY_NAME.getQuery(), namedParameter, this.computerMapper);
 
