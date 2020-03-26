@@ -11,16 +11,12 @@ public class CompanyMapper implements RowMapper<Company> {
 	
 	@Override
 	public Company mapRow(ResultSet resultSet, int rowNum) throws SQLException {
-		return mapCompany(resultSet);
-	}
-
-	public static Company mapCompany(ResultSet resultSet) throws SQLException {
-
+		
 		Company company = new Company.Builder().build();
-
-		company.setId(resultSet.getLong("id"));
-		company.setName(resultSet.getString("name"));
-
+		
+		company.setId(resultSet.getLong("company_id"));
+		company.setName(resultSet.getString("company.name"));
+		
 		return company;
 	}
 }

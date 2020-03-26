@@ -15,30 +15,32 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import model.Computer;
 import services.ComputerService;
+import services.ControllerService;
 
 @Controller
 public class Dashboard {
 	
 	private ComputerService computerService;
+	private ControllerService controllerService;
 	
-	public Dashboard(ComputerService computerService) {
+	public Dashboard(ComputerService computerService, ControllerService controllerService) {
 		
+		this.controllerService = controllerService;
 		this.computerService = computerService;
 	}
 
 	@GetMapping(value = "/dashboard")
 	protected String getDashboard(@RequestParam(value="search", required = false) String search,
 								  @RequestParam(value="orderBy", defaultValue = "default", required = false) String orderBy,
-								  @RequestParam(value="columnName", required = false) String columnName,
+								  @RequestParam(value="columnName", defaultValue = "default", required = false) String columnName,
 								  @RequestParam(value="pageIterator", defaultValue = "1", required = false) int pageIterator,
-								  @RequestParam(value="pageSize", defaultValue = "10", required = false) int pageSize,
+								  @RequestParam(value="step", defaultValue = "10", required = false) int step,
 								  ModelMap modelMap)
 			throws ServletException, IOException {
 
 		int nbRows = 0;
-		int offset  = (pageIterator - 1) * pageSize;
+		int offset  = (pageIterator - 1) * step;
 
-		List<Computer> computerListPag = computerService.listPage((pageIterator - 1) * pageSize, pageSize);
 		List<Computer> computerSearchedList;
 		
 		try {
@@ -47,35 +49,22 @@ public class Dashboard {
 			e.printStackTrace();
 		}
 		
-		switch (orderBy) {
-		case "computerName":
-			computerListPag = computerService.orderByName(offset, pageSize);
-			break;
-		case "introduced":
-			computerListPag = computerService.orderByIntroduced(offset, pageSize);
-			break;
-		case "discontinued":
-			computerListPag = computerService.orderByDiscontinued(offset, pageSize);
-			break;
-		case "company":
-			computerListPag = computerService.orderByCompany(offset, pageSize);
-			break;
-		default:
-			computerListPag = computerService.listPage(offset, pageSize);
-		}
+		System.out.println(columnName);
+		System.out.println(orderBy);
+		List<Computer> computerListPag = controllerService.displayedListPag(columnName, pageIterator, step);
 		
 		List<Computer> computerList = computerService.list();
 
 		int nbSearchedComputer = computerService.nbSearchedComputer(search);
 
-		computerSearchedList = computerService.findByName(search, offset, pageSize);
+		computerSearchedList = computerService.findByName(search, offset, step);
 
 		if (search != null) {
-			int lastPage = (int) Math.ceil((double) nbSearchedComputer / pageSize);
+			int lastPage = (int) Math.ceil((double) nbSearchedComputer / step);
 			
 			modelMap.put("lastPage", lastPage);
 		} else {
-			int lastPage = (int) Math.ceil((double) computerList.size() / pageSize);
+			int lastPage = (int) Math.ceil((double) computerList.size() / step);
 			
 			modelMap.put("lastPage", lastPage);
 		}
@@ -86,7 +75,7 @@ public class Dashboard {
 		modelMap.put("computerSearchedList", computerSearchedList);
 		modelMap.put("nbRows", nbRows);
 		modelMap.put("pageIterator", pageIterator);
-		modelMap.put("pageSize", pageSize);
+		modelMap.put("step", step);
 		modelMap.put("computerList", computerList);
 		modelMap.put("computerListPag", computerListPag);
 		

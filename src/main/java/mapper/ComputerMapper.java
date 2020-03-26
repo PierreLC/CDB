@@ -14,7 +14,7 @@ public class ComputerMapper implements RowMapper<Computer> {
 	@Override
 	public Computer mapRow(ResultSet resultSet, int rowNum) throws SQLException {
 		
-		Company company = new Company.Builder().build();;
+		Company company = new Company.Builder().build();
 		
 		company.setId(resultSet.getLong("company_id"));
 		company.setName(resultSet.getString("company.name"));

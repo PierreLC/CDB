@@ -96,35 +96,35 @@ public final class ComputerDAO {
 		return namedParameterJdbcTemplate.queryForObject(SQLRequest.NB_ROWS.getQuery(), mapParameter, Integer.class);
 	}
 
-	public List<Computer> orderByName(int offset, int pageSize) {
+	public List<Computer> orderByName(int offset, int step) {
 
 		SqlParameterSource namedParameter = new MapSqlParameterSource().addValue("offset", offset)
-																	   .addValue("pageSize", pageSize);
+																	   .addValue("step", step);
 
 		return namedParameterJdbcTemplate.query(OrderByRequest.ORDER_BY_NAME.getQuery(), namedParameter, this.computerMapper);
 	}
 
-	public List<Computer> orderByIntroduced(int offset, int pageSize) {
+	public List<Computer> orderByIntroduced(int offset, int step) {
 
 		SqlParameterSource namedParameter = new MapSqlParameterSource().addValue("offset", offset)
-																	   .addValue("pageSize", pageSize);
+																	   .addValue("step", step);
 
 		return namedParameterJdbcTemplate.query(OrderByRequest.ORDER_BY_INTRODUCED.getQuery(), namedParameter, this.computerMapper);
 	}
 
-	public List<Computer> orderByDiscontinued(int offset, int pageSize) {
+	public List<Computer> orderByDiscontinued(int offset, int step) {
 
 		SqlParameterSource namedParameter = new MapSqlParameterSource().addValue("offset", offset)
-				                                                       .addValue("pageSize", pageSize);
+				                                                       .addValue("step", step);
 
 		return namedParameterJdbcTemplate.query(OrderByRequest.ORDER_BY_DISCONTINUED.getQuery(), namedParameter,
 				this.computerMapper);
 	}
 
-	public List<Computer> orderByCompany(int offset, int pageSize) {
+	public List<Computer> orderByCompany(int offset, int step) {
 
 		SqlParameterSource namedParameter = new MapSqlParameterSource().addValue("offset", offset)
-				                                                       .addValue("pageSize", pageSize);
+				                                                       .addValue("step", step);
 
 		return namedParameterJdbcTemplate.query(OrderByRequest.ORDER_BY_COMPANY.getQuery(), namedParameter, this.computerMapper);
 	}

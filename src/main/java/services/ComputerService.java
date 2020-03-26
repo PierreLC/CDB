@@ -53,19 +53,19 @@ public class ComputerService {
 		return computerDAO.nbSearchedComputer(search);
 	}
 	
-	public List<Computer> orderByName(int offset, int pageSize){
-		return computerDAO.orderByName(offset, pageSize);
+	public List<Computer> orderByName(int offset, int step){
+		return computerDAO.orderByName(offset, step);
 	}
 	
-	public List<Computer> orderByIntroduced(int offset, int pageSize){
-		return computerDAO.orderByIntroduced(offset, pageSize);
+	public List<Computer> orderByIntroduced(int offset, int step){
+		return computerDAO.orderByIntroduced(offset, step);
 	}
 	
-	public List<Computer> orderByDiscontinued(int offset, int pageSize){
-		return computerDAO.orderByDiscontinued(offset, pageSize);
+	public List<Computer> orderByDiscontinued(int offset, int step){
+		return computerDAO.orderByDiscontinued(offset, step);
 	}
 	
-	public List<Computer> orderByCompany(int offset, int pageSize){
-		return computerDAO.orderByCompany(offset, pageSize);
+	public List<Computer> orderByCompany(int offset, int step){
+		return computerDAO.orderByCompany(offset, step);
 	}
 }
