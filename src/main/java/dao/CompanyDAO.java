@@ -18,25 +18,22 @@ import model.Company;
 public final class CompanyDAO {
 
 	private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
-	CompanyMapper companyMapper;
-	
-	public CompanyDAO() {
-	}
+	private CompanyMapper companyMapper;
 
-	private CompanyDAO(DataSource dataSource) {
+	private CompanyDAO(DataSource dataSource, CompanyMapper companyMapper) {
 		this.namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
-		companyMapper = new CompanyMapper();
+		this.companyMapper = companyMapper;
 	}
 
 	public void add(Company company) throws SQLException {
 		
-		SqlParameterSource namedParameter = new MapSqlParameterSource();
+		SqlParameterSource namedParameter = new MapSqlParameterSource().addValue("company", company);
 		
 		namedParameterJdbcTemplate.query(SQLRequest.ADD_COMPANY.getQuery(), namedParameter, this.companyMapper);
 	}
 
 	public List<Company> list() throws SQLException {
-		
+
 		return namedParameterJdbcTemplate.query(SQLRequest.LIST_COMPANY.getQuery(), this.companyMapper);
 	}
 
@@ -54,6 +51,6 @@ public final class CompanyDAO {
 		
 		SqlParameterSource namedParameter = new MapSqlParameterSource().addValue("id", id);
 		
-		namedParameterJdbcTemplate.query(SQLRequest.DELETE_COMPANY.getQuery(), namedParameter, this.companyMapper);
+		namedParameterJdbcTemplate.update(SQLRequest.DELETE_COMPANY.getQuery(), namedParameter);
 	}
 }

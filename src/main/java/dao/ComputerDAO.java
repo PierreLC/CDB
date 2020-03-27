@@ -19,9 +19,9 @@ public final class ComputerDAO {
 	private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 	ComputerMapper computerMapper;
 	
-	private ComputerDAO(DataSource dataSource) {
+	private ComputerDAO(DataSource dataSource, ComputerMapper computerMapper) {
 		this.namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
-		computerMapper = new ComputerMapper();
+		this.computerMapper = computerMapper;
 	}
 
 	public void add(Computer computer) throws SQLException {

@@ -13,20 +13,21 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import dao.ComputerDAO;
 import model.Company;
 import model.Computer;
 import services.CompanyService;
+import services.ComputerService;
 
 @Controller
 public class AddComputer {
 	
 	private CompanyService companyService;
-	private ComputerDAO computerDAO;
+	private ComputerService computerService;
 
-	public AddComputer(CompanyService companyService, ComputerDAO computerDAO) {
+	public AddComputer(CompanyService companyService, ComputerService computerService) {
+		
 		this.companyService = companyService;
-		this.computerDAO = computerDAO;
+		this.computerService = computerService;
 	}
 
 	@GetMapping("/addComputer")
@@ -51,14 +52,13 @@ public class AddComputer {
 		Company company = companyService.find_by_id(Integer.parseInt(companyId));
 		
 		Computer computer = new Computer.Builder().setName(computerName)
-												 .setIntroducedDate(LocalDateTime.parse(introduced))
-												 .setDiscontinuedDate(LocalDateTime.parse(discontinued))
-												 .setCompany(company)
-												 .build();
+												  .setIntroducedDate(LocalDateTime.parse(introduced))
+												  .setDiscontinuedDate(LocalDateTime.parse(discontinued))
+												  .setCompany(company)
+												  .build();
 		
 		try {
-			computerDAO.add(computer);
-
+			computerService.add(computer);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

@@ -5,12 +5,18 @@ import java.sql.SQLException;
 import java.time.LocalDateTime;
 
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.stereotype.Component;
 
 import model.Company;
 import model.Computer;
 
+@Component
 public class ComputerMapper implements RowMapper<Computer> {
 	
+	public ComputerMapper() {
+		super();
+	}
+
 	@Override
 	public Computer mapRow(ResultSet resultSet, int rowNum) throws SQLException {
 		

@@ -49,8 +49,6 @@ public class Dashboard {
 			e.printStackTrace();
 		}
 		
-		System.out.println(columnName);
-		System.out.println(orderBy);
 		List<Computer> computerListPag = controllerService.displayedListPag(columnName, pageIterator, step);
 		
 		List<Computer> computerList = computerService.list();

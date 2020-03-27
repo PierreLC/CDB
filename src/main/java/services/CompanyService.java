@@ -12,7 +12,7 @@ import model.Company;
 @Service
 public class CompanyService {
 	
-	private static CompanyDAO companyDAO;
+	private CompanyDAO companyDAO;
 	
 	@Autowired
 	public CompanyService(CompanyDAO companyDAO) {
