@@ -39,7 +39,7 @@ public final class CompanyDAO {
 
 	public Company findById(long id) {
 		
-		SqlParameterSource namedParameter = new MapSqlParameterSource().addValue("id", id);
+		SqlParameterSource namedParameter = new MapSqlParameterSource().addValue("company.id", id);
 		
 		Company company = namedParameterJdbcTemplate.queryForObject(SQLRequest.GET_COMPANY_BY_ID.getQuery(), namedParameter, this.companyMapper);
 		
@@ -54,3 +54,4 @@ public final class CompanyDAO {
 		namedParameterJdbcTemplate.update(SQLRequest.DELETE_COMPANY.getQuery(), namedParameter);
 	}
 }
+

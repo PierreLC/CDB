@@ -2,7 +2,6 @@ package controller;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.time.LocalDateTime;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -17,6 +16,7 @@ import model.Company;
 import model.Computer;
 import services.CompanyService;
 import services.ComputerService;
+import utils.DateUtils;
 
 @Controller
 public class AddComputer {
@@ -47,22 +47,18 @@ public class AddComputer {
 								   @RequestParam(value="introduced", required = false) String introduced,
 								   @RequestParam(value="discontinued", required = false) String discontinued,
 								   @RequestParam(value="companyId", required = false) String companyId)
-			throws ServletException, IOException {
+			throws ServletException, IOException, SQLException {
 		
-		Company company = companyService.find_by_id(Integer.parseInt(companyId));
-		
-		Computer computer = new Computer.Builder().setName(computerName)
-												  .setIntroducedDate(LocalDateTime.parse(introduced))
-												  .setDiscontinuedDate(LocalDateTime.parse(discontinued))
-												  .setCompany(company)
-												  .build();
-		
-		try {
+			Company company = companyService.findById(Integer.parseInt(companyId));
+			
+			Computer computer = new Computer.Builder().setName(computerName)
+													  .setIntroducedDate(DateUtils.convertToLDT(introduced))
+													  .setDiscontinuedDate(DateUtils.convertToLDT(discontinued))
+													  .setCompany(company)
+													  .build();
+			
 			computerService.add(computer);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		
+
 		return "redirect:/dashboard";
 	}
 }

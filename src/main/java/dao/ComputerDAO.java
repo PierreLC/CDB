@@ -25,10 +25,13 @@ public final class ComputerDAO {
 	}
 
 	public void add(Computer computer) throws SQLException {
-
-		SqlParameterSource namedParameter = new MapSqlParameterSource().addValue("computer", computer);
 		
-		namedParameterJdbcTemplate.query(SQLRequest.ADD.getQuery(), namedParameter, this.computerMapper);
+		SqlParameterSource namedParameter = new MapSqlParameterSource().addValue("name", computer.getName())
+																		.addValue("introduced", computer.getIntroduced())
+																		.addValue("discontinued", computer.getDiscontinued())
+																		.addValue("company.id", computer.getCompany().getId());
+		
+		namedParameterJdbcTemplate.update(SQLRequest.ADD.getQuery(), namedParameter);
 	}
 
 	public List<Computer> list() {
@@ -52,8 +55,8 @@ public final class ComputerDAO {
 	}
 
 	public Computer findById(int id) {
-
-		SqlParameterSource namedParameter = new MapSqlParameterSource().addValue("id", id);
+		
+		SqlParameterSource namedParameter = new MapSqlParameterSource().addValue("computer.id", id);
 		
 		Computer computer = namedParameterJdbcTemplate.queryForObject(SQLRequest.FIND_BY_ID.getQuery(), namedParameter, this.computerMapper);
 
@@ -79,12 +82,12 @@ public final class ComputerDAO {
 	}
 
 	public void update(Computer computer) {
-
-		SqlParameterSource namedParameter = new MapSqlParameterSource().addValue("id", computer.getId())
+		
+		SqlParameterSource namedParameter = new MapSqlParameterSource().addValue("computer.id", computer.getId())
 																	   .addValue("name", computer.getName())
 																	   .addValue("introduced", computer.getIntroduced())
 																	   .addValue("discontinued", computer.getDiscontinued())
-																	   .addValue("company", computer.getCompany());
+																	   .addValue("company.id", computer.getCompany().getId());
 
 		namedParameterJdbcTemplate.update(SQLRequest.UPDATE.getQuery(), namedParameter);
 	}

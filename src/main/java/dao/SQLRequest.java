@@ -5,11 +5,11 @@ public enum SQLRequest {
 	LIST_COMPUTER("SELECT computer.id, computer.name, introduced , discontinued , company_id, company.name "
 			+"FROM computer LEFT JOIN company ON company_id = company.id;"),
 	DELETE("DELETE FROM computer WHERE id= :id;"),
-	UPDATE("UPDATE computer SET  name = :name, introduced = :introduced, discontinued = :discontinued, company_id = :company.id WHERE id = :computer.id;"),
+	UPDATE("UPDATE computer SET name = :name, introduced = :introduced, discontinued = :discontinued, company_id = :company.id WHERE id = :computer.id;"),
 	LIST_PAGE("SELECT computer.id, computer.name, introduced, discontinued, company_id, company.name "
 			+"FROM computer LEFT JOIN company ON company_id = company.id LIMIT :offset, :pageSize;"),
 	FIND_BY_ID("SELECT computer.id, computer.name, computer.introduced, computer.discontinued, computer.company_id, company.name "
-			+"FROM computer LEFT JOIN company ON company_id = company.id  WHERE id= :computer.id;"),
+			+"FROM computer LEFT JOIN company ON company_id = company.id  WHERE computer.id= :computer.id;"),
 	FIND_BY_NAME_PAG("SELECT computer.id, computer.name, computer.introduced, computer.discontinued, computer.company_id,"
 			+"company.name FROM computer LEFT JOIN company ON company_id = company.id  WHERE computer.name LIKE :search LIMIT :offset, :step;"),
 	FIND_BY_NAME("SELECT computer.id, computer.name, computer.introduced, computer.discontinued, computer.company_id, company.name "

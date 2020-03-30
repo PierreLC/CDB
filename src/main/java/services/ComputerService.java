@@ -35,8 +35,8 @@ public class ComputerService {
 		computerDAO.deleteComputer(id);
 	}
 	
-	public Computer findById(int i) {
-		return computerDAO.findById(i);
+	public Computer findById(int id) {
+		return computerDAO.findById(id);
 	}
 	public List<Computer> findByName(String search, int offset, int pageSize) {
 		return computerDAO.findByName(search, offset, pageSize);

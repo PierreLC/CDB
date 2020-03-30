@@ -16,7 +16,7 @@ public class CompanyMapper implements RowMapper<Company> {
 		
 		Company company = new Company.Builder().build();
 		
-		company.setId(resultSet.getLong("company_id"));
+		company.setId(resultSet.getLong("company.id"));
 		company.setName(resultSet.getString("company.name"));
 		
 		return company;

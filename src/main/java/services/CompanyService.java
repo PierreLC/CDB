@@ -27,7 +27,7 @@ public class CompanyService {
 		return companyDAO.list();
 	}
 	
-	public Company find_by_id(int id) {
+	public Company findById(int id) {
 		return companyDAO.findById(id);
 	}
 	
