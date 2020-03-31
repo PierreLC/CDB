@@ -1,21 +1,21 @@
-package ui;
-
-import java.sql.SQLException;
-
-
-import org.junit.Before;
-import org.junit.Test;
-import org.mockito.ArgumentMatchers;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
-
-import dao.CompanyDAO;
-import dao.ComputerDAO;
-
-public class MenuActionTest {	
-	
+//package ui;
+//
+//import java.sql.SQLException;
+//
+//
+//import org.junit.Before;
+//import org.junit.Test;
+//import org.mockito.ArgumentMatchers;
+//import org.mockito.InjectMocks;
+//import org.mockito.Mock;
+//import org.mockito.Mockito;
+//import org.mockito.MockitoAnnotations;
+//
+//import dao.CompanyDAO;
+//import dao.ComputerDAO;
+//
+//public class MenuActionTest {	
+//	
 //	@InjectMocks
 //	MenuAction actionTest;
 //	
@@ -29,7 +29,7 @@ public class MenuActionTest {
 //	public void init() {
 //		MockitoAnnotations.initMocks(this);
 //	}
-
+//
 //	public void createComputer() throws SQLException {
 //		Computer computer = new Computer();
 //		System.out.println("Saisir le nom de l'ordinateur :");
@@ -48,7 +48,7 @@ public class MenuActionTest {
 //		computer.setCompany(company);
 //		computerDAO.add(computer);
 //	}
-	
+//	
 //	@Test
 //	public void createComputer_should_linked_to_existing_company_if_exists() throws SQLException {
 //		Mockito.when(companyDAO.find(ArgumentMatchers.anyInt())).thenReturn(null);
@@ -57,4 +57,4 @@ public class MenuActionTest {
 //		Mockito.verify(computerDAO).add(ArgumentMatchers.any());
 //		Mockito.verifyNoMoreInteractions(companyDAO);
 //	}
-}
+//}
