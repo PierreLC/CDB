@@ -38,43 +38,21 @@ public class Dashboard {
 								  ModelMap modelMap)
 			throws ServletException, IOException {
 
-		int nbRows = 0;
 		int offset  = (pageIterator - 1) * step;
-
-		List<Computer> computerSearchedList;
-		
-		try {
-			nbRows = computerService.getNbRows();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		
-		List<Computer> computerListPag = controllerService.displayedListPag(columnName, pageIterator, step);
-		
-		List<Computer> computerList = computerService.list();
-
 		int nbSearchedComputer = computerService.nbSearchedComputer(search);
 
-		computerSearchedList = computerService.findByName(search, offset, step);
-
-		if (search != null) {
-			int lastPage = (int) Math.ceil((double) nbSearchedComputer / step);
-			
-			modelMap.put("lastPage", lastPage);
-		} else {
-			int lastPage = (int) Math.ceil((double) computerList.size() / step);
-			
-			modelMap.put("lastPage", lastPage);
-		}
+		List<Computer> computerListPag = controllerService.displayedListPag(columnName, pageIterator, step);
+		List<Computer> computerSearchedList = computerService.findByName(search, offset, step);
+		
+		setLastPage(search, step, nbSearchedComputer, modelMap);
+		setNbRows(modelMap);
 		
 		modelMap.put("search", search);
 		modelMap.put("orderBy", orderBy);
 		modelMap.put("nbSearchedComputer", nbSearchedComputer);
 		modelMap.put("computerSearchedList", computerSearchedList);
-		modelMap.put("nbRows", nbRows);
 		modelMap.put("pageIterator", pageIterator);
 		modelMap.put("step", step);
-		modelMap.put("computerList", computerList);
 		modelMap.put("computerListPag", computerListPag);
 		
 		return "dashboard";
@@ -86,10 +64,36 @@ public class Dashboard {
 			throws ServletException, IOException {
 
 		List<String> computerToDelete = Arrays.asList(computerSelection.split(","));
+		
 		for (String s : computerToDelete) {
 			computerService.delete(Integer.parseInt(s));
 		}
 		
 		return "redirect:/dashboard";
+	}
+	
+	public void setLastPage(String search, int step, int nbSearchedComputer, ModelMap modelMap) {
+		
+		List<Computer> computerList = computerService.list();
+		
+		if (search != null) {
+			int lastPage = (int) Math.ceil((double) nbSearchedComputer / step);
+			
+			modelMap.put("lastPage", lastPage);
+		} else {
+			int lastPage = (int) Math.ceil((double) computerList.size() / step);
+			
+			modelMap.put("lastPage", lastPage);
+		}
+	}
+	
+	public void setNbRows(ModelMap modelMap) {
+		
+		try {
+			int nbRows = computerService.getNbRows();
+			modelMap.put("nbRows", nbRows);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 }

@@ -32,14 +32,10 @@ public class AddComputer {
 
 	@GetMapping("/addComputer")
 	protected void getAddComputer(ModelMap modelMap)
-			throws ServletException, IOException {
+			throws ServletException, IOException, SQLException {
 		
-		try {
 			List<Company> companyList = companyService.list();
 			modelMap.put("companyList", companyList);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
 	}
 	
 	@PostMapping("/addComputer")
@@ -49,16 +45,21 @@ public class AddComputer {
 								   @RequestParam(value="companyId", required = false) String companyId)
 			throws ServletException, IOException, SQLException {
 		
-			Company company = companyService.findById(Integer.parseInt(companyId));
-			
-			Computer computer = new Computer.Builder().setName(computerName)
-													  .setIntroducedDate(DateUtils.convertToLDT(introduced))
-													  .setDiscontinuedDate(DateUtils.convertToLDT(discontinued))
-													  .setCompany(company)
-													  .build();
-			
-			computerService.add(computer);
+		addComputer(companyId, computerName, introduced, discontinued);
 
 		return "redirect:/dashboard";
+	}
+	
+	public void addComputer(String companyId, String computerName, String introduced, String discontinued) throws SQLException {
+		
+		Company company = companyService.findById(Integer.parseInt(companyId));
+		
+		Computer computer = new Computer.Builder().setName(computerName)
+												  .setIntroducedDate(DateUtils.convertToLDT(introduced))
+												  .setDiscontinuedDate(DateUtils.convertToLDT(discontinued))
+												  .setCompany(company)
+												  .build();
+		
+		computerService.add(computer);
 	}
 }

@@ -32,25 +32,12 @@ public class EditComputer {
 	@GetMapping("/editComputer")
 	protected void getUpdate(@RequestParam(value="id", required = false) String id,
 						     ModelMap modelMap) 
-		throws ServletException, IOException {
-		
-		List<Company> companyList;
-		try {
-			companyList = companyService.list();
-			modelMap.put("companyList", companyList);
-		
-			Computer computer = computerService.findById(Integer.parseInt(id));
+		throws ServletException, IOException, SQLException {
+
+			List<Company> companyList = companyService.list();
+			Computer computer = getComputerById(id);
 			
-			modelMap.put("companyList", companyList);
-			modelMap.put("computerId", computer.getId());
-			modelMap.put("computerName", computer.getName());
-			modelMap.put("introduced", computer.getIntroduced());
-			modelMap.put("discontinued", computer.getDiscontinued());
-			modelMap.put("company", computer.getCompany().getId());
-			
-		} catch (SQLException e) {
-			e.getMessage();
-		}
+			setView(modelMap, computer, companyList);
 	}
 	
 	@PostMapping("/editComputer")
@@ -61,6 +48,13 @@ public class EditComputer {
 						        @RequestParam(value="companyId", required = false) String companyId,
 						        ModelMap modelMap)
 	throws ServletException, IOException{
+		
+		updateComputer(companyId, computerName, introduced, discontinued, id);
+		
+		return "redirect:/dashboard";
+	}
+	
+	public void updateComputer(String companyId, String computerName, String introduced, String discontinued, String id) {
 		
 		Company company = companyService.findById(Integer.parseInt(companyId));
 		
@@ -73,7 +67,22 @@ public class EditComputer {
 		computer.setId(Integer.parseInt(id));
 		
 		computerService.update(computer);
+	}
+	
+	public void setView(ModelMap modelMap, Computer computer, List<Company> companyList) {
 		
-		return "redirect:/dashboard";
+		modelMap.put("companyList", companyList);
+		modelMap.put("computerId", computer.getId());
+		modelMap.put("computerName", computer.getName());
+		modelMap.put("introduced", computer.getIntroduced());
+		modelMap.put("discontinued", computer.getDiscontinued());
+		modelMap.put("company", computer.getCompany().getId());
+	}
+	
+	public Computer getComputerById(String id) {
+		
+		Computer computer = computerService.findById(Integer.parseInt(id));
+		
+		return computer;
 	}
 }

@@ -19,9 +19,7 @@
 <spring:url value="resources/css/bootstrap.min.css" var="bootstrapCSS" />
 <spring:url value="resources/css/font-awesome.css" var="fontAwesomeCSS" />
 <spring:url value="resources/css/main.css" var="mainCSS" />
-<spring:url
-	value="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.3.0/css/flag-icon.min.css"
-	var="flagCSS" />
+<spring:url value="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.3.0/css/flag-icon.min.css" var="flagCSS" />
 
 <link href="${bootstrapCSS}" rel="stylesheet" media="screen">
 <link href="${fontAwesomeCSS}" rel="stylesheet" media="screen">
@@ -44,27 +42,27 @@
 			<c:choose>
 				<c:when test="${ search != null }">
 					<h1 id="homeTitle">${ nbSearchedComputer }
-						<spring:message code="label.searchedComputerFound" />
+						<spring:message code="label.searchedComputerFound"/>
 						${ search }
 					</h1>
 				</c:when>
 				<c:otherwise>
 					<h1 id="homeTitle">
-						<b><spring:message code="label.computerDatabase" /> ${ nbRows }
-							<spring:message code="label.computerFound" /></b>
+						<b><spring:message code="label.computerDatabase"/> ${ nbRows }
+							<spring:message code="label.computerFound"/></b>
 					</h1>
 				</c:otherwise>
 			</c:choose>
 			<c:choose>
 				<c:when test="${ pageIterator > 0 && pageIterator <= lastPage }">
 					<h4>
-						<spring:message code="Page" />
+						<spring:message code="label.page"/>
 						${ pageIterator }
 					</h4>
 				</c:when>
 				<c:otherwise>
 					<h4>
-						<spring:message code="label.noPage" />
+						<spring:message code="label.noPage"/>
 					</h4>
 				</c:otherwise>
 			</c:choose>
@@ -75,17 +73,17 @@
 
 						<input type="search" id="searchbox" name="search"
 							class="form-control"
-							placeholder="<spring:message code = "label.searchByName"/>" /> <input
+							placeholder="<spring:message code = "label.searchByName"/>"/> <input
 							type="submit" id="searchsubmit"
 							value="<spring:message code = "label.search"/>"
-							class="btn btn-primary" />
+							class="btn btn-primary"/>
 					</form>
 				</div>
 				<div class="pull-right">
 					<a class="btn btn-success" id="addComputer" href="addComputer"><spring:message
-							code="label.addComputer" /></a> <a class="btn btn-default"
+							code="label.addComputer"/></a><a class="btn btn-default"
 						id="editComputer" href="#" onclick="$.fn.toggleEditMode();"><spring:message
-							code="label.editComputer" /></a>
+							code="label.editComputer"/></a>
 				</div>
 			</div>
 		</div>
@@ -103,7 +101,7 @@
 						<!-- Table header for Computer Name -->
 
 						<th class="editMode" style="width: 60px; height: 22px;"><input
-							type="checkbox" id="selectall" /> <span
+							type="checkbox" id="selectall"/> <span
 							style="vertical-align: top;"> - <a href="#"
 								id="deleteSelected" onclick="$.fn.deleteSelected();"> <i
 									class="fa fa-trash-o fa-lg"></i>
@@ -131,10 +129,10 @@
 									<td class="editMode"><input type="checkbox" name="cb"
 										class="cb" value="${ computer.getId() }"></td>
 									<td><a href="editComputer?id=${ computer.getId() } "
-										onclick=""><c:out value="${ computer.getName() }" /></a></td>
-									<td><c:out value="${ computer.getIntroduced() }" /></td>
-									<td><c:out value="${ computer.getDiscontinued() }" /></td>
-									<td><c:out value="${ computer.getCompany().getName() }" /></td>
+										onclick=""><c:out value="${ computer.getName() }"/></a></td>
+									<td><c:out value="${ computer.getIntroduced() }"/></td>
+									<td><c:out value="${ computer.getDiscontinued() }"/></td>
+									<td><c:out value="${ computer.getCompany().getName() }"/></td>
 								<tr>
 							</c:forEach>
 
@@ -145,10 +143,10 @@
 									<td class="editMode"><input type="checkbox" name="cb"
 										class="cb" value="${computer.getId()}"></td>
 									<td><a href="editComputer?id=${ computer.getId() }"
-										onclick=""> <c:out value="${ computer.getName() }" /></a></td>
-									<td><c:out value="${ computer.getIntroduced() }" /></td>
-									<td><c:out value="${ computer.getDiscontinued() }" /></td>
-									<td><c:out value="${ computer.getCompany().getName() }" /></td>
+										onclick=""> <c:out value="${ computer.getName() }"/></a></td>
+									<td><c:out value="${ computer.getIntroduced() }"/></td>
+									<td><c:out value="${ computer.getDiscontinued() }"/></td>
+									<td><c:out value="${ computer.getCompany().getName() }"/></td>
 								</tr>
 							</c:forEach>
 						</c:otherwise>
@@ -174,7 +172,7 @@
 								</c:when>
 							</c:choose></li>
 
-						<li><a href="dashboard?pageIterator=1"><c:out value="1" /></a></li>
+						<li><a href="dashboard?pageIterator=1"><c:out value="1"/></a></li>
 
 						<c:choose>
 							<c:when test="${ pageIterator > 4 }">
@@ -198,7 +196,7 @@
 									<li><a
 										href="dashboard?pageIterator=${ i }
 									<c:if test="${ search != null }">&search=${ search }</c:if>">
-											<c:out value="${ i }" />
+											<c:out value="${ i }"/>
 									</a></li>
 								</c:forEach>
 							</c:when>
@@ -208,7 +206,7 @@
 									<li><a
 										href="dashboard?pageIterator=${ i }
 									<c:if test="${ search != null }">&search=${ search }</c:if>">
-											<c:out value="${ i }" />
+											<c:out value="${ i }"/>
 									</a></li>
 								</c:forEach>
 							</c:when>
@@ -224,7 +222,7 @@
 						<li><a
 							href="dashboard?pageIterator=${ lastPage }
 						<c:if test="${ search != null }">&search=${ search }</c:if>">
-								<c:out value="${ lastPage }" />
+								<c:out value="${ lastPage }"/>
 						</a></li>
 
 						<li><c:choose>
@@ -268,12 +266,12 @@
 				<c:if test="${ search != null }">&search=${ search }</c:if>">
 					<button type="button" class="btn btn-default"
 						onclick="<c:set var="pageIterator" value="1"/>">10</button>
-				</a> <a
+				</a><a
 					href="dashboard?pageIterator=1&step=50
 					<c:if test="${ search != null }">&search=${ search }</c:if>">
 					<button type="button" class="btn btn-default"
 						onclick="<c:set var="pageIterator" value="1"/>">50</button>
-				</a> <a
+				</a><a
 					href="dashboard?pageIterator=1&step=100
 					<c:if test="${ search != null }">&search=${ search }</c:if>">
 					<button type="button" class="btn btn-default"
