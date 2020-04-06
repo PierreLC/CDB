@@ -2,41 +2,58 @@ package dto;
 
 public class CompanyDTO {
 
-	private long id;
-	private String name;
+	private long idDTO;
+	private String nameDTO;
 
-	public CompanyDTO(int id, String name) {
-		this.id = id;
-		this.name = name;
+	public CompanyDTO(Builder builder) {
+		this.idDTO = builder.idDTO;
+		this.nameDTO = builder.nameDTO;
+	}
+	
+	public long getIdDTO() {
+		return idDTO;
 	}
 
-	public long getId() {
-		return id;
+	public void setIdDTO(long idDTO) {
+		this.idDTO = idDTO;
 	}
 
-	public void setId(long id) {
-		this.id = id;
+	public String getNameDTO() {
+		return nameDTO;
 	}
 
-	public String getName() {
-		return name;
+	public void setNameDTO(String nameDTO) {
+		this.nameDTO = nameDTO;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public static class Builder {
+		private long idDTO;
+		private String nameDTO;
+		
+		public Builder() {
+		}
+		
+		public Builder setIdDTO(long idDTO) {
+			this.idDTO = idDTO;
+			return this;
+		}
+		
+		public Builder setNameDTO(String nameDTO) {
+			this.nameDTO = nameDTO;
+			return this;
+		}
+		
+		public CompanyDTO build() {
+			return new CompanyDTO(this);
+		}
 	}
-
-	@Override
-	public String toString() {
-		return "CompanyDTO [id=" + id + ", name=" + name + "]";
-	}
-
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + (int) (id ^ (id >>> 32));
-		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		result = prime * result + (int) (idDTO ^ (idDTO >>> 32));
+		result = prime * result + ((nameDTO == null) ? 0 : nameDTO.hashCode());
 		return result;
 	}
 
@@ -49,13 +66,18 @@ public class CompanyDTO {
 		if (getClass() != obj.getClass())
 			return false;
 		CompanyDTO other = (CompanyDTO) obj;
-		if (id != other.id)
+		if (idDTO != other.idDTO)
 			return false;
-		if (name == null) {
-			if (other.name != null)
+		if (nameDTO == null) {
+			if (other.nameDTO != null)
 				return false;
-		} else if (!name.equals(other.name))
+		} else if (!nameDTO.equals(other.nameDTO))
 			return false;
 		return true;
+	}
+	
+	@Override
+	public String toString() {
+		return "CompanyDTO [id=" + idDTO + ", name=" + nameDTO + "]";
 	}
 }

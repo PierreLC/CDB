@@ -68,22 +68,22 @@ public class Computer {
 		private LocalDateTime discontinued;
 		private Company company;
 
+		public Builder setId(long id) {
+			this.id = id;
+			return this;
+		}
+		
 		public Builder setName(String name) {
 			this.name = name;
 			return this;
 		}
 
-		public Builder setId(long id) {
-			this.id = id;
-			return this;
-		}
-
-		public Builder setIntroducedDate(LocalDateTime introduced) {
+		public Builder setIntroduced(LocalDateTime introduced) {
 			this.introduced = introduced;
 			return this;
 		}
 
-		public Builder setDiscontinuedDate(LocalDateTime discontinued) {
+		public Builder setDiscontinued(LocalDateTime discontinued) {
 			this.discontinued = discontinued;
 			return this;
 		}

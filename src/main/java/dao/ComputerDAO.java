@@ -54,7 +54,7 @@ public final class ComputerDAO {
 		namedParameterJdbcTemplate.update(SQLRequest.DELETE.getQuery(), namedParameter);
 	}
 
-	public Computer findById(int id) {
+	public Computer getComputerById(int id) {
 		
 		SqlParameterSource namedParameter = new MapSqlParameterSource().addValue("computer.id", id);
 		
@@ -63,7 +63,7 @@ public final class ComputerDAO {
 		return computer;
 	}
 
-	public List<Computer> findByName(String search, int offset, int step) {
+	public List<Computer> getComputerByName(String search, int offset, int step) {
 
 		SqlParameterSource namedParameter = new MapSqlParameterSource().addValue("search", '%' + search + '%')
 																	   .addValue("offset", offset)

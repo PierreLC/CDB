@@ -124,29 +124,29 @@
 				<tbody id="results">
 					<c:choose>
 						<c:when test="${search != null}">
-							<c:forEach items="${computerSearchedList}" var="computer">
+							<c:forEach items="${computerDTOSearchedList}" var="computer">
 								<tr>
 									<td class="editMode"><input type="checkbox" name="cb"
-										class="cb" value="${ computer.getId() }"></td>
-									<td><a href="editComputer?id=${ computer.getId() } "
-										onclick=""><c:out value="${ computer.getName() }"/></a></td>
-									<td><c:out value="${ computer.getIntroduced() }"/></td>
-									<td><c:out value="${ computer.getDiscontinued() }"/></td>
-									<td><c:out value="${ computer.getCompany().getName() }"/></td>
+										class="cb" value="${ computerDTO.getIdDTO() }"></td>
+									<td><a href="editComputer?id=${ computerDTO.getIdDTO() } "
+										onclick=""><c:out value="${ computerDTO.getNameDTO() }"/></a></td>
+									<td><c:out value="${ computerDTO.getIntroducedDTO() }"/></td>
+									<td><c:out value="${ computerDTO.getDiscontinuedDTO() }"/></td>
+									<td><c:out value="${ computerDTO.getCompanyDTO().getNameDTO() }"/></td>
 								<tr>
 							</c:forEach>
 
 						</c:when>
 						<c:otherwise>
-							<c:forEach items="${ computerListPag }" var="computer">
+							<c:forEach items="${ computerDTOListPag }" var="computer">
 								<tr>
 									<td class="editMode"><input type="checkbox" name="cb"
-										class="cb" value="${computer.getId()}"></td>
-									<td><a href="editComputer?id=${ computer.getId() }"
-										onclick=""> <c:out value="${ computer.getName() }"/></a></td>
-									<td><c:out value="${ computer.getIntroduced() }"/></td>
-									<td><c:out value="${ computer.getDiscontinued() }"/></td>
-									<td><c:out value="${ computer.getCompany().getName() }"/></td>
+										class="cb" value="${computerDTO.getIdDTO()}"></td>
+									<td><a href="editComputer?id=${ computerDTO.getIdDTO() }"
+										onclick=""> <c:out value="${ computerDTO.getNameDTO() }"/></a></td>
+									<td><c:out value="${ computerDTO.getIntroducedDTO() }"/></td>
+									<td><c:out value="${ computerDTO.getDiscontinuedDTO() }"/></td>
+									<td><c:out value="${ computerDTO.getCompanyDTO().getNameDTO() }"/></td>
 								</tr>
 							</c:forEach>
 						</c:otherwise>

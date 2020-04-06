@@ -27,8 +27,8 @@ public class CompanyService {
 		return companyDAO.list();
 	}
 	
-	public Company findById(int id) {
-		return companyDAO.findById(id);
+	public Company getCompanyById(int id) {
+		return companyDAO.getCompanyById(id);
 	}
 	
 	public void deleteCompany(int id) throws SQLException {

@@ -2,6 +2,7 @@ package controller;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -12,6 +13,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import dto.CompanyDTO;
+import dto.ComputerDTO;
+import mapper.CompanyMapper;
+import mapper.ComputerMapper;
 import model.Company;
 import model.Computer;
 import services.CompanyService;
@@ -35,9 +40,15 @@ public class EditComputer {
 		throws ServletException, IOException, SQLException {
 
 			List<Company> companyList = companyService.list();
-			Computer computer = getComputerById(id);
+			List<CompanyDTO> companyDTOList = new ArrayList<>();
+			companyList.stream().forEach(company -> companyDTOList.add(CompanyMapper.companyToCompanyDTO(company)));
 			
-			setView(modelMap, computer, companyList);
+			System.out.println("EditComputer :" + companyDTOList);
+			
+			Computer computer = computerService.getComputerById(Integer.parseInt(id));
+			ComputerDTO computerDTO = ComputerMapper.computerToComputerDTO(computer);
+			
+			setView(modelMap, computerDTO, companyDTOList);
 	}
 	
 	@PostMapping("/editComputer")
@@ -56,33 +67,29 @@ public class EditComputer {
 	
 	public void updateComputer(String companyId, String computerName, String introduced, String discontinued, String id) {
 		
-		Company company = companyService.findById(Integer.parseInt(companyId));
+		CompanyDTO companyDTO = new CompanyDTO.Builder().build();
+		companyDTO.setIdDTO(Integer.parseInt(companyId));
 		
-		Computer computer = new Computer.Builder().setName(computerName)
-				 						.setIntroducedDate(DateUtils.convertToLDT(introduced))
-				 						.setDiscontinuedDate(DateUtils.convertToLDT(discontinued))
-				 						.setCompany(company)
+		ComputerDTO computerDTO = new ComputerDTO.Builder().setNameDTO(computerName)
+				 						.setIntroducedDTO(DateUtils.convertToLDT(introduced))
+				 						.setDiscontinuedDTO(DateUtils.convertToLDT(discontinued))
+				 						.setCompanyDTO(companyDTO)
 				 						.build();
 		
-		computer.setId(Integer.parseInt(id));
+		computerDTO.setIdDTO(Integer.parseInt(id));
+		
+		Computer computer = ComputerMapper.computerDTOToComputer(computerDTO);
 		
 		computerService.update(computer);
 	}
 	
-	public void setView(ModelMap modelMap, Computer computer, List<Company> companyList) {
+	public void setView(ModelMap modelMap, ComputerDTO computerDTO, List<CompanyDTO> companyDTOList) {
 		
-		modelMap.put("companyList", companyList);
-		modelMap.put("computerId", computer.getId());
-		modelMap.put("computerName", computer.getName());
-		modelMap.put("introduced", computer.getIntroduced());
-		modelMap.put("discontinued", computer.getDiscontinued());
-		modelMap.put("company", computer.getCompany().getId());
-	}
-	
-	public Computer getComputerById(String id) {
-		
-		Computer computer = computerService.findById(Integer.parseInt(id));
-		
-		return computer;
+		modelMap.put("companyDTOList", companyDTOList);
+		modelMap.put("computerDTOId", computerDTO.getIdDTO());
+		modelMap.put("computerDTOName", computerDTO.getNameDTO());
+		modelMap.put("introducedDTO", computerDTO.getIntroducedDTO());
+		modelMap.put("discontinuedDTO", computerDTO.getDiscontinuedDTO());
+		modelMap.put("companyDTO", computerDTO.getCompanyDTO().getIdDTO());
 	}
 }

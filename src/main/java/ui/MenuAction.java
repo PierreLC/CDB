@@ -33,7 +33,7 @@ public class MenuAction {
 		System.out.println("Saisir la date de fin de production : (yyyy-MM-dd)");
 		computer.setDiscontinued(DateUtils.convertToLDT(sc.nextLine()));
 		System.out.println("Saisir l'id de la marque :");
-		Company company = companyDAO.findById(sc.nextInt());
+		Company company = companyDAO.getCompanyById(sc.nextInt());
 		if (company == null) {
 			System.out.println("La compagnie n'existe pas, rentrez le nom de la nouvelle compagnie :");
 			company = new Company.Builder().setName(sc.nextLine()).build();
@@ -46,7 +46,7 @@ public class MenuAction {
 
 	public void updateComputer() {
 		System.out.println("Saisir l'id de l'ordinateur à modifier :\n");
-		Computer computer = computerDAO.findById(sc.nextInt());
+		Computer computer = computerDAO.getComputerById(sc.nextInt());
 		System.out.println("Saisir le nouvel id :\n");
 		computer = new Computer.Builder().setId(sc.nextLong()).build();
 		System.out.println("Saisir le nouveau nom :\n");
@@ -63,7 +63,7 @@ public class MenuAction {
 
 	public void displayComputer() {
 		System.out.println("Rentrez l'id de l'ordinateur à afficher :\n");
-		System.out.println(computerDAO.findById(sc.nextInt()));
+		System.out.println(computerDAO.getComputerById(sc.nextInt()));
 	}
 
 	public void deleteComputer() {

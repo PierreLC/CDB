@@ -2,6 +2,7 @@ package controller;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -13,6 +14,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import dto.ComputerDTO;
+import mapper.ComputerMapper;
 import model.Computer;
 import services.ComputerService;
 import services.ControllerService;
@@ -38,22 +41,13 @@ public class Dashboard {
 								  ModelMap modelMap)
 			throws ServletException, IOException {
 
-		int offset  = (pageIterator - 1) * step;
 		int nbSearchedComputer = computerService.nbSearchedComputer(search);
 
-		List<Computer> computerListPag = controllerService.displayedListPag(columnName, pageIterator, step);
-		List<Computer> computerSearchedList = computerService.findByName(search, offset, step);
-		
-		setLastPage(search, step, nbSearchedComputer, modelMap);
 		setNbRows(modelMap);
-		
-		modelMap.put("search", search);
-		modelMap.put("orderBy", orderBy);
-		modelMap.put("nbSearchedComputer", nbSearchedComputer);
-		modelMap.put("computerSearchedList", computerSearchedList);
-		modelMap.put("pageIterator", pageIterator);
-		modelMap.put("step", step);
-		modelMap.put("computerListPag", computerListPag);
+		setLastPage(search, step, nbSearchedComputer, modelMap);
+		setComputerDTOListPag(columnName, pageIterator, step, modelMap);
+		setComputerDTOSearchedListPag(search, columnName, pageIterator, step, modelMap);
+		setView(modelMap, search, orderBy, nbSearchedComputer, pageIterator, step);
 		
 		return "dashboard";
 	}
@@ -91,9 +85,42 @@ public class Dashboard {
 		
 		try {
 			int nbRows = computerService.getNbRows();
+			
 			modelMap.put("nbRows", nbRows);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public void setComputerDTOListPag(String columnName, int pageIterator, int step, ModelMap modelMap) {
+		
+		List<Computer> computerListPag = controllerService.displayedListPag(columnName, pageIterator, step);
+		List<ComputerDTO> computerDTOListPag = new ArrayList<>();
+		computerListPag.stream().forEach(computer -> computerDTOListPag.add(ComputerMapper.computerToComputerDTO(computer)));
+		
+		System.out.println("ComputerDTOList :" + computerDTOListPag);
+		
+		modelMap.put("computerDTOListPag", computerDTOListPag);
+	}
+	public void setComputerDTOSearchedListPag(String search, String columnName, int pageIterator, int step, ModelMap modelMap) {
+		
+		int offset  = (pageIterator - 1) * step;
+		
+		List<Computer> computerSearchedList = computerService.getComputerByName(search, offset, step);
+		List<ComputerDTO> computerDTOSearchedList = new ArrayList<>();
+		computerSearchedList.stream().forEach(computer -> computerDTOSearchedList.add(ComputerMapper.computerToComputerDTO(computer)));
+		
+		System.out.println("ComputerDTOSearchedList :" + computerDTOSearchedList);
+		
+		modelMap.put("computerDTOSearchedList", computerDTOSearchedList);
+	}
+	
+	public void setView(ModelMap modelMap, String search, String orderBy, int nbSearchedComputer, int pageIterator, int step) {
+		
+		modelMap.put("search", search);
+		modelMap.put("orderBy", orderBy);
+		modelMap.put("nbSearchedComputer", nbSearchedComputer);
+		modelMap.put("pageIterator", pageIterator);
+		modelMap.put("step", step);
 	}
 }

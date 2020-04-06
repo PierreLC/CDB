@@ -30,11 +30,11 @@
 			<div class="row">
 				<div class="col-xs-8 col-xs-offset-2 box">
 					<div class="label label-default pull-right"><spring:message code="label.id"/>
-						${ computerId }</div>
+						${ computerDTOId }</div>
 					<h1><spring:message code="label.edit"/></h1>
 
 					<form action="editComputer" method="POST">
-						<input type="hidden" value="${ computerId }" id="computerId" name="computerId"/>
+						<input type="hidden" value="${ computerDTOId }" id="computerId" name="computerId"/>
 						
 						<!-- TODO: Change this value with the computer id -->
 						
@@ -43,33 +43,33 @@
 								<label for="computerName"><spring:message code="label.computerName"/></label> <input
 									type="text" class="form-control" id="computerName"
 									placeholder="Computer name" name="computerName"
-									value="${ computerName }">
+									value="${ computerDTOName }">
 							</div>
 							<div class="form-group">
 								<label for="introduced"><spring:message code="introducedDate"/></label> <input
 									type="date" class="form-control" id="introduced"
 									placeholder="Introduced date" name="introduced"
-									value="${ introduced }">
+									value="${ introducedDTO }">
 							</div>
 							<div class="form-group">
 								<label for="discontinued"><spring:message code="label.discontinuedDate"/></label> <input
 									type="date" class="form-control" id="discontinued"
 									placeholder="Discontinued date" name="discontinued"
-									value="${ discontinued }">
+									value="${ discontinuedDTO }">
 							</div>
 							<div class="form-group">
 								<label for="companyId"><spring:message code="label.company"/></label> <select
 									class="form-control" id="companyId" name="companyId">
 									<option value="0">--</option>
-									<c:forEach items="${ companyList }" var="company">
+									<c:forEach items="${ companyDTOList }" var="company">
 										<c:choose>
-											<c:when test="${ companyId == company.getId() }">
-												<option value="${ company.getId() }" selected><c:out
-														value="${ company.getName() }"/></option>
+											<c:when test="${ companyId == companyDTO.getIdDTO() }">
+												<option value="${ companyDTO.getIdDTO() }" selected><c:out
+														value="${ companyDTO.getNameDTO() }"/></option>
 											</c:when>
 											<c:otherwise>
-												<option value="${ company.getId() }"><c:out
-														value="${ company.getName() }"/></option>
+												<option value="${ companyDTO.getIdDTO() }"><c:out
+														value="${ companyDTO.getNameDTO() }"/></option>
 											</c:otherwise>
 										</c:choose>
 									</c:forEach>

@@ -35,11 +35,11 @@ public class ComputerService {
 		computerDAO.deleteComputer(id);
 	}
 	
-	public Computer findById(int id) {
-		return computerDAO.findById(id);
+	public Computer getComputerById(int id) {
+		return computerDAO.getComputerById(id);
 	}
-	public List<Computer> findByName(String search, int offset, int pageSize) {
-		return computerDAO.findByName(search, offset, pageSize);
+	public List<Computer> getComputerByName(String search, int offset, int pageSize) {
+		return computerDAO.getComputerByName(search, offset, pageSize);
 	}
 	
 	public void update(Computer computer) {

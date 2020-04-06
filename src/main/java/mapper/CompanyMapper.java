@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 
+import dto.CompanyDTO;
 import model.Company;
 
 @Component
@@ -20,5 +21,10 @@ public class CompanyMapper implements RowMapper<Company> {
 		company.setName(resultSet.getString("company.name"));
 		
 		return company;
+	}
+	
+	public static CompanyDTO companyToCompanyDTO(Company company) {
+		
+		return new CompanyDTO.Builder().setIdDTO(company.getId()).setNameDTO(company.getName()).build();
 	}
 }

@@ -37,7 +37,7 @@ public final class CompanyDAO {
 		return namedParameterJdbcTemplate.query(SQLRequest.LIST_COMPANY.getQuery(), this.companyMapper);
 	}
 
-	public Company findById(long id) {
+	public Company getCompanyById(long id) {
 		
 		SqlParameterSource namedParameter = new MapSqlParameterSource().addValue("company.id", id);
 		

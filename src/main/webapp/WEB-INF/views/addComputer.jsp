@@ -52,9 +52,9 @@
 								<label for="companyId"><spring:message code="label.company"/></label> <select
 									class="form-control" id="companyId" name="companyId">
 									<option value="0">--</option>
-									<c:forEach items="${ companyList }" var="company">
-										<option value="${ company.getId() }">
-											<c:out value="${ company.getName() }"/></option>
+									<c:forEach items="${ companyDTOList }" var="company">
+										<option value="${ companyDTO.getIdDTO() }">
+											<c:out value="${ companyDTO.getNameDTO() }"/></option>
 									</c:forEach>
 								</select>
 							</div>

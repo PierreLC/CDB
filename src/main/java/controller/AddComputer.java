@@ -2,6 +2,7 @@ package controller;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -12,6 +13,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import dto.CompanyDTO;
+import dto.ComputerDTO;
+import mapper.CompanyMapper;
+import mapper.ComputerMapper;
 import model.Company;
 import model.Computer;
 import services.CompanyService;
@@ -34,8 +39,7 @@ public class AddComputer {
 	protected void getAddComputer(ModelMap modelMap)
 			throws ServletException, IOException, SQLException {
 		
-			List<Company> companyList = companyService.list();
-			modelMap.put("companyList", companyList);
+		setCompanyDTOList(modelMap);
 	}
 	
 	@PostMapping("/addComputer")
@@ -52,14 +56,27 @@ public class AddComputer {
 	
 	public void addComputer(String companyId, String computerName, String introduced, String discontinued) throws SQLException {
 		
-		Company company = companyService.findById(Integer.parseInt(companyId));
+		CompanyDTO companyDTO = new CompanyDTO.Builder().setIdDTO(Integer.parseInt(companyId)).build();
 		
-		Computer computer = new Computer.Builder().setName(computerName)
-												  .setIntroducedDate(DateUtils.convertToLDT(introduced))
-												  .setDiscontinuedDate(DateUtils.convertToLDT(discontinued))
-												  .setCompany(company)
+		ComputerDTO computerDTO = new ComputerDTO.Builder().setNameDTO(computerName)
+												  .setIntroducedDTO(DateUtils.convertToLDT(introduced))
+												  .setDiscontinuedDTO(DateUtils.convertToLDT(discontinued))
+												  .setCompanyDTO(companyDTO)
 												  .build();
 		
+		Computer computer = ComputerMapper.computerDTOToComputer(computerDTO);
+		
 		computerService.add(computer);
+	}
+	
+	public void setCompanyDTOList(ModelMap modelMap) throws SQLException {
+		
+		List<Company> companyList = companyService.list();
+		List<CompanyDTO> companyDTOList = new ArrayList<>();
+		companyList.stream().forEach(company -> companyDTOList.add(CompanyMapper.companyToCompanyDTO(company)));
+		
+		System.out.println("AddComputer :" + companyDTOList);
+		
+		modelMap.put("companyDTOList", companyDTOList);
 	}
 }
