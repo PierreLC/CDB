@@ -98,8 +98,6 @@ public class Dashboard {
 		List<ComputerDTO> computerDTOListPag = new ArrayList<>();
 		computerListPag.stream().forEach(computer -> computerDTOListPag.add(ComputerMapper.computerToComputerDTO(computer)));
 		
-		System.out.println("ComputerDTOList :" + computerDTOListPag);
-		
 		modelMap.put("computerDTOListPag", computerDTOListPag);
 	}
 	public void setComputerDTOSearchedListPag(String search, String columnName, int pageIterator, int step, ModelMap modelMap) {
@@ -109,8 +107,6 @@ public class Dashboard {
 		List<Computer> computerSearchedList = computerService.getComputerByName(search, offset, step);
 		List<ComputerDTO> computerDTOSearchedList = new ArrayList<>();
 		computerSearchedList.stream().forEach(computer -> computerDTOSearchedList.add(ComputerMapper.computerToComputerDTO(computer)));
-		
-		System.out.println("ComputerDTOSearchedList :" + computerDTOSearchedList);
 		
 		modelMap.put("computerDTOSearchedList", computerDTOSearchedList);
 	}

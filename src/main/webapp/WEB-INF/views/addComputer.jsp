@@ -53,8 +53,8 @@
 									class="form-control" id="companyId" name="companyId">
 									<option value="0">--</option>
 									<c:forEach items="${ companyDTOList }" var="company">
-										<option value="${ companyDTO.getIdDTO() }">
-											<c:out value="${ companyDTO.getNameDTO() }"/></option>
+										<option value="${ company.getIdDTO() }">
+											<c:out value="${ company.getNameDTO() }"/></option>
 									</c:forEach>
 								</select>
 							</div>

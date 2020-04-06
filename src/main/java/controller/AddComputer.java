@@ -75,8 +75,6 @@ public class AddComputer {
 		List<CompanyDTO> companyDTOList = new ArrayList<>();
 		companyList.stream().forEach(company -> companyDTOList.add(CompanyMapper.companyToCompanyDTO(company)));
 		
-		System.out.println("AddComputer :" + companyDTOList);
-		
 		modelMap.put("companyDTOList", companyDTOList);
 	}
 }

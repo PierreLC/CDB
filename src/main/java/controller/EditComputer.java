@@ -43,8 +43,6 @@ public class EditComputer {
 			List<CompanyDTO> companyDTOList = new ArrayList<>();
 			companyList.stream().forEach(company -> companyDTOList.add(CompanyMapper.companyToCompanyDTO(company)));
 			
-			System.out.println("EditComputer :" + companyDTOList);
-			
 			Computer computer = computerService.getComputerById(Integer.parseInt(id));
 			ComputerDTO computerDTO = ComputerMapper.computerToComputerDTO(computer);
 			

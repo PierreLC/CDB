@@ -63,13 +63,13 @@
 									<option value="0">--</option>
 									<c:forEach items="${ companyDTOList }" var="company">
 										<c:choose>
-											<c:when test="${ companyId == companyDTO.getIdDTO() }">
-												<option value="${ companyDTO.getIdDTO() }" selected><c:out
-														value="${ companyDTO.getNameDTO() }"/></option>
+											<c:when test="${ companyId == company.getIdDTO() }">
+												<option value="${ company.getIdDTO() }" selected><c:out
+														value="${ company.getNameDTO() }"/></option>
 											</c:when>
 											<c:otherwise>
-												<option value="${ companyDTO.getIdDTO() }"><c:out
-														value="${ companyDTO.getNameDTO() }"/></option>
+												<option value="${ company.getIdDTO() }"><c:out
+														value="${ company.getNameDTO() }"/></option>
 											</c:otherwise>
 										</c:choose>
 									</c:forEach>

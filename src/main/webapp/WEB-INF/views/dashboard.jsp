@@ -127,12 +127,12 @@
 							<c:forEach items="${computerDTOSearchedList}" var="computer">
 								<tr>
 									<td class="editMode"><input type="checkbox" name="cb"
-										class="cb" value="${ computerDTO.getIdDTO() }"></td>
-									<td><a href="editComputer?id=${ computerDTO.getIdDTO() } "
-										onclick=""><c:out value="${ computerDTO.getNameDTO() }"/></a></td>
-									<td><c:out value="${ computerDTO.getIntroducedDTO() }"/></td>
-									<td><c:out value="${ computerDTO.getDiscontinuedDTO() }"/></td>
-									<td><c:out value="${ computerDTO.getCompanyDTO().getNameDTO() }"/></td>
+										class="cb" value="${ computer.getIdDTO() }"></td>
+									<td><a href="editComputer?id=${ computer.getIdDTO() } "
+										onclick=""><c:out value="${ computer.getNameDTO() }"/></a></td>
+									<td><c:out value="${ computer.getIntroducedDTO() }"/></td>
+									<td><c:out value="${ computer.getDiscontinuedDTO() }"/></td>
+									<td><c:out value="${ computer.getCompanyDTO().getNameDTO() }"/></td>
 								<tr>
 							</c:forEach>
 
@@ -141,12 +141,12 @@
 							<c:forEach items="${ computerDTOListPag }" var="computer">
 								<tr>
 									<td class="editMode"><input type="checkbox" name="cb"
-										class="cb" value="${computerDTO.getIdDTO()}"></td>
-									<td><a href="editComputer?id=${ computerDTO.getIdDTO() }"
-										onclick=""> <c:out value="${ computerDTO.getNameDTO() }"/></a></td>
-									<td><c:out value="${ computerDTO.getIntroducedDTO() }"/></td>
-									<td><c:out value="${ computerDTO.getDiscontinuedDTO() }"/></td>
-									<td><c:out value="${ computerDTO.getCompanyDTO().getNameDTO() }"/></td>
+										class="cb" value="${computer.getIdDTO()}"></td>
+									<td><a href="editComputer?id=${ computer.getIdDTO() }"
+										onclick=""> <c:out value="${ computer.getNameDTO() }"/></a></td>
+									<td><c:out value="${ computer.getIntroducedDTO() }"/></td>
+									<td><c:out value="${ computer.getDiscontinuedDTO() }"/></td>
+									<td><c:out value="${ computer.getCompanyDTO().getNameDTO() }"/></td>
 								</tr>
 							</c:forEach>
 						</c:otherwise>
