@@ -20,6 +20,7 @@ public final class ComputerDAO {
 	ComputerMapper computerMapper;
 	
 	private ComputerDAO(DataSource dataSource, ComputerMapper computerMapper) {
+		
 		this.namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
 		this.computerMapper = computerMapper;
 	}

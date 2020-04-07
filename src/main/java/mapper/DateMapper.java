@@ -1,12 +1,15 @@
-package utils;
+package mapper;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+import org.springframework.stereotype.Component;
+
 import com.mysql.cj.util.StringUtils;
 
-public class DateUtils {
-	
+@Component
+public class DateMapper {
+
 	public static LocalDateTime convertToLDT(String date) {
 		if (StringUtils.isNullOrEmpty(date)) {
 			return null;

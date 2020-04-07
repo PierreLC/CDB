@@ -2,6 +2,10 @@ package model;
 
 import java.time.LocalDateTime;
 
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 public class Computer {
 
 	private Long id;
@@ -100,14 +104,14 @@ public class Computer {
 
 	@Override
 	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((company == null) ? 0 : company.hashCode());
-		result = prime * result + ((discontinued == null) ? 0 : discontinued.hashCode());
-		result = prime * result + (int) (id ^ (id >>> 32));
-		result = prime * result + ((introduced == null) ? 0 : introduced.hashCode());
-		result = prime * result + ((name == null) ? 0 : name.hashCode());
-		return result;
+		
+		return new HashCodeBuilder()
+				.append(this.id)
+				.append(this.name)
+				.append(this.introduced)
+				.append(this.discontinued)
+				.append(this.company)
+				.toHashCode();
 	}
 
 	@Override
@@ -146,8 +150,8 @@ public class Computer {
 
 	@Override
 	public String toString() {
-		return "Computer [id=" + id + ", name=" + name + ", introduced=" + introduced + ", discontinued=" + discontinued
-				+ ", company=" + company + "]";
+
+		return ReflectionToStringBuilder.toString(this, ToStringStyle.JSON_STYLE);
 	}
 
 }

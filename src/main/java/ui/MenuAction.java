@@ -7,9 +7,9 @@ import org.springframework.stereotype.Component;
 
 import dao.CompanyDAO;
 import dao.ComputerDAO;
+import mapper.DateMapper;
 import model.Company;
 import model.Computer;
-import utils.DateUtils;
 
 @Component
 public class MenuAction {
@@ -29,9 +29,9 @@ public class MenuAction {
 		System.out.println("Saisir le nom de l'ordinateur :");
 		computer.setName(sc.nextLine());
 		System.out.println("Saisir la date de parution du modèle (yyyy-MM-dd):");
-		computer.setIntroduced(DateUtils.convertToLDT(sc.nextLine()));
+		computer.setIntroduced(DateMapper.convertToLDT(sc.nextLine()));
 		System.out.println("Saisir la date de fin de production : (yyyy-MM-dd)");
-		computer.setDiscontinued(DateUtils.convertToLDT(sc.nextLine()));
+		computer.setDiscontinued(DateMapper.convertToLDT(sc.nextLine()));
 		System.out.println("Saisir l'id de la marque :");
 		Company company = companyDAO.getCompanyById(sc.nextInt());
 		if (company == null) {
@@ -52,9 +52,9 @@ public class MenuAction {
 		System.out.println("Saisir le nouveau nom :\n");
 		computer.setName(sc.next());
 		System.out.println("Saisir la nouvelle date de parution du modele :\n");
-		computer.setIntroduced(DateUtils.convertToLDT(sc.next()));
+		computer.setIntroduced(DateMapper.convertToLDT(sc.next()));
 		System.out.println("Saisir la nouvelle date de fin de production :\n");
-		computer.setDiscontinued(DateUtils.convertToLDT(sc.next()));
+		computer.setDiscontinued(DateMapper.convertToLDT(sc.next()));
 		System.out.println("Saisir le nouvel id de la marque :\n");
 		Company company = new Company.Builder().setId(sc.nextLong()).build();
 		computer.setCompany(company);

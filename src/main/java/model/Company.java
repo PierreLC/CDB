@@ -1,5 +1,9 @@
 package model;
 
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 public class Company {
 
 	private Long id;
@@ -47,11 +51,11 @@ public class Company {
 
 	@Override
 	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = (int) (prime * result + id);
-		result = prime * result + ((name == null) ? 0 : name.hashCode());
-		return result;
+	
+		return new HashCodeBuilder()
+				.append(this.id)
+				.append(this.name)
+				.toHashCode();
 	}
 
 	@Override
@@ -75,11 +79,7 @@ public class Company {
 
 	@Override
 	public String toString() {
-		return "Company [id=" + id + ", name=" + name + "]";
-	}
-
-	public void getGeneratedId(long long1) {
 		
+		return ReflectionToStringBuilder.toString(this, ToStringStyle.JSON_STYLE);
 	}
-
 }

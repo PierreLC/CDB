@@ -16,22 +16,27 @@ public class CompanyService {
 	
 	@Autowired
 	public CompanyService(CompanyDAO companyDAO) {
+		
 		this.companyDAO = companyDAO;
 	}
 	
 	public void add(Company company) throws SQLException {
+		
 		companyDAO.add(company);
 	}
 	
 	public List<Company> list() throws SQLException{
+		
 		return companyDAO.list();
 	}
 	
 	public Company getCompanyById(int id) {
+		
 		return companyDAO.getCompanyById(id);
 	}
 	
 	public void deleteCompany(int id) throws SQLException {
+		
 		companyDAO.deleteCompany(id);
 	}
 }
