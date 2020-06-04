@@ -9,11 +9,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.ModelAndView;
 
 import services.AddComputerService;
 
 @Controller
+@RequestMapping(value = "/addComputer")
 public class AddComputer {
 	
 	private AddComputerService addComputerService;
@@ -23,22 +25,22 @@ public class AddComputer {
 		this.addComputerService = addComputerService;
 	}
 
-	@GetMapping("/addComputer")
+	@GetMapping
 	protected void getAddComputer(ModelMap modelMap)
 			throws ServletException, IOException, SQLException {
 		
-		addComputerService.setCompanyDTOList(modelMap);
+		ModelAndView modelAndView = new ModelAndView();
+		
+		addComputerService.setCompanyDTOList(modelAndView);
 	}
 	
-	@PostMapping("/addComputer")
-	protected String postDashboard(@RequestParam(value="computerName", required = false) String computerName,
-								   @RequestParam(value="introduced", required = false) String introduced,
-								   @RequestParam(value="discontinued", required = false) String discontinued,
-								   @RequestParam(value="companyId", required = false) String companyId)
+	@PostMapping
+	protected String postDashboard(ParamsControllers paramsControllers)
 			throws ServletException, IOException, SQLException {
 		
-		addComputerService.addComputer(companyId, computerName, introduced, discontinued);
+		addComputerService.addComputer(paramsControllers.getCompanyId(), paramsControllers.getComputerName(), paramsControllers.getDiscontinued(), paramsControllers.getIntroduced());
 
 		return "redirect:/dashboard";
 	}
 }
+

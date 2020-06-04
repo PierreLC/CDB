@@ -7,7 +7,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.ui.ModelMap;
+import org.springframework.web.servlet.ModelAndView;
 
 import dto.ComputerDTO;
 import mapper.ComputerMapper;
@@ -26,58 +26,57 @@ public class DashboardService {
 	
 	public List<Computer> displayedListPag(String columnName, int pageIterator, int step) {
 		
-		List<Computer> computerListPag;
 		int offset  = (pageIterator - 1) * step;
 		
 		switch (EnumDisplayedPage.displayedPage(columnName)) {
 		case COMPUTER_NAME:
-			return computerListPag = computerService.orderByName(offset, step);
+			return computerService.orderByName(offset, step);
 		case INTRODUCED:
-			return computerListPag = computerService.orderByIntroduced(offset, step);
+			return computerService.orderByIntroduced(offset, step);
 		case DISCONTINUED:
-			return computerListPag = computerService.orderByDiscontinued(offset, step);
+			return computerService.orderByDiscontinued(offset, step);
 		case COMPANY:
-			return computerListPag = computerService.orderByCompany(offset, step);
+			return computerService.orderByCompany(offset, step);
 		default:
-			return computerListPag = computerService.listPage(offset, step);
+			return computerService.listPage(offset, step);
 		}
 	}
 		
-	public void setLastPage(String search, int step, int nbSearchedComputer, ModelMap modelMap) {
+	public void setLastPage(String search, int step, int nbSearchedComputer, ModelAndView modelAndView) {
 		
 		List<Computer> computerList = computerService.list();
 		
 		if (search != null) {
 			int lastPage = (int) Math.ceil((double) nbSearchedComputer / step);
 			
-			modelMap.put("lastPage", lastPage);
+			modelAndView.addObject("lastPage", lastPage);
 		} else {
 			int lastPage = (int) Math.ceil((double) computerList.size() / step);
 			
-			modelMap.put("lastPage", lastPage);
+			modelAndView.addObject("lastPage", lastPage);
 		}
 	}
 	
-	public void setNbRows(ModelMap modelMap) {
+	public void setNbRows(ModelAndView modelAndView) {
 		
 		try {
 			int nbRows = computerService.getNbRows();
 			
-			modelMap.put("nbRows", nbRows);
+			modelAndView.addObject("nbRows", nbRows);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 	}
 	
-	public void setComputerDTOListPag(String columnName, int pageIterator, int step, ModelMap modelMap) {
+	public void setComputerDTOListPag(String columnName, int pageIterator, int step, ModelAndView modelAndView) {
 		
 		List<Computer> computerListPag = displayedListPag(columnName, pageIterator, step);
 		List<ComputerDTO> computerDTOListPag = new ArrayList<>();
 		computerListPag.stream().forEach(computer -> computerDTOListPag.add(ComputerMapper.computerToComputerDTO(computer)));
 		
-		modelMap.put("computerDTOListPag", computerDTOListPag);
+		modelAndView.addObject("computerDTOListPag", computerDTOListPag);
 	}
-	public void setComputerDTOSearchedListPag(String search, String columnName, int pageIterator, int step, ModelMap modelMap) {
+	public void setComputerDTOSearchedListPag(String search, String columnName, int pageIterator, int step, ModelAndView modelAndView) {
 		
 		int avoidBlankPage = 1;
 		int offset  = (pageIterator - avoidBlankPage) * step;
@@ -86,16 +85,16 @@ public class DashboardService {
 		List<ComputerDTO> computerDTOSearchedList = new ArrayList<>();
 		computerSearchedList.stream().forEach(computer -> computerDTOSearchedList.add(ComputerMapper.computerToComputerDTO(computer)));
 		
-		modelMap.put("computerDTOSearchedList", computerDTOSearchedList);
+		modelAndView.addObject("computerDTOSearchedList", computerDTOSearchedList);
 	}
 	
-	public void setView(ModelMap modelMap, String search, String orderBy, int nbSearchedComputer, int pageIterator, int step) {
+	public void setView(ModelAndView modelAndView, String search, String orderBy, int nbSearchedComputer, int pageIterator, int step) {
 		
-		modelMap.put("search", search);
-		modelMap.put("orderBy", orderBy);
-		modelMap.put("nbSearchedComputer", nbSearchedComputer);
-		modelMap.put("pageIterator", pageIterator);
-		modelMap.put("step", step);
+		modelAndView.addObject("search", search);
+		modelAndView.addObject("orderBy", orderBy);
+		modelAndView.addObject("nbSearchedComputer", nbSearchedComputer);
+		modelAndView.addObject("pageIterator", pageIterator);
+		modelAndView.addObject("step", step);
 	}
 	
 	public int getNbSearchedComputer(String search) {

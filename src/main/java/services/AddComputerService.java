@@ -6,7 +6,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.ui.ModelMap;
+import org.springframework.web.servlet.ModelAndView;
 
 import dto.CompanyDTO;
 import dto.ComputerDTO;
@@ -29,13 +29,13 @@ public class AddComputerService {
 		this.computerService = computerService;
 	}
 	
-	public void setCompanyDTOList(ModelMap modelMap) throws SQLException {
+	public void setCompanyDTOList(ModelAndView modelAndView) throws SQLException {
 		
 		List<Company> companyList = companyService.list();
 		List<CompanyDTO> companyDTOList = new ArrayList<>();
 		companyList.stream().forEach(company -> companyDTOList.add(CompanyMapper.companyToCompanyDTO(company)));
 		
-		modelMap.put("companyDTOList", companyDTOList);
+		modelAndView.addObject("companyDTOList", companyDTOList);
 	}
 	
 	public void addComputer(String companyId, String computerName, String introduced, String discontinued) throws SQLException {

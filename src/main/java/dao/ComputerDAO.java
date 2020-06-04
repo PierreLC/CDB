@@ -2,8 +2,7 @@ package dao;
 
 import java.sql.SQLException;
 import java.util.List;
-
-import javax.sql.DataSource;
+import java.util.Optional;
 
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -17,11 +16,12 @@ import model.Computer;
 public final class ComputerDAO {
 
 	private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
-	ComputerMapper computerMapper;
+	private ComputerMapper computerMapper;
+
 	
-	private ComputerDAO(DataSource dataSource, ComputerMapper computerMapper) {
+	private ComputerDAO(NamedParameterJdbcTemplate namedParameterJdbcTemplate, ComputerMapper computerMapper) {
 		
-		this.namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
+		this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
 		this.computerMapper = computerMapper;
 	}
 
@@ -55,13 +55,13 @@ public final class ComputerDAO {
 		namedParameterJdbcTemplate.update(SQLRequest.DELETE.getQuery(), namedParameter);
 	}
 
-	public Computer getComputerById(int id) {
+	public Optional<Computer> getComputerById(int id) {
 		
 		SqlParameterSource namedParameter = new MapSqlParameterSource().addValue("computer.id", id);
 		
 		Computer computer = namedParameterJdbcTemplate.queryForObject(SQLRequest.FIND_BY_ID.getQuery(), namedParameter, this.computerMapper);
 
-		return computer;
+		return Optional.of(computer);
 	}
 
 	public List<Computer> getComputerByName(String search, int offset, int step) {
@@ -121,8 +121,7 @@ public final class ComputerDAO {
 		SqlParameterSource namedParameter = new MapSqlParameterSource().addValue("offset", offset)
 				                                                       .addValue("step", step);
 
-		return namedParameterJdbcTemplate.query(OrderByRequest.ORDER_BY_DISCONTINUED.getQuery(), namedParameter,
-				this.computerMapper);
+		return namedParameterJdbcTemplate.query(OrderByRequest.ORDER_BY_DISCONTINUED.getQuery(), namedParameter, this.computerMapper);
 	}
 
 	public List<Computer> orderByCompany(int offset, int step) {

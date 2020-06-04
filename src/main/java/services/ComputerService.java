@@ -2,6 +2,7 @@ package services;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -40,10 +41,11 @@ public class ComputerService {
 		computerDAO.deleteComputer(id);
 	}
 	
-	public Computer getComputerById(int id) {
+	public Optional<Computer> getComputerById(int id) {
 		
 		return computerDAO.getComputerById(id);
 	}
+	
 	public List<Computer> getComputerByName(String search, int offset, int pageSize) {
 		
 		return computerDAO.getComputerByName(search, offset, pageSize);

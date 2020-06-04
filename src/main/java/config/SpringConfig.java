@@ -10,13 +10,14 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.web.WebApplicationInitializer;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 import org.springframework.web.servlet.DispatcherServlet;
 
 @Configuration
-@ComponentScan(basePackages = {"dao", "services", "controller", "ui", "model", "mapper", "dto", "exceptions", "utils"})
+@ComponentScan(basePackages = {"dao", "services", "controller", "ui", "model", "mapper", "dto", "exceptions"})
 @PropertySource(value = "classpath:application.properties")
 public class SpringConfig implements WebApplicationInitializer {
 	
@@ -34,7 +35,15 @@ public class SpringConfig implements WebApplicationInitializer {
 		
 		return dataSource;
 	}
-
+	
+	@Bean 
+	public NamedParameterJdbcTemplate namedParameterJdbcTemplate(DataSource dataSource) {
+		
+		NamedParameterJdbcTemplate namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
+		
+		return namedParameterJdbcTemplate;
+	}
+	
 	@Override
 	public void onStartup(ServletContext servletContext) {
 		

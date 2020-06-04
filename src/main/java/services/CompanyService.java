@@ -2,6 +2,7 @@ package services;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,7 +31,7 @@ public class CompanyService {
 		return companyDAO.list();
 	}
 	
-	public Company getCompanyById(int id) {
+	public Optional<Company> getCompanyById(int id) {
 		
 		return companyDAO.getCompanyById(id);
 	}

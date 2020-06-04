@@ -3,20 +3,22 @@ package controller;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Optional;
 
 import javax.servlet.ServletException;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.ModelAndView;
 
 import dto.CompanyDTO;
 import dto.ComputerDTO;
 import services.EditComputerService;
 
 @Controller
+@RequestMapping(value = "/editComputer")
 public class EditComputer {
 	
 	private EditComputerService editComputerService;
@@ -26,28 +28,28 @@ public class EditComputer {
 		this.editComputerService = editComputerService;
 	}
 	
-	@GetMapping("/editComputer")
-	protected void getUpdate(@RequestParam(value="id", required = false) String id,
-						     ModelMap modelMap) 
+	@GetMapping
+	protected void getUpdate(ParamsControllers paramsControllers) 
 		throws ServletException, IOException, SQLException {
 		
+		ModelAndView modelAndView = new ModelAndView();
+		
 		List<CompanyDTO> companyDTOList = editComputerService.getCompanyDTOList();
-		ComputerDTO computerDTO = editComputerService.getComputerDTO(Integer.parseInt(id));
+		Optional<ComputerDTO> computerDTO = editComputerService.getComputerDTO(Integer.parseInt(paramsControllers.getId()));
 			
-		editComputerService.setView(modelMap, computerDTO, companyDTOList);
+		if(computerDTO.isPresent()) {
+			editComputerService.setView(modelAndView, computerDTO.get(), companyDTOList);
+		}
 	}
 	
-	@PostMapping("/editComputer")
-	protected String postUpdate(@RequestParam(value="computerId", required = false) String id,
-								@RequestParam(value="computerName", required = false) String computerName,
-						        @RequestParam(value="introduced", required = false) String introduced,
-						        @RequestParam(value="discontinued", required = false) String discontinued,
-						        @RequestParam(value="companyId", required = false) String companyId,
-						        ModelMap modelMap)
+	@PostMapping
+	protected ModelAndView postUpdate(ParamsControllers paramsControllers)
 	throws ServletException, IOException{
 		
-		editComputerService.updateComputer(companyId, computerName, introduced, discontinued, id);
+		ModelAndView modelAndView = new ModelAndView("redirect:/dashboard");
 		
-		return "redirect:/dashboard";
+		editComputerService.updateComputer(paramsControllers.getCompanyId(), paramsControllers.getComputerName(), paramsControllers.getIntroduced(), paramsControllers.getDiscontinued(), paramsControllers.getId());
+		
+		return modelAndView;
 	}
 }

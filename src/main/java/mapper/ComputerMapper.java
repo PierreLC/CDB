@@ -55,7 +55,7 @@ public class ComputerMapper implements RowMapper<Computer> {
 							 							   .setDiscontinuedDTO(computer.getDiscontinued())
 							 							   .setCompanyDTO(companyDTO)
 							 							   .build();
-		
+			
 		return computerDTO;
 	}
 	

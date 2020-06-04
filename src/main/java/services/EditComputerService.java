@@ -3,10 +3,11 @@ package services;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.ui.ModelMap;
+import org.springframework.web.servlet.ModelAndView;
 
 import dto.CompanyDTO;
 import dto.ComputerDTO;
@@ -46,20 +47,20 @@ public class EditComputerService {
 		computerService.update(computer);
 	}
 	
-	public void setView(ModelMap modelMap, ComputerDTO computerDTO, List<CompanyDTO> companyDTOList) {
+	public void setView(ModelAndView modelAndView, ComputerDTO computerDTO, List<CompanyDTO> companyDTOList) {
 		
-		modelMap.put("companyDTOList", companyDTOList);
-		modelMap.put("computerDTOId", computerDTO.getIdDTO());
-		modelMap.put("computerDTOName", computerDTO.getNameDTO());
-		modelMap.put("introducedDTO", computerDTO.getIntroducedDTO());
-		modelMap.put("discontinuedDTO", computerDTO.getDiscontinuedDTO());
-		modelMap.put("companyDTO", computerDTO.getCompanyDTO().getIdDTO());
+		modelAndView.addObject("companyDTOList", companyDTOList);
+		modelAndView.addObject("computerDTOId", computerDTO.getIdDTO());
+		modelAndView.addObject("computerDTOName", computerDTO.getNameDTO());
+		modelAndView.addObject("introducedDTO", computerDTO.getIntroducedDTO());
+		modelAndView.addObject("discontinuedDTO", computerDTO.getDiscontinuedDTO());
+		modelAndView.addObject("companyDTO", computerDTO.getCompanyDTO().getIdDTO());
 	}
 	
-	public ComputerDTO getComputerDTO(int id) {
+	public Optional<ComputerDTO> getComputerDTO(int id) {
 		
-		Computer computer = computerService.getComputerById(id);
-		ComputerDTO computerDTO = ComputerMapper.computerToComputerDTO(computer);
+		Optional<Computer> computer = computerService.getComputerById(id);
+		Optional<ComputerDTO> computerDTO = computer.map(ComputerMapper::computerToComputerDTO);
 		
 		return computerDTO;
 	}
