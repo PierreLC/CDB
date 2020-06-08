@@ -46,7 +46,7 @@ public class ComputerService {
 		return computerDAO.getComputerById(id);
 	}
 	
-	public List<Computer> getComputerByName(String search, int offset, int pageSize) {
+	public List<Computer> getComputerByName(String search, int offset, String pageSize) {
 		
 		return computerDAO.getComputerByName(search, offset, pageSize);
 	}

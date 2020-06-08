@@ -32,6 +32,8 @@ public class EditComputerService {
 	
 	public void updateComputer(String companyId, String computerName, String introduced, String discontinued, String id) {
 		
+		System.out.println(id);
+		
 		CompanyDTO companyDTO = new CompanyDTO.Builder().build();
 		companyDTO.setIdDTO(Integer.parseInt(companyId));
 		

@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.ModelAndView;
 
+import controller.ParamsControllers;
 import dto.ComputerDTO;
 import mapper.ComputerMapper;
 import model.Computer;
@@ -17,97 +18,130 @@ import model.Computer;
 public class DashboardService {
 
 	private ComputerService computerService;
-	
+
 	@Autowired
 	public DashboardService(ComputerService computerService) {
-		
+
 		this.computerService = computerService;
 	}
-	
-	public List<Computer> displayedListPag(String columnName, int pageIterator, int step) {
+
+	public List<Computer> displayedListPag(ParamsControllers paramsControllers) {
+
+		List<Computer> listComputerPag;
 		
-		int offset  = (pageIterator - 1) * step;
+		String step = "10";
 		
-		switch (EnumDisplayedPage.displayedPage(columnName)) {
+		int offsetLimit = 1;
+		
+		System.out.println(step);
+		System.out.println(paramsControllers.getPageIterator());
+		
+		int offset = (Integer.parseInt(paramsControllers.getPageIterator()) - offsetLimit) * Integer.parseInt(step);
+
+		switch (EnumDisplayedPage.displayedPage(paramsControllers.getColumnName())) {
 		case COMPUTER_NAME:
-			return computerService.orderByName(offset, step);
+			listComputerPag = computerService.orderByName(offset, Integer.parseInt(paramsControllers.getStep()));
+			return listComputerPag;
 		case INTRODUCED:
-			return computerService.orderByIntroduced(offset, step);
+			listComputerPag = computerService.orderByIntroduced(offset, Integer.parseInt(paramsControllers.getStep()));
+			return listComputerPag;
 		case DISCONTINUED:
-			return computerService.orderByDiscontinued(offset, step);
+			listComputerPag = computerService.orderByDiscontinued(offset, Integer.parseInt(paramsControllers.getStep()));
+			return listComputerPag;
 		case COMPANY:
-			return computerService.orderByCompany(offset, step);
+			listComputerPag = computerService.orderByCompany(offset, Integer.parseInt(paramsControllers.getStep()));
+			return listComputerPag;
 		default:
-			return computerService.listPage(offset, step);
+			listComputerPag = computerService.listPage(offset, Integer.parseInt(paramsControllers.getStep()));
+			return listComputerPag;
 		}
 	}
-		
-	public void setLastPage(String search, int step, int nbSearchedComputer, ModelAndView modelAndView) {
-		
+
+	public void setLastPage(ParamsControllers paramsControllers, int nbSearchedComputer, ModelAndView modelAndView) {
+
 		List<Computer> computerList = computerService.list();
-		
-		if (search != null) {
-			int lastPage = (int) Math.ceil((double) nbSearchedComputer / step);
-			
-			modelAndView.addObject("lastPage", lastPage);
-		} else {
-			int lastPage = (int) Math.ceil((double) computerList.size() / step);
-			
-			modelAndView.addObject("lastPage", lastPage);
+
+		if (paramsControllers.getStep() != null) {
+			if (paramsControllers.getSearch() != null) {
+				int lastPage = (int) Math.ceil((double) nbSearchedComputer / Integer.parseInt(paramsControllers.getStep()));
+
+				modelAndView.addObject("lastPage", lastPage);
+			} else {
+
+				int lastPage = (int) Math.ceil(computerList.size() / Integer.parseInt(paramsControllers.getStep()));
+
+				modelAndView.addObject("lastPage", lastPage);
+			}
+		} else {	
+			String step = "10";
+			if (paramsControllers.getSearch() != null) {
+				int lastPage = (int) Math.ceil((double) nbSearchedComputer / Integer.parseInt(step));
+
+				modelAndView.addObject("lastPage", lastPage);
+			} else {
+
+				double lastPage = Math.ceil(computerList.size() / Integer.parseInt(step));
+
+				modelAndView.addObject("lastPage", lastPage);
+			}
+
 		}
 	}
-	
+
 	public void setNbRows(ModelAndView modelAndView) {
-		
+
 		try {
 			int nbRows = computerService.getNbRows();
-			
+
 			modelAndView.addObject("nbRows", nbRows);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 	}
+
+	public void setComputerDTOListPag(ParamsControllers paramsControllers, ModelAndView modelAndView) {
 	
-	public void setComputerDTOListPag(String columnName, int pageIterator, int step, ModelAndView modelAndView) {
-		
-		List<Computer> computerListPag = displayedListPag(columnName, pageIterator, step);
+		List<Computer> computerListPag = displayedListPag(paramsControllers);
 		List<ComputerDTO> computerDTOListPag = new ArrayList<>();
-		computerListPag.stream().forEach(computer -> computerDTOListPag.add(ComputerMapper.computerToComputerDTO(computer)));
-		
+		computerListPag.stream()
+				.forEach(computer -> computerDTOListPag.add(ComputerMapper.computerToComputerDTO(computer)));
+
 		modelAndView.addObject("computerDTOListPag", computerDTOListPag);
 	}
-	public void setComputerDTOSearchedListPag(String search, String columnName, int pageIterator, int step, ModelAndView modelAndView) {
-		
+
+	public void setComputerDTOSearchedListPag(ParamsControllers paramsControllers, ModelAndView modelAndView) {
+
 		int avoidBlankPage = 1;
-		int offset  = (pageIterator - avoidBlankPage) * step;
-		
-		List<Computer> computerSearchedList = computerService.getComputerByName(search, offset, step);
+		int offset = (Integer.parseInt(paramsControllers.getPageIterator()) - avoidBlankPage) * Integer.parseInt(paramsControllers.getStep());
+
+		List<Computer> computerSearchedList = computerService.getComputerByName(paramsControllers.getSearch(), offset, paramsControllers.getStep());
 		List<ComputerDTO> computerDTOSearchedList = new ArrayList<>();
-		computerSearchedList.stream().forEach(computer -> computerDTOSearchedList.add(ComputerMapper.computerToComputerDTO(computer)));
-		
+		computerSearchedList.stream()
+				.forEach(computer -> computerDTOSearchedList.add(ComputerMapper.computerToComputerDTO(computer)));
+
 		modelAndView.addObject("computerDTOSearchedList", computerDTOSearchedList);
 	}
-	
-	public void setView(ModelAndView modelAndView, String search, String orderBy, int nbSearchedComputer, int pageIterator, int step) {
-		
-		modelAndView.addObject("search", search);
-		modelAndView.addObject("orderBy", orderBy);
+
+	public void setView(ModelAndView modelAndView, ParamsControllers paramsControllers, int nbSearchedComputer) {
+
+		modelAndView.addObject("search", paramsControllers.getSearch());
+		modelAndView.addObject("orderBy", paramsControllers.getOrderBy());
 		modelAndView.addObject("nbSearchedComputer", nbSearchedComputer);
-		modelAndView.addObject("pageIterator", pageIterator);
-		modelAndView.addObject("step", step);
+		modelAndView.addObject("pageIterator", paramsControllers.getPageIterator());
+		modelAndView.addObject("step", paramsControllers.getStep());
 	}
-	
+
 	public int getNbSearchedComputer(String search) {
-		
+
 		int nbSearchedComputer = computerService.nbSearchedComputer(search);
-		
+
 		return nbSearchedComputer;
 	}
-	
+
 	public void deleteComputerSelection(String computerSelection) {
-		
+
 		List<String> computerToDelete = Arrays.asList(computerSelection.split(","));
-		
+
 		for (String computer : computerToDelete) {
 			computerService.delete(Integer.parseInt(computer));
 		}

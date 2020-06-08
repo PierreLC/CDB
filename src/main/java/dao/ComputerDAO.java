@@ -64,11 +64,11 @@ public final class ComputerDAO {
 		return Optional.of(computer);
 	}
 
-	public List<Computer> getComputerByName(String search, int offset, int step) {
+	public List<Computer> getComputerByName(String search, int offset, String pageSize) {
 
 		SqlParameterSource namedParameter = new MapSqlParameterSource().addValue("search", '%' + search + '%')
 																	   .addValue("offset", offset)
-																	   .addValue("step", step);
+																	   .addValue("step", pageSize);
 
 		List<Computer> computer = namedParameterJdbcTemplate.query(SQLRequest.FIND_BY_NAME.getQuery(), namedParameter, this.computerMapper);
 

@@ -6,7 +6,6 @@ import java.sql.SQLException;
 import javax.servlet.ServletException;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,12 +25,14 @@ public class AddComputer {
 	}
 
 	@GetMapping
-	protected void getAddComputer(ModelMap modelMap)
+	protected ModelAndView getAddComputer()
 			throws ServletException, IOException, SQLException {
 		
 		ModelAndView modelAndView = new ModelAndView();
 		
 		addComputerService.setCompanyDTOList(modelAndView);
+		
+		return modelAndView;
 	}
 	
 	@PostMapping

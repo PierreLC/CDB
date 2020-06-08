@@ -4,8 +4,8 @@ public class ParamsControllers {
 	private String search;
 	private String orderBy;
 	private String columnName;
-	private int pageIterator;
-	private int step;
+	private String pageIterator;
+	private String step;
 	private String computerSelection;
 	private String computerName;
 	private String introduced;
@@ -13,7 +13,7 @@ public class ParamsControllers {
 	private String companyId;
 	private String id;
 
-	public ParamsControllers(String search, String orderBy, String columnName, int pageIterator, int step, String computerSelection,
+	public ParamsControllers(String search, String orderBy, String columnName, String pageIterator, String step, String computerSelection,
 			               String computerName, String introduced, String discontinued, String companyId, String id) {
 		
 		this.search = search;
@@ -53,19 +53,19 @@ public class ParamsControllers {
 		this.columnName = columnName;
 	}
 
-	public int getPageIterator() {
+	public String getPageIterator() {
 		return pageIterator;
 	}
 
-	public void setPageIterator(int pageIterator) {
+	public void setPageIterator(String pageIterator) {
 		this.pageIterator = pageIterator;
 	}
 
-	public int getStep() {
+	public String getStep() {
 		return step;
 	}
 
-	public void setStep(int step) {
+	public void setStep(String step) {
 		this.step = step;
 	}
 	
