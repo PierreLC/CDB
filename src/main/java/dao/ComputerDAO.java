@@ -64,7 +64,7 @@ public final class ComputerDAO {
 		return Optional.of(computer);
 	}
 
-	public List<Computer> getComputerByName(String search, int offset, String pageSize) {
+	public List<Computer> getComputerByName(String search, int offset, int pageSize) {
 
 		SqlParameterSource namedParameter = new MapSqlParameterSource().addValue("search", '%' + search + '%')
 																	   .addValue("offset", offset)

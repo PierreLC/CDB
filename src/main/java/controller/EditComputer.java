@@ -36,9 +36,6 @@ public class EditComputer {
 		
 		List<CompanyDTO> companyDTOList = editComputerService.getCompanyDTOList();
 		Optional<ComputerDTO> computerDTO = editComputerService.getComputerDTO(Integer.parseInt(paramsControllers.getId()));
-			
-		System.out.println(paramsControllers.getId());
-		System.out.println(computerDTO);
 		
 		if(computerDTO.isPresent()) {
 			editComputerService.setView(modelAndView, computerDTO.get(), companyDTOList);
@@ -52,9 +49,6 @@ public class EditComputer {
 	throws ServletException, IOException{
 		
 		ModelAndView modelAndView = new ModelAndView("redirect:/dashboard");
-		
-		System.out.println(paramsControllers.getId());
-		System.out.println(paramsControllers.getComputerName());
 		
 		editComputerService.updateComputer(paramsControllers.getCompanyId(), paramsControllers.getComputerName(), paramsControllers.getIntroduced(), paramsControllers.getDiscontinued(), paramsControllers.getId());
 		
