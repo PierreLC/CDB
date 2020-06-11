@@ -18,6 +18,7 @@
 		<my-sql-connector-java-version>8.0.19</my-sql-connector-java-version>
 		<log4j-api-version>2.13.0</log4j-api-version>
 		<log4j-core-version>2.13.0</log4j-core-version>
+		<org-apache-commons>3.10</org-apache-commons>
 		<log4j-slf4j-impl-version>2.13.0</log4j-slf4j-impl-version>
 		<slf4j-api-version>1.7.30</slf4j-api-version>
 		<slf4j-log4j12-version>1.7.30</slf4j-log4j12-version>
@@ -54,6 +55,12 @@
 			<groupId>org.apache.logging.log4j</groupId>
 			<artifactId>log4j-slf4j-impl</artifactId>
 			<version>${log4j-slf4j-impl-version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+			<version>${org-apache-commons}</version>
 		</dependency>
 
 		<dependency>
