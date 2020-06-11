@@ -34,8 +34,8 @@ public class Paginate {
 	public void paginate(ParamsControllers paramsControllers, ModelAndView modelAndView) {
 
 		setParameters(paramsControllers);
-		displayedPag();
 		setComputerDTOList();
+		System.out.println("affichage computerDTOList dans paginate : " + computerDTOList);
 		setComputerDTOSearchedList(); 
 		setLastPage();
 		setView(modelAndView);
@@ -106,7 +106,7 @@ public class Paginate {
 		case INTRODUCED:
 			
 			listComputerPag = computerService.orderByIntroduced(getOffset(), step);
-			
+
 			return listComputerPag;
 			
 		case DISCONTINUED:
@@ -131,6 +131,7 @@ public class Paginate {
 	
 	public void setComputerDTOSearchedList() {
 
+		computerDTOSearchedList.clear();
 		List<Computer> computerSearchedList = computerService.getComputerByName(search, getOffset(), step);
 
 		computerSearchedList.stream()
@@ -139,7 +140,9 @@ public class Paginate {
 	
 	public void setComputerDTOList() {
 		
+		computerDTOList.clear();
 		List<Computer> computerList = displayedPag();
+
 		computerList.stream()
 				.forEach(computer -> computerDTOList.add(ComputerMapper.computerToComputerDTO(computer)));
 	}

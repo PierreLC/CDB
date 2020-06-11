@@ -15,7 +15,7 @@ import mapper.Paginate;
 public class DashboardService {
 
 	private ComputerService computerService;
-	private static Paginate page;
+	private Paginate page;
 
 	@Autowired
 	public DashboardService(ComputerService computerService, Paginate page) {
@@ -36,7 +36,7 @@ public class DashboardService {
 	}
 
 	
-	public static void setPage(ParamsControllers paramsControllers, ModelAndView modelAndView) {
+	public void setPage(ParamsControllers paramsControllers, ModelAndView modelAndView) {
 		
 		page.paginate(paramsControllers, modelAndView);
 	}

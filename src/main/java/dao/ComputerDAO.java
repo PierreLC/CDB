@@ -89,7 +89,7 @@ public final class ComputerDAO {
 																	   .addValue("introduced", computer.getIntroduced())
 																	   .addValue("discontinued", computer.getDiscontinued())
 																	   .addValue("company.id", computer.getCompany().getId());
-
+		
 		namedParameterJdbcTemplate.update(SQLRequest.UPDATE.getQuery(), namedParameter);
 	}
 

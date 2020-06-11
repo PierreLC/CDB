@@ -2,7 +2,6 @@ package controller;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.List;
 import java.util.Optional;
 
 import javax.servlet.ServletException;
@@ -13,7 +12,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import dto.CompanyDTO;
 import dto.ComputerDTO;
 import services.EditComputerService;
 
@@ -32,13 +30,13 @@ public class EditComputer {
 	protected ModelAndView getUpdate(ParamsControllers paramsControllers) 
 		throws ServletException, IOException, SQLException {
 		
+
 		ModelAndView modelAndView = new ModelAndView();
 		
-		List<CompanyDTO> companyDTOList = editComputerService.getCompanyDTOList();
-		Optional<ComputerDTO> computerDTO = editComputerService.getComputerDTO(Integer.parseInt(paramsControllers.getId()));
+		Optional<ComputerDTO> computerDTO = editComputerService.getComputerDTO(paramsControllers);
 		
 		if(computerDTO.isPresent()) {
-			editComputerService.setView(modelAndView, computerDTO.get(), companyDTOList);
+			editComputerService.setView(modelAndView, computerDTO.get());
 		}
 		
 		return modelAndView;
@@ -50,7 +48,7 @@ public class EditComputer {
 		
 		ModelAndView modelAndView = new ModelAndView("redirect:/dashboard");
 		
-		editComputerService.updateComputer(paramsControllers.getCompanyId(), paramsControllers.getComputerName(), paramsControllers.getIntroduced(), paramsControllers.getDiscontinued(), paramsControllers.getId());
+		editComputerService.updateComputer(paramsControllers);
 		
 		return modelAndView;
 	}

@@ -41,8 +41,8 @@
 					</h1>
 
 					<form action="editComputer" method="POST">
-						<input type="hidden" value="${ computerDTO }" id="computerId"
-							name="computerId" />
+						<input type="hidden" value="${ computerDTOId }" id="computerId"
+							name="id" />
 
 						<!-- TODO: Change this value with the computer id -->
 

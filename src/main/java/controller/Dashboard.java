@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import mapper.Paginate;
 import services.DashboardService;
 
 @Controller
@@ -19,7 +18,7 @@ public class Dashboard {
 	
 	private DashboardService dashboardService;
 
-	public Dashboard(DashboardService dashboardService, Paginate paginate) {
+	public Dashboard(DashboardService dashboardService) {
 
 		this.dashboardService = dashboardService;
 	}
@@ -31,7 +30,7 @@ public class Dashboard {
 		ModelAndView modelAndView = new ModelAndView("dashboard");
 
 		dashboardService.setNbRows(modelAndView);
-		DashboardService.setPage(paramsControllers, modelAndView);
+		dashboardService.setPage(paramsControllers, modelAndView);
 		
 		return modelAndView;
 	}
@@ -42,6 +41,7 @@ public class Dashboard {
 
 		ModelAndView modelAndView = new ModelAndView("redirect:/dashboard");
 		
+		//Faire un méthode pour valider la valeur de la selection
 		dashboardService.deleteComputerSelection(paramsControllers.getComputerSelection());
 
 		return modelAndView;
