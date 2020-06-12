@@ -30,6 +30,8 @@
 		<taglibs-standard-impl-version>1.2.5</taglibs-standard-impl-version>
 		<HikariCP-version>2.6.1</HikariCP-version>
 		<spring-version>5.2.4.RELEASE</spring-version>
+		<hibernate-version>5.4.17.Final</hibernate-version>
+		<jpa-version>2.3.1.RELEASE</jpa-version>
 	</properties>
 
 
@@ -147,5 +149,29 @@
 			<version>${spring-version}</version>
 		</dependency>
 
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-orm</artifactId>
+			<version>${spring-version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.data</groupId>
+			<artifactId>spring-data-jpa</artifactId>
+			<version>${jpa-version}</version>
+		</dependency>
+
+		<!-- Hibernate -->
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-core</artifactId>
+			<version>${hibernate-version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-entitymanager</artifactId>
+			<version>${hibernate-version}</version>
+		</dependency>
 	</dependencies>
 </project>

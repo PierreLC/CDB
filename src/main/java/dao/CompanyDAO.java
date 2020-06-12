@@ -14,7 +14,7 @@ import mapper.CompanyMapper;
 import model.Company;
 
 @Repository
-public final class CompanyDAO {
+public class CompanyDAO {
 
 	private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 	private CompanyMapper companyMapper;

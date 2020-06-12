@@ -13,7 +13,7 @@ import mapper.ComputerMapper;
 import model.Computer;
 
 @Repository
-public final class ComputerDAO {
+public class ComputerDAO {
 
 	private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 	private ComputerMapper computerMapper;
