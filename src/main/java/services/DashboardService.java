@@ -27,7 +27,7 @@ public class DashboardService {
 	public void setNbRows(ModelAndView modelAndView) {
 
 		try {
-			int nbRows = computerService.getNbRows();
+			long nbRows = computerService.getNbRows();
 
 			modelAndView.addObject("nbRows", nbRows);
 		} catch (SQLException e) {

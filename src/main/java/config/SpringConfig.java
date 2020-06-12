@@ -1,5 +1,7 @@
 package config;
 
+import java.util.Properties;
+
 import javax.servlet.ServletContext;
 import javax.servlet.ServletRegistration;
 import javax.sql.DataSource;
@@ -10,10 +12,13 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
+import org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
-import org.springframework.orm.hibernate5.HibernateTransactionManager;
-import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
+import org.springframework.orm.jpa.JpaTransactionManager;
+import org.springframework.orm.jpa.JpaVendorAdapter;
+import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
+import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.WebApplicationInitializer;
@@ -21,7 +26,8 @@ import org.springframework.web.context.support.AnnotationConfigWebApplicationCon
 import org.springframework.web.servlet.DispatcherServlet;
 
 @Configuration
-@ComponentScan(basePackages = {"dao", "services", "controller", "ui", "model", "mapper", "dto", "exceptions", "config"})
+@ComponentScan(basePackages = { "dao", "services", "controller", "ui", "model", "mapper", "dto", "exceptions",
+		"config" })
 @PropertySource(value = "classpath:application.properties")
 @EnableJpaRepositories("Repository")
 @EnableTransactionManagement
@@ -29,27 +35,27 @@ public class SpringConfig implements WebApplicationInitializer {
 
 	@Autowired
 	private Environment environment;
-	
+
 	@Override
 	public void onStartup(ServletContext servletContext) {
-		
+
 		AnnotationConfigWebApplicationContext webContext = new AnnotationConfigWebApplicationContext();
 		webContext.register(SpringConfig.class, MvcConfig.class);
 		webContext.setServletContext(servletContext);
-		ServletRegistration.Dynamic servlet = servletContext.addServlet("dynamicServlet", new DispatcherServlet(webContext));
+		ServletRegistration.Dynamic servlet = servletContext.addServlet("dynamicServlet",
+				new DispatcherServlet(webContext));
 		servlet.setLoadOnStartup(1);
 		servlet.addMapping("/");
 	}
-	
-	@Bean
-	public LocalSessionFactoryBean sessionFactory() {
 
-		LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
-		sessionFactory.setDataSource(dataSource());
-		sessionFactory.setPackagesToScan("model");
-
-		return sessionFactory;
-	}
+//	@Bean
+//	public LocalSessionFactoryBean sessionFactory() {
+//
+//		LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
+//		sessionFactory.setDataSource(dataSource());
+//
+//		return sessionFactory;
+//	}
 
 	@Bean
 	public DataSource dataSource() {
@@ -64,19 +70,47 @@ public class SpringConfig implements WebApplicationInitializer {
 	}
 
 //	@Bean
-//	public NamedParameterJdbcTemplate namedParameterJdbcTemplate(DataSource dataSource) {
+//	public PlatformTransactionManager hibernateTransactionManager() {
 //
-//		NamedParameterJdbcTemplate namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
+//		HibernateTransactionManager transactionManager = new HibernateTransactionManager();
+//		transactionManager.setSessionFactory(sessionFactory().getObject());
 //
-//		return namedParameterJdbcTemplate;
+//		return transactionManager;
 //	}
 
 	@Bean
-	public PlatformTransactionManager hibernateTransactionManager() {
-
-		HibernateTransactionManager transactionManager = new HibernateTransactionManager();
-		transactionManager.setSessionFactory(sessionFactory().getObject());
+	public PlatformTransactionManager transactionManager() {
+		
+		JpaTransactionManager transactionManager = new JpaTransactionManager();
+		transactionManager.setEntityManagerFactory(entityManagerFactory().getObject());
 
 		return transactionManager;
+	}
+
+	@Bean
+	public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
+
+		LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
+		em.setDataSource(dataSource());
+		em.setPackagesToScan(new String[] { "fr.excilys.model" });
+
+		JpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
+		em.setJpaVendorAdapter(vendorAdapter);
+		em.setJpaProperties(additionalProperties());
+
+		return em;
+	}
+
+	@Bean
+	public PersistenceExceptionTranslationPostProcessor exceptionTranslation() {
+		
+		return new PersistenceExceptionTranslationPostProcessor();
+	}
+
+	Properties additionalProperties() {
+		Properties properties = new Properties();
+		properties.setProperty("hibernate.dialect", "org.hibernate.dialect.MySQL5Dialect");
+
+		return properties;
 	}
 }

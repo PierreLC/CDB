@@ -8,42 +8,42 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import dao.CompanyDAO;
+import Repository.CompanyRepository;
 import model.Company;
 
 @Service
 public class CompanyService {
 	
-	private CompanyDAO companyDAO;
+	private CompanyRepository companyRepository;
 	
 	@Autowired
-	public CompanyService(CompanyDAO companyDAO) {
+	public CompanyService(CompanyRepository companyRepository) {
 		
-		this.companyDAO = companyDAO;
+		this.companyRepository = companyRepository;
 	}
 	
 	@Transactional
 	public void add(Company company) throws SQLException {
 		
-		companyDAO.add(company);
+		companyRepository.save(company);
 	}
 	
 	@Transactional
 	public List<Company> list() throws SQLException{
 		
-		return companyDAO.list();
+		return companyRepository.findAll();
 	}
 	
 	@Transactional
-	public Optional<Company> getCompanyById(int id) {
+	public Optional<Company> getCompanyById(long id) {
 		
-		return companyDAO.getCompanyById(id);
+		return companyRepository.findById(id);
 	}
 	
 	@Transactional
-	public void deleteCompany(int id) throws SQLException {
+	public void deleteCompany(long id) throws SQLException {
 		
-		companyDAO.deleteCompany(id);
+		companyRepository.deleteById(id);;
 	}
 }
 

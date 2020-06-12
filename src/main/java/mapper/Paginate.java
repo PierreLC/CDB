@@ -35,7 +35,6 @@ public class Paginate {
 
 		setParameters(paramsControllers);
 		setComputerDTOList();
-		System.out.println("affichage computerDTOList dans paginate : " + computerDTOList);
 		setComputerDTOSearchedList(); 
 		setLastPage();
 		setView(modelAndView);
