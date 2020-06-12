@@ -8,8 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import Repository.ComputerRepository;
 import model.Computer;
+import repository.ComputerRepository;
 
 @Service
 public class ComputerService {

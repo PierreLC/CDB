@@ -26,8 +26,7 @@ import org.springframework.web.context.support.AnnotationConfigWebApplicationCon
 import org.springframework.web.servlet.DispatcherServlet;
 
 @Configuration
-@ComponentScan(basePackages = { "dao", "services", "controller", "ui", "model", "mapper", "dto", "exceptions",
-		"config" })
+@ComponentScan(basePackages = { "dao", "services", "controller", "ui", "model", "mapper", "dto", "exceptions", "config", "repository"})
 @PropertySource(value = "classpath:application.properties")
 @EnableJpaRepositories("Repository")
 @EnableTransactionManagement
@@ -48,15 +47,6 @@ public class SpringConfig implements WebApplicationInitializer {
 		servlet.addMapping("/");
 	}
 
-//	@Bean
-//	public LocalSessionFactoryBean sessionFactory() {
-//
-//		LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
-//		sessionFactory.setDataSource(dataSource());
-//
-//		return sessionFactory;
-//	}
-
 	@Bean
 	public DataSource dataSource() {
 
@@ -68,15 +58,6 @@ public class SpringConfig implements WebApplicationInitializer {
 
 		return dataSource;
 	}
-
-//	@Bean
-//	public PlatformTransactionManager hibernateTransactionManager() {
-//
-//		HibernateTransactionManager transactionManager = new HibernateTransactionManager();
-//		transactionManager.setSessionFactory(sessionFactory().getObject());
-//
-//		return transactionManager;
-//	}
 
 	@Bean
 	public PlatformTransactionManager transactionManager() {
@@ -92,7 +73,7 @@ public class SpringConfig implements WebApplicationInitializer {
 
 		LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
 		em.setDataSource(dataSource());
-		em.setPackagesToScan(new String[] { "fr.excilys.model" });
+		em.setPackagesToScan(new String[] { "model" });
 
 		JpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
 		em.setJpaVendorAdapter(vendorAdapter);
