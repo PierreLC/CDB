@@ -128,7 +128,7 @@
 								<tr>
 									<td class="editMode"><input type="checkbox" name="cb"
 										class="cb" value="${ computer.getIdDTO() }"></td>
-									<td><a href="editComputer?id=${ computer.getIdDTO() } "
+									<td><a href="editComputer?id=${ computer.getIdDTO() }"
 										onclick=""><c:out value="${ computer.getNameDTO() }"/></a></td>
 									<td><c:out value="${ computer.getIntroducedDTO() }"/></td>
 									<td><c:out value="${ computer.getDiscontinuedDTO() }"/></td>
@@ -166,13 +166,13 @@
 						<li><c:choose>
 								<c:when test="${ pageIterator >= 2 }">
 									<a
-										href="dashboard?pageIterator=${ pageIterator - 1 }
+										href="dashboard?pageIterator=${ pageIterator - 1 }&step=${ step }
 										<c:if test="${ search != null }">&search=${ search }</c:if>"
 										aria-label="Previous"> <span aria-hidden="true">&laquo;</span></a>
 								</c:when>
 							</c:choose></li>
 
-						<li><a href="dashboard?pageIterator=1"><c:out value="1"/></a></li>
+						<li><a href="dashboard?pageIterator=1&step=${ step }"><c:out value="1"/></a></li>
 
 						<c:choose>
 							<c:when test="${ pageIterator > 4 }">
@@ -184,7 +184,7 @@
 							<c:when test="${ pageIterator <= 3 }">
 								<c:forEach var="i" begin="2" end="5" step="1">
 									<li><a
-										href="dashboard?pageIterator=${ i }
+										href="dashboard?pageIterator=${ i }&step=${ step }
 									<c:if test="${ search != null }">&search=${ search }</c:if>"><c:out
 												value="${ i }" /></a></li>
 								</c:forEach>
@@ -194,7 +194,7 @@
 								<c:forEach var="i" begin="${ pageIterator - 2 }"
 									end="${ pageIterator + 2 }" step="1">
 									<li><a
-										href="dashboard?pageIterator=${ i }
+										href="dashboard?pageIterator=${ i }&step=${ step }
 									<c:if test="${ search != null }">&search=${ search }</c:if>">
 											<c:out value="${ i }"/>
 									</a></li>
@@ -204,7 +204,7 @@
 								<c:forEach var="i" begin="${ lastPage - 5}"
 									end="${ lastPage -1 }" step="1">
 									<li><a
-										href="dashboard?pageIterator=${ i }
+										href="dashboard?pageIterator=${ i }&step=${ step }
 									<c:if test="${ search != null }">&search=${ search }</c:if>">
 											<c:out value="${ i }"/>
 									</a></li>
@@ -220,7 +220,7 @@
 						</c:choose>
 
 						<li><a
-							href="dashboard?pageIterator=${ lastPage }
+							href="dashboard?pageIterator=${ lastPage }&step=${ step }
 						<c:if test="${ search != null }">&search=${ search }</c:if>">
 								<c:out value="${ lastPage }"/>
 						</a></li>
@@ -228,7 +228,7 @@
 						<li><c:choose>
 								<c:when test="${ pageIterator != lastPage }">
 									<a
-										href="dashboard?pageIterator=${ pageIterator + 1 }
+										href="dashboard?pageIterator=${ pageIterator + 1 }&step=${ step }
 									<c:if test="${ search != null }">&search=${ search }</c:if>"
 										aria-label="Next"><span aria-hidden="true">&raquo;</span></a>
 								</c:when>
@@ -238,19 +238,19 @@
 						<li><c:choose>
 								<c:when test="${ pageIterator >= 2 }">
 									<a
-										href="dashboard?pageIterator=${ pageIterator - 1 }
+										href="dashboard?pageIterator=${ pageIterator - 1 }&step=${ step }
 									<c:if test="${ search != null }">&search=${ search }</c:if>"
 										aria-label="Previous"> <span aria-hidden="true">&laquo;</span></a>
 								</c:when>
 							</c:choose></li>
 						<c:forEach var="i" begin="1" end="${ lastPage }" step="1">
-							<li><a href="dashboard?pageIterator=${ i }"><c:out
+							<li><a href="dashboard?pageIterator=${ i }&step=${ step }"><c:out
 										value="${ i }" /></a></li>
 						</c:forEach>
 						<li><c:choose>
 								<c:when test="${ pageIterator != lastPage }">
 									<a
-										href="dashboard?pageIterator=${ pageIterator + 1 }
+										href="dashboard?pageIterator=${ pageIterator + 1 }&step=${ step }
 									<c:if test="${ search != null }">&search=${ search }</c:if>"
 										aria-label="Next"><span aria-hidden="true">&raquo;</span></a>
 								</c:when>
