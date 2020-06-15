@@ -6,14 +6,14 @@ public class ParamsControllers {
 	private String columnName;
 	private String pageIterator;
 	private String step;
-	private String computerSelection;
+	private String selection;
 	private String computerName;
 	private String introduced;
 	private String discontinued;
 	private String companyId;
 	private String id;
 
-	public ParamsControllers(String search, String orderBy, String columnName, String pageIterator, String step, String computerSelection,
+	public ParamsControllers(String search, String orderBy, String columnName, String pageIterator, String step, String selection,
 			               String computerName, String introduced, String discontinued, String companyId, String id) {
 		
 		this.search = search;
@@ -21,7 +21,7 @@ public class ParamsControllers {
 		this.columnName = columnName;
 		this.pageIterator = pageIterator;
 		this.step = step;
-		this.computerSelection = computerSelection;
+		this.selection = selection;
 		this.computerName = computerName;
 		this.introduced = introduced;
 		this.discontinued = discontinued;
@@ -70,11 +70,11 @@ public class ParamsControllers {
 	}
 	
 	public String getComputerSelection() {
-		return computerSelection;
+		return selection;
 	}
 
-	public void setComputerSelection(String computerSelection) {
-		this.computerSelection = computerSelection;
+	public void setComputerSelection(String selection) {
+		this.selection = selection;
 	}
 	
 	public String getComputerName() {

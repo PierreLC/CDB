@@ -23,6 +23,10 @@ public class Company {
 	@Column(name = "name")
 	private String name;
 
+	private Company() {
+		
+	}
+	
 	private Company(Builder builder) {
 		this.id = builder.id;
 		this.name = builder.name;

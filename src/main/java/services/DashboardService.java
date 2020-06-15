@@ -24,29 +24,35 @@ public class DashboardService {
 		this.page = page;
 	}
 
-	public void setNbRows(ModelAndView modelAndView) {
-
-		try {
-			long nbRows = computerService.getNbRows();
-
-			modelAndView.addObject("nbRows", nbRows);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-	}
+//	public void setNbRows(ModelAndView modelAndView) {
+//
+//		try {
+//			long nbRows = computerService.getNbRows();
+//
+//			modelAndView.addObject("nbRows", nbRows);
+//		} catch (SQLException e) {
+//			e.printStackTrace();
+//		}
+//	}
 
 	
-	public void setPage(ParamsControllers paramsControllers, ModelAndView modelAndView) {
+	public void setPage(ParamsControllers paramsControllers, ModelAndView modelAndView) throws SQLException {
 		
 		page.paginate(paramsControllers, modelAndView);
 	}
 	
-	public void deleteComputerSelection(String computerSelection) {
+	public void deleteComputerSelection(String selection) {
 
-		List<String> computerToDelete = Arrays.asList(computerSelection.split(","));
+		System.out.println(selection);
+		List<String> computerToDelete = Arrays.asList(selection.split(","));
 
 		for (String computer : computerToDelete) {
-			computerService.delete(Integer.parseInt(computer));
+			computerService.delete(Long.parseLong(computer));
 		}
 	}
+	
+//	public void deleteComputersById(String selection) {
+//		
+//		
+//	}
 }

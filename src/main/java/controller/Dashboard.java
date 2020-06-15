@@ -1,6 +1,7 @@
 package controller;
 
 import java.io.IOException;
+import java.sql.SQLException;
 
 import javax.servlet.ServletException;
 
@@ -25,11 +26,11 @@ public class Dashboard {
 
 	@GetMapping
 	protected ModelAndView getDashboard(ParamsControllers paramsControllers)
-			throws ServletException, IOException {
+			throws ServletException, IOException, SQLException {
 		
 		ModelAndView modelAndView = new ModelAndView("dashboard");
 
-		dashboardService.setNbRows(modelAndView);
+//		dashboardService.setNbRows(modelAndView);
 		dashboardService.setPage(paramsControllers, modelAndView);
 		
 		return modelAndView;
@@ -41,8 +42,10 @@ public class Dashboard {
 
 		ModelAndView modelAndView = new ModelAndView("redirect:/dashboard");
 		
-		//Faire un méthode pour valider la valeur de la selection
+		System.out.println("dashboard");
+		//Faire une méthode pour valider la valeur de la selection
 		dashboardService.deleteComputerSelection(paramsControllers.getComputerSelection());
+		
 
 		return modelAndView;
 	}

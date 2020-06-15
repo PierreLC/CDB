@@ -5,8 +5,10 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import model.Computer;
 import repository.ComputerRepository;
@@ -14,89 +16,88 @@ import repository.ComputerRepository;
 @Service
 public class ComputerService {
 	
+	@Autowired
 	private ComputerRepository computerRepository;
 
-	@Autowired
-	public ComputerService(ComputerRepository computerRepository) {
-		this.computerRepository = computerRepository;
-	}
-	
-	@Transactional
 	public void add(Computer computer) throws SQLException {
 		
 		computerRepository.save(computer);
 	}
-	
-	@Transactional
+
 	public List<Computer> list(){
 		
 		return computerRepository.findAll();
 	}
-	
-//	@Transactional
-//	public List<Computer> listPage(int offset, int pageSize){
-//		
-//		return computerDAO.listPage(offset, pageSize);
-//	}
-	
-	@Transactional
+
+	public Page<Computer> listPage(int offset, int pageSize){
+		
+		Page<Computer> computersPag = computerRepository.findAll(PageRequest.of(offset, pageSize));
+		
+		return computersPag;
+	}
+
 	public void delete(long id) {
 		
 		computerRepository.deleteById(id);
 	}
-	
-	@Transactional
+
 	public Optional<Computer> getComputerById(long id) {
 		
 		return computerRepository.findById(id);
 	}
-	
-//	@Transactional
-//	public List<Computer> getComputerByName(String search, int offset, int pageSize) {
-//		
-//		return computerDAO.getComputerByName(search, offset, pageSize);
-//	}
-	
-	@Transactional
+
+	public Page<Computer> getComputerByName(String search, int offset, int pageSize) {
+		
+		return computerRepository.findByNameContaining(search, PageRequest.of(offset, pageSize));
+	}
+
 	public void update(Computer computer) {
 		
 		computerRepository.save(computer);
 	}
-	
-	@Transactional
+
 	public long getNbRows() throws SQLException {
 		
 		return computerRepository.count();
 	}
+
+	public long nbSearchedComputer(String search) {
+		
+		return computerRepository.countByNameContaining(search);
+	}
+
+	public Page<Computer> orderByName(int offset, int step){
+		
+		Page<Computer> computersByName = computerRepository.findAll(PageRequest.of(offset, step, Sort.by(Sort.Direction.ASC, "name")));
+		
+		return computersByName;
+	}
+
+	public Page<Computer> orderByIntroduced(int offset, int step){
+		
+		Page<Computer> computersByIntroduced = computerRepository.findAll(PageRequest.of(offset, step, Sort.by(Sort.Direction.ASC, "introduced")));
+		
+		return computersByIntroduced;
+	}
+
+	public Page<Computer> orderByDiscontinued(int offset, int step){
+		
+		Page<Computer> computersByDiscontinued = computerRepository.findAll(PageRequest.of(offset, step, Sort.by(Sort.Direction.ASC, "discontinued")));
+		
+		return computersByDiscontinued;
+	}
+
+	public Page<Computer> orderByCompany(int offset, int step){
+		
+		Page<Computer> computersByCompany = computerRepository.findAll(PageRequest.of(offset, step, Sort.by(Sort.Direction.ASC, "company")));
+		
+		return computersByCompany;
+	}
 	
-//	@Transactional
-//	public int nbSearchedComputer(String search) {
+//	public void deleteComputersById(String computerSelection) {
 //		
-//		//Regarder le example matcher
-//		return computerRepository.count();
-//	}
-	
-//	@Transactional
-//	public List<Computer> orderByName(int offset, int step){
+//		List<String> computerToDelete = Arrays.asList(computerSelection.split(","));
 //		
-//		return computerRepository.findAll(columnName);
-//	}
-	
-//	@Transactional
-//	public List<Computer> orderByIntroduced(int offset, int step){
-//		
-//		return computerDAO.orderByIntroduced(offset, step);
-//	}
-//	
-//	@Transactional
-//	public List<Computer> orderByDiscontinued(int offset, int step){
-//		
-//		return computerDAO.orderByDiscontinued(offset, step);
-//	}
-//	
-//	@Transactional
-//	public List<Computer> orderByCompany(int offset, int step){
-//		
-//		return computerDAO.orderByCompany(offset, step);
+//		computerRepository.deleteComputerById(computerToDelete);
 //	}
 }

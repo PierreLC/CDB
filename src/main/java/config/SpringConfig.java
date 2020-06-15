@@ -28,7 +28,7 @@ import org.springframework.web.servlet.DispatcherServlet;
 @Configuration
 @ComponentScan(basePackages = { "dao", "services", "controller", "ui", "model", "mapper", "dto", "exceptions", "config", "repository"})
 @PropertySource(value = "classpath:application.properties")
-@EnableJpaRepositories("Repository")
+@EnableJpaRepositories("repository")
 @EnableTransactionManagement
 public class SpringConfig implements WebApplicationInitializer {
 
@@ -37,12 +37,10 @@ public class SpringConfig implements WebApplicationInitializer {
 
 	@Override
 	public void onStartup(ServletContext servletContext) {
-
 		AnnotationConfigWebApplicationContext webContext = new AnnotationConfigWebApplicationContext();
 		webContext.register(SpringConfig.class, MvcConfig.class);
 		webContext.setServletContext(servletContext);
-		ServletRegistration.Dynamic servlet = servletContext.addServlet("dynamicServlet",
-				new DispatcherServlet(webContext));
+		ServletRegistration.Dynamic servlet = servletContext.addServlet("dynamicServlet", new DispatcherServlet(webContext));
 		servlet.setLoadOnStartup(1);
 		servlet.addMapping("/");
 	}
@@ -89,8 +87,10 @@ public class SpringConfig implements WebApplicationInitializer {
 	}
 
 	Properties additionalProperties() {
+		
 		Properties properties = new Properties();
 		properties.setProperty("hibernate.dialect", "org.hibernate.dialect.MySQL5Dialect");
+		properties.setProperty("hibernate.show_sql", "true");
 
 		return properties;
 	}

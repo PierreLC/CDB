@@ -1,8 +1,10 @@
 package mapper;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -31,12 +33,12 @@ public class Paginate {
 		this.computerService = computerService;
 	}
 
-	public void paginate(ParamsControllers paramsControllers, ModelAndView modelAndView) {
+	public void paginate(ParamsControllers paramsControllers, ModelAndView modelAndView) throws SQLException {
 
 		setParameters(paramsControllers);
-		setComputerDTOList();
-		setComputerDTOSearchedList(); 
+		setDisplayedList();
 		setLastPage();
+		setNbComputer(search, modelAndView);
 		setView(modelAndView);
 	}
 
@@ -50,7 +52,7 @@ public class Paginate {
 
 	private int getOffset() {
 		int avoidBlankPage = 1;
-		int offset = ((pageIterator - avoidBlankPage) * step);
+		int offset = pageIterator - avoidBlankPage;
 		
 		return offset;
 	}
@@ -93,46 +95,53 @@ public class Paginate {
 
 	private List<Computer> displayedPag() {
 
-		List<Computer> listComputerPag;
+		Page<Computer> listComputerPag;
+		List<Computer> listDisplayedComputer;
 		
 		switch (EnumDisplayedPage.displayedPage(columnName)) {
 		case COMPUTER_NAME:
 			
 			listComputerPag = computerService.orderByName(getOffset(), step);
+			listDisplayedComputer = listComputerPag.getContent();
 			
-			return listComputerPag;
+			return listDisplayedComputer;
 			
 		case INTRODUCED:
 			
 			listComputerPag = computerService.orderByIntroduced(getOffset(), step);
+			listDisplayedComputer = listComputerPag.getContent();
 
-			return listComputerPag;
+			return listDisplayedComputer;
 			
 		case DISCONTINUED:
 			
 			listComputerPag = computerService.orderByDiscontinued(getOffset(), step);
+			listDisplayedComputer = listComputerPag.getContent();
 			
-			return listComputerPag;
+			return listDisplayedComputer;
 			
 		case COMPANY:
 			
 			listComputerPag = computerService.orderByCompany(getOffset(), step);
+			listDisplayedComputer = listComputerPag.getContent();
 			
-			return listComputerPag;
+			return listDisplayedComputer;
 			
 		default:
-
-			listComputerPag = computerService.listPage(getOffset(), step);
 			
-			return listComputerPag;
+			listComputerPag = computerService.listPage(getOffset(), step);
+			listDisplayedComputer = listComputerPag.getContent();
+			
+			return listDisplayedComputer;
 		}
 	}
 	
 	public void setComputerDTOSearchedList() {
 
 		computerDTOSearchedList.clear();
-		List<Computer> computerSearchedList = computerService.getComputerByName(search, getOffset(), step);
-
+		Page<Computer> computerSearchedPage = computerService.getComputerByName(search, getOffset(), step);
+		List<Computer> computerSearchedList = computerSearchedPage.getContent();
+		
 		computerSearchedList.stream()
 				.forEach(computer -> computerDTOSearchedList.add(ComputerMapper.computerToComputerDTO(computer)));
 	}
@@ -146,9 +155,9 @@ public class Paginate {
 				.forEach(computer -> computerDTOList.add(ComputerMapper.computerToComputerDTO(computer)));
 	}
 	
-	public int getNbSearchedComputer(String search) {
+	public long getNbSearchedComputer(String search) {
 
-		int nbSearchedComputer = computerService.nbSearchedComputer(search);
+		long nbSearchedComputer = computerService.nbSearchedComputer(search);
 
 		return nbSearchedComputer;
 	}
@@ -165,11 +174,33 @@ public class Paginate {
 			}
 	}
 	
+	public void setDisplayedList() {
+		
+		if(search != null) {
+			setComputerDTOSearchedList();
+		} else {
+			setComputerDTOList();
+		}
+	}
+	
+	public void setNbComputer(String search, ModelAndView modelAndView) throws SQLException {
+	
+		if(search != null) {
+			long nbSearchedComputer = computerService.nbSearchedComputer(search);
+			
+			modelAndView.addObject("nbSearchedComputer", nbSearchedComputer);
+		} else {
+			long nbRows = computerService.getNbRows();
+			
+			modelAndView.addObject("nbRows", nbRows);
+		}
+	}
+	
 	public void setView(ModelAndView modelAndView) {
 
 		modelAndView.addObject("search", search);
 		modelAndView.addObject("orderBy", columnName);
-		modelAndView.addObject("nbSearchedComputer", getNbSearchedComputer(search));
+//		modelAndView.addObject("nbSearchedComputer", getNbSearchedComputer(search));
 		modelAndView.addObject("pageIterator", pageIterator);
 		modelAndView.addObject("step", step);
 		modelAndView.addObject("computerDTOSearchedList", computerDTOSearchedList);
