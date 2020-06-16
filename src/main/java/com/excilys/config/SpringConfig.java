@@ -26,9 +26,9 @@ import org.springframework.web.context.support.AnnotationConfigWebApplicationCon
 import org.springframework.web.servlet.DispatcherServlet;
 
 @Configuration
-@ComponentScan(basePackages = { "dao", "services", "controller", "ui", "model", "mapper", "dto", "exceptions", "config", "repository"})
+@ComponentScan(basePackages = { "com.excilys.dao", "com.excilys.services", "com.excilys.controller", "com.excilys.ui", "com.excilys.model", "com.excilys.mapper", "com.excilys.dto", "com.excilys.exceptions", "com.excilys.config", "com.excilys.repository"})
 @PropertySource(value = "classpath:application.properties")
-@EnableJpaRepositories("repository")
+@EnableJpaRepositories("com.excilys.repository")
 @EnableTransactionManagement
 public class SpringConfig implements WebApplicationInitializer {
 
@@ -71,7 +71,7 @@ public class SpringConfig implements WebApplicationInitializer {
 
 		LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
 		em.setDataSource(dataSource());
-		em.setPackagesToScan(new String[] { "model" });
+		em.setPackagesToScan(new String[] { "com.excilys.model" });
 
 		JpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
 		em.setJpaVendorAdapter(vendorAdapter);
