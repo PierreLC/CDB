@@ -37,15 +37,16 @@ public class Computer {
 	@JoinColumn(name = "company_id", referencedColumnName = "id")
 	private Company company;
 
+	public Computer() {
+		
+	}
+	
 	public Computer(Builder builder) {
 		this.id = builder.id;
 		this.name = builder.name;
 		this.introduced = builder.introduced;
 		this.discontinued = builder.discontinued;
 		this.company = builder.company;
-	}
-
-	public Computer() {
 	}
 
 	public long getId() {

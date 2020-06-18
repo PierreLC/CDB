@@ -160,6 +160,24 @@
 			<version>${jpa-version}</version>
 		</dependency>
 
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-core</artifactId>
+			<version>${spring-version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-config</artifactId>
+			<version>${spring-version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-web</artifactId>
+			<version>${spring-version}</version>
+		</dependency>
+
 		<!-- Hibernate -->
 		<dependency>
 			<groupId>org.hibernate</groupId>
@@ -173,8 +191,8 @@
 			<version>${hibernate-version}</version>
 		</dependency>
 	</dependencies>
-	
-	<!--  Modules -->
+
+	<!-- Modules -->
 	<modules>
 		<module>core</module>
 		<module>presistence</module>
