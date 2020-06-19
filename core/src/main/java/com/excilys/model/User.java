@@ -17,7 +17,7 @@ public class User {
 	@Id
 	@Column(name = "username")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private String userName;
+	private String username;
 	
 	@Column(name = "password")
 	private String password;
@@ -31,17 +31,17 @@ public class User {
 	}
 	
 	private User(Builder builder) {
-		this.userName = builder.userName;
+		this.username = builder.username;
 		this.password = builder.password;
 		this.role = builder.role;
 	}
 	
 	public String getUsername() {
-		return userName;
+		return username;
 	}
 
 	public void setUsername(String username) {
-		this.userName = username;
+		this.username = username;
 	}
 
 	public String getPassword() {
@@ -61,12 +61,12 @@ public class User {
 	}
 	
 	public static class Builder {
-		private String userName;
+		private String username;
 		private String password;
 		private Role role;
 
-		public Builder setUserName(String userName) {
-			this.userName = userName;
+		public Builder setUsername(String username) {
+			this.username = username;
 			return this;
 		}
 	

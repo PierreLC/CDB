@@ -5,6 +5,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import com.excilys.dto.UserDTO;
+import com.excilys.mapper.UserMapper;
 import com.excilys.model.Role;
 import com.excilys.model.User;
 import com.excilys.repository.RoleRepository;
@@ -19,7 +21,9 @@ public class AuthenticationService {
 	@Autowired
 	private RoleRepository roleRepository;
 	
-	public void addUser(User user) {
+	public void addUser(UserDTO userDTO) {
+		
+		User user = UserMapper.userDTOToUser(userDTO);
 		
 		userRepository.save(user);
 	}

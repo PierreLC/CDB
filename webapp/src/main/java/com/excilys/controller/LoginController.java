@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import com.excilys.dto.UserDTO;
 import com.excilys.services.AuthenticationService;
 
 @Controller
@@ -33,13 +34,13 @@ public class LoginController {
 		return "register";
 	}
 	
-	@PostMapping(value = "/addUser")
-	public String register(@ModelAttribute("newUser") UserDTO newUserDto) {
-
-		newUserDto.setPassword(passwordEncoder.encode(newUserDto.getPassword()));
-		authenticationService.addUser(newUserDto);
-		return "login";
-	}
+//	@PostMapping(value = "/addUser")
+//	public String register(@ModelAttribute("newUser") UserDTO userDTO) {
+//
+//		userDTO.setPassword(passwordEncoder.encode(userDTO.getPassword()));
+//		authenticationService.addUser(userDTO);
+//		return "login";
+//	}
 	
 //	@PostMapping(value = {"", "/login", "/home"})
 //	public String loginPage(@RequestParam(value = "error", required = false) String error,
@@ -57,7 +58,7 @@ public class LoginController {
 //		
 //		return "login";	
 //	}
-//	
+	
 //	@GetMapping(value = "/logout")
 //	public String logoutPage (HttpServletRequest request, HttpServletResponse response) {
 //		
@@ -68,6 +69,4 @@ public class LoginController {
 //		}
 //		return "redirect:/login?logout=true";
 //	}
-
-
 }
